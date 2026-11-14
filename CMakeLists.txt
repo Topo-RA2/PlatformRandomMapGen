@@ -15,6 +15,11 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
+# 与工作区其余仓一致，显式固定 MSVC 动态运行库，不依赖 CMake 的当前默认值。
+if(MSVC)
+    set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>DLL")
+endif()
+
 set(RMG_GENERATOR_VERSION "1.1.0-native" CACHE STRING "Version string reported by rmg --version")
 if(NOT RMG_GENERATOR_VERSION MATCHES "^[A-Za-z0-9][A-Za-z0-9._+%-]*$" OR
    RMG_GENERATOR_VERSION STREQUAL "")
@@ -98,6 +103,15 @@ target_link_libraries(rmg PRIVATE PlatformRandomMapGen::Native)
 target_compile_definitions(rmg PRIVATE RMG_GENERATOR_VERSION="${RMG_GENERATOR_VERSION}")
 if(MSVC)
     target_compile_options(rmg PRIVATE /utf-8)
+endif()
+# OpenSSL 在工作区按共享库提供；没有暂存时 rmg 在干净机器上找不到 libcrypto。
+if(WIN32)
+    add_custom_command(TARGET rmg POST_BUILD
+        COMMAND "${CMAKE_COMMAND}"
+            "-DRUNTIME_DLLS=$<TARGET_RUNTIME_DLLS:rmg>"
+            "-DOUTPUT_DIRECTORY=$<TARGET_FILE_DIR:rmg>"
+            -P "${PLATFORM_DEVKIT_SOURCE_DIR}/cmake/StageRuntimeDlls.cmake"
+        VERBATIM)
 endif()
 
 if(PLATFORMRANDOMMAPGEN_BUILD_TESTS)
