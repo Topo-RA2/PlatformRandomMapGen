@@ -4,16 +4,18 @@
 #include "rmg/native_generator.h"
 #include "rmg/native_theater_catalog.h"
 
-namespace rmg {
+namespace rmg
+{
 
-struct NativeGenerationResult {
+struct NativeGenerationResult
+{
     MapGrid map;
     NativeGenerationReport report;
 };
 
 NativeGenerationResult generateNativeMap(
-    const MapSeedOptions& options,
-    const RmgConfig& config = {},
-    const NativeTheaterCatalog* theaterCatalog = nullptr);
+    const MapSeedOptions &options,
+    const RmgConfig &config = {},
+    const NativeTheaterCatalog *theaterCatalog = nullptr);
 
 } // namespace rmg

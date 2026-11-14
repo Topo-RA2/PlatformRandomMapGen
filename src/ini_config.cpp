@@ -7,110 +7,134 @@
 #include <sstream>
 #include <stdexcept>
 
-namespace rmg {
-namespace {
+namespace rmg
+{
+namespace
+{
 
 std::string trim(std::string value)
 {
-    auto isSpace = [](unsigned char ch) { return std::isspace(ch) != 0; };
-    value.erase(value.begin(), std::find_if(value.begin(), value.end(), [&](char ch) {
-        return !isSpace(static_cast<unsigned char>(ch));
-    }));
-    value.erase(std::find_if(value.rbegin(), value.rend(), [&](char ch) {
-        return !isSpace(static_cast<unsigned char>(ch));
-    }).base(), value.end());
+    auto isSpace = [](unsigned char ch)
+    {
+        return std::isspace(ch) != 0;
+    };
+    value.erase(value.begin(), std::find_if(value.begin(), value.end(), [&](char ch)
+                                            {
+                                                return !isSpace(static_cast<unsigned char>(ch));
+                                            }));
+    value.erase(std::find_if(value.rbegin(), value.rend(), [&](char ch)
+                             {
+                                 return !isSpace(static_cast<unsigned char>(ch));
+                             })
+                    .base(),
+                value.end());
     return value;
 }
 
 std::string lower(std::string value)
 {
-    std::transform(value.begin(), value.end(), value.begin(), [](unsigned char ch) {
-        return static_cast<char>(std::tolower(ch));
-    });
+    std::transform(value.begin(), value.end(), value.begin(), [](unsigned char ch)
+                   {
+                       return static_cast<char>(std::tolower(ch));
+                   });
     return value;
 }
 
-std::vector<int> parseIntList(const std::string& value)
+std::vector<int> parseIntList(const std::string &value)
 {
     std::vector<int> result;
     std::stringstream stream(value);
     std::string item;
-    while (std::getline(stream, item, ',')) {
+    while (std::getline(stream, item, ','))
+    {
         item = trim(item);
-        if (!item.empty()) {
+        if (!item.empty())
+        {
             result.push_back(std::stoi(item));
         }
     }
     return result;
 }
 
-std::vector<std::string> parseStringList(const std::string& value)
+std::vector<std::string> parseStringList(const std::string &value)
 {
     std::vector<std::string> result;
     std::stringstream stream(value);
     std::string item;
-    while (std::getline(stream, item, ',')) {
+    while (std::getline(stream, item, ','))
+    {
         item = trim(item);
-        if (!item.empty()) {
+        if (!item.empty())
+        {
             result.push_back(item);
         }
     }
     return result;
 }
 
-void applyList(const IniDocument& ini, const std::string& section, const std::string& key, std::vector<int>& target)
+void applyList(const IniDocument &ini, const std::string &section, const std::string &key, std::vector<int> &target)
 {
     const std::string raw = ini.getString(section, key, "");
-    if (raw.empty()) {
+    if (raw.empty())
+    {
         return;
     }
     auto values = parseIntList(raw);
-    if (!values.empty()) {
+    if (!values.empty())
+    {
         target = std::move(values);
     }
 }
 
-void applyStringList(const IniDocument& ini, const std::string& section, const std::string& key, std::vector<std::string>& target)
+void applyStringList(const IniDocument &ini, const std::string &section, const std::string &key, std::vector<std::string> &target)
 {
     const std::string raw = ini.getString(section, key, "");
-    if (raw.empty()) {
+    if (raw.empty())
+    {
         return;
     }
     auto values = parseStringList(raw);
-    if (!values.empty()) {
+    if (!values.empty())
+    {
         target = std::move(values);
     }
 }
 
 } // namespace
 
-IniDocument IniDocument::loadFile(const std::filesystem::path& path)
+IniDocument IniDocument::loadFile(const std::filesystem::path &path)
 {
     std::ifstream file(path);
-    if (!file) {
+    if (!file)
+    {
         throw std::runtime_error("failed to open INI file: " + path.string());
     }
 
     IniDocument document;
     std::string section;
     std::string line;
-    while (std::getline(file, line)) {
+    while (std::getline(file, line))
+    {
         const auto comment = line.find_first_of(";#");
-        if (comment != std::string::npos) {
+        if (comment != std::string::npos)
+        {
             line.erase(comment);
         }
         line = trim(line);
-        if (line.empty()) {
+        if (line.empty())
+        {
             continue;
         }
-        if (line.front() == '[' && line.back() == ']') {
+        if (line.front() == '[' && line.back() == ']')
+        {
             section = lower(trim(line.substr(1, line.size() - 2)));
             document.sections_[section];
             continue;
         }
 
         const auto equals = line.find('=');
-        if (equals == std::string::npos || section.empty()) {
+        if (equals == std::string::npos || section.empty())
+        {
             continue;
         }
         const std::string key = lower(trim(line.substr(0, equals)));
@@ -120,79 +144,90 @@ IniDocument IniDocument::loadFile(const std::filesystem::path& path)
     return document;
 }
 
-bool IniDocument::hasSection(const std::string& section) const
+bool IniDocument::hasSection(const std::string &section) const
 {
     return sections_.find(lower(section)) != sections_.end();
 }
 
-std::string IniDocument::getString(const std::string& section, const std::string& key, const std::string& fallback) const
+std::string IniDocument::getString(const std::string &section, const std::string &key, const std::string &fallback) const
 {
     const auto sectionIt = sections_.find(lower(section));
-    if (sectionIt == sections_.end()) {
+    if (sectionIt == sections_.end())
+    {
         return fallback;
     }
     const auto keyIt = sectionIt->second.find(lower(key));
-    if (keyIt == sectionIt->second.end()) {
+    if (keyIt == sectionIt->second.end())
+    {
         return fallback;
     }
     return keyIt->second;
 }
 
-int IniDocument::getInt(const std::string& section, const std::string& key, int fallback) const
+int IniDocument::getInt(const std::string &section, const std::string &key, int fallback) const
 {
     const std::string value = getString(section, key, "");
-    if (value.empty()) {
+    if (value.empty())
+    {
         return fallback;
     }
     return std::stoi(value);
 }
 
-std::uint32_t IniDocument::getUInt32(const std::string& section, const std::string& key, std::uint32_t fallback) const
+std::uint32_t IniDocument::getUInt32(const std::string &section, const std::string &key, std::uint32_t fallback) const
 {
     const std::string value = getString(section, key, "");
-    if (value.empty()) {
+    if (value.empty())
+    {
         return fallback;
     }
-    if (value.front() == '-' || value.front() == '+') {
+    if (value.front() == '-' || value.front() == '+')
+    {
         throw std::runtime_error(section + "." + key + " must be an unsigned 32-bit integer");
     }
 
     std::size_t parsedLength = 0;
     const unsigned long long parsed = std::stoull(value, &parsedLength, 10);
-    if (parsedLength != value.size() || parsed > std::numeric_limits<std::uint32_t>::max()) {
+    if (parsedLength != value.size() || parsed > std::numeric_limits<std::uint32_t>::max())
+    {
         throw std::runtime_error(section + "." + key + " must be between 0 and 4294967295");
     }
     return static_cast<std::uint32_t>(parsed);
 }
 
-double IniDocument::getDouble(const std::string& section, const std::string& key, double fallback) const
+double IniDocument::getDouble(const std::string &section, const std::string &key, double fallback) const
 {
     const std::string value = getString(section, key, "");
-    if (value.empty()) {
+    if (value.empty())
+    {
         return fallback;
     }
     return std::stod(value);
 }
 
-bool IniDocument::getBool(const std::string& section, const std::string& key, bool fallback) const
+bool IniDocument::getBool(const std::string &section, const std::string &key, bool fallback) const
 {
     const std::string value = lower(getString(section, key, ""));
-    if (value.empty()) {
+    if (value.empty())
+    {
         return fallback;
     }
-    if (value == "true" || value == "yes" || value == "1") {
+    if (value == "true" || value == "yes" || value == "1")
+    {
         return true;
     }
-    if (value == "false" || value == "no" || value == "0") {
+    if (value == "false" || value == "no" || value == "0")
+    {
         return false;
     }
     return fallback;
 }
 
-std::vector<std::pair<std::string, std::string>> IniDocument::sectionEntries(const std::string& section) const
+std::vector<std::pair<std::string, std::string>> IniDocument::sectionEntries(const std::string &section) const
 {
     const auto sectionIt = sections_.find(lower(section));
-    if (sectionIt == sections_.end()) {
+    if (sectionIt == sections_.end())
+    {
         return {};
     }
     return std::vector<std::pair<std::string, std::string>>(
@@ -200,9 +235,9 @@ std::vector<std::pair<std::string, std::string>> IniDocument::sectionEntries(con
         sectionIt->second.end());
 }
 
-void applyRandomMapSection(const IniDocument& ini, MapSeedOptions& options)
+void applyRandomMapSection(const IniDocument &ini, MapSeedOptions &options)
 {
-    constexpr const char* section = "RandomMap";
+    constexpr const char *section = "RandomMap";
     options.theater = ini.getInt(section, "Theater", options.theater);
     options.mapType = ini.getInt(section, "MapType", options.mapType);
     options.resources = ini.getInt(section, "Resources", options.resources);
@@ -225,9 +260,10 @@ void applyRandomMapSection(const IniDocument& ini, MapSeedOptions& options)
     options.seed = ini.getUInt32(section, "Seed", options.seed);
 }
 
-void applyRmgConfig(const IniDocument& ini, RmgConfig& config)
+void applyRmgConfig(const IniDocument &ini, RmgConfig &config)
 {
-    for (const std::string section : {"General", "RandomMap", "RMG", "RMGMD"}) {
+    for (const std::string section : {"General", "RandomMap", "RMG", "RMGMD"})
+    {
         config.minimumTiberium = ini.getInt(section, "RMGMinimumTiberium", config.minimumTiberium);
         config.maximumTiberium = ini.getInt(section, "RMGMaximumTiberium", config.maximumTiberium);
         config.maxTrees = ini.getInt(section, "MaxTrees", config.maxTrees);
@@ -251,7 +287,7 @@ void applyRmgConfig(const IniDocument& ini, RmgConfig& config)
     }
 }
 
-MapSeedOptions loadMapSeedOptions(const std::filesystem::path& path, MapSeedOptions fallback)
+MapSeedOptions loadMapSeedOptions(const std::filesystem::path &path, MapSeedOptions fallback)
 {
     const IniDocument ini = IniDocument::loadFile(path);
     applyRandomMapSection(ini, fallback);
@@ -262,7 +298,7 @@ MapSeedOptions loadMapSeedOptions(const std::filesystem::path& path, MapSeedOpti
     return fallback;
 }
 
-RmgConfig loadRmgConfig(const std::filesystem::path& path, RmgConfig fallback)
+RmgConfig loadRmgConfig(const std::filesystem::path &path, RmgConfig fallback)
 {
     const IniDocument ini = IniDocument::loadFile(path);
     applyRmgConfig(ini, fallback);

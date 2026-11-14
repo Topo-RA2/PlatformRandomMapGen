@@ -30,7 +30,8 @@
 #include <float.h>
 #endif
 
-namespace rmg {
+namespace rmg
+{
 #include "native_generator_detail/helpers.inc"
 
 #include "native_generator_detail/stage_report.inc"

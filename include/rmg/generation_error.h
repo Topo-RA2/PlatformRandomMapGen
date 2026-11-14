@@ -5,7 +5,8 @@
 #include <string_view>
 #include <utility>
 
-namespace rmg {
+namespace rmg
+{
 
 enum class GenerationFailureCode
 {
@@ -14,7 +15,8 @@ enum class GenerationFailureCode
 
 constexpr std::string_view generationFailureCodeName(GenerationFailureCode code)
 {
-    switch (code) {
+    switch (code)
+    {
     case GenerationFailureCode::StartsInsufficient:
         return "RMG_STARTS_INSUFFICIENT";
     }
@@ -24,12 +26,14 @@ constexpr std::string_view generationFailureCodeName(GenerationFailureCode code)
 class GenerationError : public std::runtime_error
 {
 public:
-    GenerationError(GenerationFailureCode code, std::string detail)
-        : std::runtime_error(std::move(detail)), code_(code)
+    GenerationError(GenerationFailureCode code, std::string detail) : std::runtime_error(std::move(detail)), code_(code)
     {
     }
 
-    GenerationFailureCode code() const noexcept { return code_; }
+    GenerationFailureCode code() const noexcept
+    {
+        return code_;
+    }
 
 private:
     GenerationFailureCode code_;

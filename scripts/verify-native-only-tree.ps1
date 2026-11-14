@@ -5,41 +5,47 @@ $repoRoot = [IO.Path]::GetFullPath((Join-Path $PSScriptRoot ".."))
 function Assert-NoPath([string]$RelativePath) {
     $path = Join-Path $repoRoot $RelativePath
     if (Test-Path -LiteralPath $path) {
-        throw "native-only 仓库不允许包含: $RelativePath"
+        throw "RMG 仓库不应内嵌独立组件: $RelativePath"
     }
 }
 
-Assert-NoPath "src/advanced"
-Assert-NoPath "src/advanced_strategy.cpp"
-Assert-NoPath "include/rmg/advanced"
-Assert-NoPath "include/rmg/advanced_strategy.h"
-Assert-NoPath "docs/advanced-generator-architecture.md"
+function Assert-RequiredPath([string]$RelativePath) {
+    $path = Join-Path $repoRoot $RelativePath
+    if (!(Test-Path -LiteralPath $path -PathType Leaf)) {
+        throw "RMG 缺少必需实现: $RelativePath"
+    }
+}
+
+Assert-NoPath "src/CompetitiveMapGen"
+Assert-NoPath "src/competitive_map_gen.py"
 Assert-NoPath "docs/native-rmg-analysis.md"
 Assert-NoPath "docs/native-rmg-call-tree.generated.json"
 Assert-NoPath "src/RA2AssetRenderer"
+Assert-NoPath "src/advanced"
+Assert-NoPath "include/rmg/advanced"
+Assert-NoPath "src/advanced_strategy.cpp"
+Assert-NoPath "include/rmg/advanced_strategy.h"
+Assert-NoPath "src/main_native_legacy.cpp"
 
-$codeFiles = @(
-    Get-ChildItem -LiteralPath (Join-Path $repoRoot "include") -Recurse -File
-    Get-ChildItem -LiteralPath (Join-Path $repoRoot "src") -Recurse -File
-)
+foreach ($path in @(
+    "src/main.cpp",
+    "src/yrini_validator.cpp",
+    "include/rmg/yrini_validator.h"
+)) {
+    Assert-RequiredPath $path
+}
 
-$forbiddenPatterns = @(
-    "advancedMode",
-    "advancedRecipe",
-    "AdvancedStrategy",
-    "StrategyPlanningContext",
-    "TopologyStrategy",
-    "SpawnStrategy",
-    "ResourceStrategy",
-    "ObjectiveStrategy",
-    "rebuildAdvancedShorePieceTiles"
-)
-
-foreach ($pattern in $forbiddenPatterns) {
-    $matches = @($codeFiles | Select-String -Pattern $pattern -SimpleMatch)
-    if ($matches.Count -gt 0) {
-        $locations = ($matches | ForEach-Object { "$($_.Path):$($_.LineNumber)" }) -join ", "
-        throw "发现非原生策略代码 '$pattern': $locations"
+$mainSource = Get-Content -LiteralPath (Join-Path $repoRoot "src/main.cpp") -Raw
+foreach ($capability in @(
+    "--error-report-out",
+    "--native-options-report-hex",
+    "verify-native-game-options",
+    "verify-native-options-report",
+    "verify-yrini-product",
+    "verify-competitive-yrini"
+)) {
+    if (!$mainSource.Contains($capability)) {
+        throw "RandomMapGen CLI is missing required capability: $capability"
     }
 }
 
@@ -56,7 +62,11 @@ if ($forbiddenAssets.Count -gt 0) {
     throw "仓库包含不允许分发的游戏或地图资源: $($forbiddenAssets.FullName -join ', ')"
 }
 
-$markdownFiles = Get-ChildItem -LiteralPath $repoRoot -Recurse -File -Filter "*.md"
+$markdownFiles = Get-ChildItem -LiteralPath $repoRoot -Recurse -File -Filter "*.md" |
+    Where-Object {
+        $relativePath = [IO.Path]::GetRelativePath($repoRoot, $_.FullName)
+        $relativePath -notmatch '^(build|\.git)([\\/]|$)'
+    }
 foreach ($file in $markdownFiles) {
     $text = Get-Content -LiteralPath $file.FullName -Raw
     foreach ($match in [regex]::Matches($text, '\[[^\]]+\]\(([^)#]+)(?:#[^)]+)?\)')) {
@@ -72,4 +82,4 @@ foreach ($file in $markdownFiles) {
 }
 
 & (Join-Path $PSScriptRoot "verify-native-generator-layout.ps1")
-Write-Host "native-only tree verification passed"
+Write-Host "RandomMapGen tree verification passed"

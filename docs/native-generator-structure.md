@@ -97,7 +97,7 @@ pwsh -NoProfile -File .\src\RandomMapGen\scripts\verify-native-generator-layout.
   -NativeOriginCellParityOutPrefix build\native-structure-matrix\current
 ```
 
-`-NativeOriginPrebuiltRmg` 或 `RMG_NATIVE_ORIGIN_PREBUILT_RMG` 让矩阵复用已经编译的可执行文件。没有提供时，脚本使用 `xmake build -y -j 8 rmg` 构建一次，然后复用同一产物。
+`-NativeOriginPrebuiltRmg` 或 `RMG_NATIVE_ORIGIN_PREBUILT_RMG` 让矩阵复用已经编译的可执行文件。测试前用 `cmake --build <构建目录> --target rmg --parallel 1` 生成当前产物，再通过对应测试脚本的可执行文件参数复用它。
 
 每个样本检查：
 

@@ -3,7 +3,7 @@ int nativeInterpolatedPlayableSize(int seedSize, int players, bool highResourceT
     return nativeInterpolatedPlayableSizeImpl(seedSize, players, highResourceTerrain);
 }
 
-void NativeMapGenerator::captureStage(const std::string& name, const MapGrid& map, const NativeRandomizer& rng, bool initializedClear)
+void NativeMapGenerator::captureStage(const std::string &name, const MapGrid &map, const NativeRandomizer &rng, bool initializedClear)
 {
     NativeStageSnapshot snapshot;
     snapshot.index = static_cast<int>(report_.stageSnapshots.size()) + 1;
@@ -24,7 +24,8 @@ void NativeMapGenerator::captureStage(const std::string& name, const MapGrid& ma
     std::uint64_t objectHash = kFnvOffset;
     std::uint64_t heightHash = kFnvOffset;
     std::uint64_t flagsHash = kFnvOffset;
-    for (std::uint64_t* hash : {&mapHash, &terrainHash, &overlayHash, &objectHash, &heightHash, &flagsHash}) {
+    for (std::uint64_t *hash : {&mapHash, &terrainHash, &overlayHash, &objectHash, &heightHash, &flagsHash})
+    {
         hashI32(*hash, snapshot.width);
         hashI32(*hash, snapshot.height);
         hashI32(*hash, snapshot.x);
@@ -36,7 +37,7 @@ void NativeMapGenerator::captureStage(const std::string& name, const MapGrid& ma
     // only on the local playable rectangle.  The Origin stage dump therefore
     // includes the current g_MapgenData tile/height/level projection before
     // the later CellClass materialization boundary.
-    const std::vector<IsoTileOverride>* stageIsoTileOverrides = &report_.isoTileOverrides;
+    const std::vector<IsoTileOverride> *stageIsoTileOverrides = &report_.isoTileOverrides;
     std::vector<NativeStageCell> nativeCells = buildNativeStageCells(
         map,
         initializedClear,
@@ -49,27 +50,23 @@ void NativeMapGenerator::captureStage(const std::string& name, const MapGrid& ma
         nativeMapgenDataActive_,
         nativeMapgenDefaultTempTag_,
         nativeMapgenDefaultZoneId_);
-    if (nativeHighResourceWorkspaceActive_
-        && (name == "terrain_generated"
-            || name == "post_process_terrain"
-            || name == "decorate_ponds"
-            || name == "regions_built"
-            || name == "regions_expanded"
-            || name == "regions_connected"
-            || name == "regions_rebuilt"
-            || name == "regions_processed")) {
-        for (NativeStageCell& cell : nativeCells) {
+    if (nativeHighResourceWorkspaceActive_ && (name == "terrain_generated" || name == "post_process_terrain" || name == "decorate_ponds" || name == "regions_built" || name == "regions_expanded" || name == "regions_connected" || name == "regions_rebuilt" || name == "regions_processed"))
+    {
+        for (NativeStageCell &cell : nativeCells)
+        {
             cell.landType = 0;
         }
     }
     dumpNativeStageCellsIfRequested(name, nativeCells);
     snapshot.nonNullCells = static_cast<int>(nativeCells.size());
 
-    for (const NativeStageCell& nativeCell : nativeCells) {
-        const Cell* sourceCell = nativeCell.source;
-        const Cell fallbackCell{};
-        const Cell& cell = sourceCell ? *sourceCell : fallbackCell;
-        switch (cell.terrain) {
+    for (const NativeStageCell &nativeCell : nativeCells)
+    {
+        const Cell *sourceCell = nativeCell.source;
+        const Cell fallbackCell {};
+        const Cell &cell = sourceCell ? *sourceCell : fallbackCell;
+        switch (cell.terrain)
+        {
         case Terrain::Water:
             ++snapshot.waterCells;
             break;
@@ -100,7 +97,8 @@ void NativeMapGenerator::captureStage(const std::string& name, const MapGrid& ma
             break;
         }
 
-        switch (cell.overlay) {
+        switch (cell.overlay)
+        {
         case Overlay::None:
             break;
         case Overlay::Ore:
@@ -131,11 +129,13 @@ void NativeMapGenerator::captureStage(const std::string& name, const MapGrid& ma
         case Overlay::Bridge:
             break;
         }
-        if (nativeCell.overlayTypeIndex >= 168 && nativeCell.overlayTypeIndex <= 177) {
+        if (nativeCell.overlayTypeIndex >= 168 && nativeCell.overlayTypeIndex <= 177)
+        {
             ++snapshot.grassCells;
         }
 
-        switch (cell.terrainObject) {
+        switch (cell.terrainObject)
+        {
         case TerrainObject::None:
             break;
         case TerrainObject::TiberiumTree:
@@ -146,55 +146,73 @@ void NativeMapGenerator::captureStage(const std::string& name, const MapGrid& ma
             break;
         }
 
-        if (isPassable(cell)) {
+        if (isPassable(cell))
+        {
             ++snapshot.passableCells;
         }
-        if (isBuildable(cell)) {
+        if (isBuildable(cell))
+        {
             ++snapshot.buildableCells;
         }
-        if (isWet(cell)) {
+        if (isWet(cell))
+        {
             ++snapshot.wetCells;
         }
-        if (isEncodedShorePiece(cell.slope)) {
+        if (isEncodedShorePiece(cell.slope))
+        {
             const ShorePiece piece = decodeShorePiece(cell.slope);
             ++snapshot.encodedShoreCells;
-            if (cell.terrain == Terrain::Water) {
+            if (cell.terrain == Terrain::Water)
+            {
                 ++snapshot.encodedShoreWaterCells;
-                if (piece.subTile != 0) {
+                if (piece.subTile != 0)
+                {
                     ++snapshot.encodedShoreWaterNonZeroSubTiles;
                 }
-            } else {
+            }
+            else
+            {
                 ++snapshot.encodedShoreLandCells;
-                if (piece.subTile != 0) {
+                if (piece.subTile != 0)
+                {
                     ++snapshot.encodedShoreLandNonZeroSubTiles;
                 }
             }
-            if (piece.subTile != 0) {
+            if (piece.subTile != 0)
+            {
                 ++snapshot.encodedShoreNonZeroSubTiles;
             }
         }
-        if (nativeCell.height != 0) {
+        if (nativeCell.height != 0)
+        {
             ++snapshot.heightCells;
         }
-        if (nativeCell.level != 0) {
+        if (nativeCell.level != 0)
+        {
             ++snapshot.levelNonZeroCells;
         }
-        if (nativeCell.slopeIndex >= 0) {
+        if (nativeCell.slopeIndex >= 0)
+        {
             ++snapshot.slopeCells;
         }
-        if (cell.spawnExclusion) {
+        if (cell.spawnExclusion)
+        {
             ++snapshot.spawnExclusionCells;
         }
-        if (cell.cliffShoreExclusion) {
+        if (cell.cliffShoreExclusion)
+        {
             ++snapshot.cliffShoreExclusionCells;
         }
-        if (cell.regionTag != 0) {
+        if (cell.regionTag != 0)
+        {
             ++snapshot.regionTaggedCells;
         }
-        if (cell.tempTag != 0) {
+        if (cell.tempTag != 0)
+        {
             ++snapshot.tempTaggedCells;
         }
-        if (cell.urbanRegionMark) {
+        if (cell.urbanRegionMark)
+        {
             ++snapshot.urbanMarkedCells;
         }
 
@@ -279,12 +297,13 @@ void NativeMapGenerator::captureStage(const std::string& name, const MapGrid& ma
     report_.stageSnapshots.push_back(std::move(snapshot));
 }
 
-std::string describeNativeStageReport(const NativeGenerationReport& report)
+std::string describeNativeStageReport(const NativeGenerationReport &report)
 {
     std::ostringstream out;
     out << "native stage report\n";
     out << "stages=" << report.stageSnapshots.size() << '\n';
-    for (const NativeStageSnapshot& stage : report.stageSnapshots) {
+    for (const NativeStageSnapshot &stage : report.stageSnapshots)
+    {
         out << "stage=" << stage.index
             << " name=" << stage.name
             << " valid=" << (stage.valid ? 1 : 0)

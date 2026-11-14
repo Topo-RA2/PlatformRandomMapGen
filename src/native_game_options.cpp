@@ -15,15 +15,19 @@
 #include <string_view>
 #include <system_error>
 
-namespace rmg {
-namespace {
+namespace rmg
+{
+namespace
+{
 
-struct Range {
+struct Range
+{
     int minimum;
     int maximum;
 };
 
-struct TerrainRanges {
+struct TerrainRanges
+{
     Range water;
     Range ruggedness;
     Range urbanPresence;
@@ -31,130 +35,121 @@ struct TerrainRanges {
     Range regionSize;
 };
 
-constexpr std::array<TerrainRanges, 4> kTerrainRanges{{
+constexpr std::array<TerrainRanges, 4> kTerrainRanges {{
     {{0, 25}, {20, 100}, {0, 100}, {0, 100}, {0, 100}},
     {{50, 100}, {20, 100}, {0, 100}, {0, 100}, {35, 100}},
     {{0, 100}, {20, 100}, {0, 100}, {0, 100}, {0, 100}},
     {{0, 100}, {20, 100}, {0, 0}, {0, 20}, {0, 50}},
 }};
 
-void requireRange(const char* name, int value, int minimum, int maximum)
+void requireRange(const char *name, int value, int minimum, int maximum)
 {
-    if (value < minimum || value > maximum) {
+    if (value < minimum || value > maximum)
+    {
         throw std::invalid_argument(
-            std::string(name) + " must be between " + std::to_string(minimum)
-            + " and " + std::to_string(maximum));
+            std::string(name) + " must be between " + std::to_string(minimum) + " and " + std::to_string(maximum));
     }
 }
 
-Range vegetationRange(const RmgConfig& config, int terrainType)
+Range vegetationRange(const RmgConfig &config, int terrainType)
 {
     const std::size_t index = static_cast<std::size_t>(terrainType);
-    if (config.vegetationMinimums.size() <= index) {
+    if (config.vegetationMinimums.size() <= index)
+    {
         throw std::invalid_argument(
-            "vegetationMinimums must contain an entry for terrainType "
-            + std::to_string(terrainType));
+            "vegetationMinimums must contain an entry for terrainType " + std::to_string(terrainType));
     }
-    if (config.vegetationMaximums.size() <= index) {
+    if (config.vegetationMaximums.size() <= index)
+    {
         throw std::invalid_argument(
-            "vegetationMaximums must contain an entry for terrainType "
-            + std::to_string(terrainType));
+            "vegetationMaximums must contain an entry for terrainType " + std::to_string(terrainType));
     }
 
-    Range range{
+    Range range {
         std::clamp(config.vegetationMinimums[index], 0, 100),
         std::clamp(config.vegetationMaximums[index], 0, 100),
     };
-    if (range.minimum > range.maximum) {
+    if (range.minimum > range.maximum)
+    {
         range.minimum = range.maximum;
     }
     return range;
 }
 
-int drawRange(NativeRandomizer& randomizer, Range range)
+int drawRange(NativeRandomizer &randomizer, Range range)
 {
     return randomizer.randomRanged(range.minimum, range.maximum);
 }
 
-bool sameMapSeedOptions(const MapSeedOptions& left, const MapSeedOptions& right)
+bool sameMapSeedOptions(const MapSeedOptions &left, const MapSeedOptions &right)
 {
-    return left.theater == right.theater
-        && left.mapType == right.mapType
-        && left.resources == right.resources
-        && left.ruggedness == right.ruggedness
-        && left.time == right.time
-        && left.waterAmount == right.waterAmount
-        && left.numPlayers == right.numPlayers
-        && left.tiberium == right.tiberium
-        && left.tiberiumLayout == right.tiberiumLayout
-        && left.vegetation == right.vegetation
-        && left.urbanPresence == right.urbanPresence
-        && left.width == right.width
-        && left.height == right.height
-        && left.accessibility == right.accessibility
-        && left.regionSize == right.regionSize
-        && left.seed == right.seed
-        && left.terrainTypeOverride == right.terrainTypeOverride
-        && left.nativeWidthInterpolation == right.nativeWidthInterpolation
-        && left.nativeHeightInterpolation == right.nativeHeightInterpolation
-        && left.nativeSeedWidth == right.nativeSeedWidth
-        && left.nativeSeedHeight == right.nativeSeedHeight;
+    return left.theater == right.theater && left.mapType == right.mapType && left.resources == right.resources && left.ruggedness == right.ruggedness && left.time == right.time && left.waterAmount == right.waterAmount && left.numPlayers == right.numPlayers && left.tiberium == right.tiberium && left.tiberiumLayout == right.tiberiumLayout && left.vegetation == right.vegetation && left.urbanPresence == right.urbanPresence && left.width == right.width && left.height == right.height && left.accessibility == right.accessibility && left.regionSize == right.regionSize && left.seed == right.seed && left.terrainTypeOverride == right.terrainTypeOverride && left.nativeWidthInterpolation == right.nativeWidthInterpolation && left.nativeHeightInterpolation == right.nativeHeightInterpolation && left.nativeSeedWidth == right.nativeSeedWidth && left.nativeSeedHeight == right.nativeSeedHeight;
 }
 
-void requireVerification(bool condition, const std::string& detail)
+void requireVerification(bool condition, const std::string &detail)
 {
-    if (!condition) {
+    if (!condition)
+    {
         throw std::runtime_error("native game options self-test failed: " + detail);
     }
 }
 
-std::optional<std::uint64_t> nonNegativeInteger(const nlohmann::json& value)
+std::optional<std::uint64_t> nonNegativeInteger(const nlohmann::json &value)
 {
-    if (value.is_number_unsigned()) {
+    if (value.is_number_unsigned())
+    {
         return value.get<std::uint64_t>();
     }
-    if (value.is_number_integer()) {
+    if (value.is_number_integer())
+    {
         const std::int64_t integer = value.get<std::int64_t>();
-        if (integer >= 0) {
+        if (integer >= 0)
+        {
             return static_cast<std::uint64_t>(integer);
         }
     }
     return std::nullopt;
 }
 
-bool exactlyMatchesJson(const nlohmann::json& actual, const nlohmann::json& expected)
+bool exactlyMatchesJson(const nlohmann::json &actual, const nlohmann::json &expected)
 {
-    if (expected.is_object()) {
-        if (!actual.is_object() || actual.size() != expected.size()) {
+    if (expected.is_object())
+    {
+        if (!actual.is_object() || actual.size() != expected.size())
+        {
             return false;
         }
-        for (auto it = expected.begin(); it != expected.end(); ++it) {
+        for (auto it = expected.begin(); it != expected.end(); ++it)
+        {
             const auto actualIt = actual.find(it.key());
-            if (actualIt == actual.end() || !exactlyMatchesJson(*actualIt, it.value())) {
+            if (actualIt == actual.end() || !exactlyMatchesJson(*actualIt, it.value()))
+            {
                 return false;
             }
         }
         return true;
     }
-    if (expected.is_number_integer() || expected.is_number_unsigned()) {
+    if (expected.is_number_integer() || expected.is_number_unsigned())
+    {
         const auto actualInteger = nonNegativeInteger(actual);
         const auto expectedInteger = nonNegativeInteger(expected);
-        return actualInteger.has_value()
-            && expectedInteger.has_value()
-            && *actualInteger == *expectedInteger;
+        return actualInteger.has_value() && expectedInteger.has_value() && *actualInteger == *expectedInteger;
     }
     return actual.type() == expected.type() && actual == expected;
 }
 
-template <typename Mutator>
-void requireRejected(const NativeGameOptions& base, Mutator mutator, const char* label)
+template<typename Mutator>
+void requireRejected(const NativeGameOptions &base, Mutator mutator, const char *label)
 {
     NativeGameOptions invalid = base;
     mutator(invalid);
     bool rejected = false;
-    try {
+    try
+    {
         static_cast<void>(deriveNativeGameOptions(invalid));
-    } catch (const std::invalid_argument&) {
+    }
+    catch (const std::invalid_argument &)
+    {
         rejected = true;
     }
     requireVerification(rejected, std::string("accepted invalid ") + label);
@@ -163,8 +158,8 @@ void requireRejected(const NativeGameOptions& base, Mutator mutator, const char*
 } // namespace
 
 NativeGameOptionsResolution deriveNativeGameOptions(
-    const NativeGameOptions& options,
-    const RmgConfig& config)
+    const NativeGameOptions &options,
+    const RmgConfig &config)
 {
     requireRange("terrainType", options.terrainType, 1, 4);
     requireRange("timeOfDay", options.timeOfDay, 0, 3);
@@ -173,7 +168,7 @@ NativeGameOptionsResolution deriveNativeGameOptions(
     requireRange("resources", options.resources, 0, 3);
     requireRange("players", options.players, 2, 8);
 
-    const TerrainRanges& ranges = kTerrainRanges[static_cast<std::size_t>(options.terrainType - 1)];
+    const TerrainRanges &ranges = kTerrainRanges[static_cast<std::size_t>(options.terrainType - 1)];
     const Range vegetation = vegetationRange(config, options.terrainType);
     NativeRandomizer randomizer(options.randomizationSeed);
 
@@ -210,15 +205,15 @@ NativeGameOptionsResolution deriveNativeGameOptions(
 }
 
 std::string serializeNativeGameOptionsReport(
-    const NativeGameOptions& options,
-    const NativeGameOptionsResolution& resolution)
+    const NativeGameOptions &options,
+    const NativeGameOptionsResolution &resolution)
 {
-    const MapSeedOptions& derived = resolution.mapSeedOptions;
+    const MapSeedOptions &derived = resolution.mapSeedOptions;
     std::ostringstream out;
     out << "{\n"
         << "  \"schemaVersion\": 1,\n"
         << "  \"input\": {\n"
-        << "    \"mode\": \"game-native\",\n"
+        << "    \"mode\": \"native\",\n"
         << "    \"terrainType\": " << options.terrainType << ",\n"
         << "    \"timeOfDay\": " << options.timeOfDay << ",\n"
         << "    \"climate\": " << options.climate << ",\n"
@@ -255,10 +250,11 @@ std::string serializeNativeGameOptionsReport(
 
 NativeGameOptionsResolution validateNativeGameOptionsReport(
     std::string_view report,
-    const NativeGameOptions& expectedOptions,
-    const RmgConfig& config)
+    const NativeGameOptions &expectedOptions,
+    const RmgConfig &config)
 {
-    if (report.empty() || report.size() > kMaximumNativeGameOptionsReportBytes) {
+    if (report.empty() || report.size() > kMaximumNativeGameOptionsReportBytes)
+    {
         throw std::runtime_error("native options report must be between 1 and 8192 bytes");
     }
 
@@ -268,31 +264,35 @@ NativeGameOptionsResolution validateNativeGameOptionsReport(
         nullptr,
         false);
     const nlohmann::json actual = nlohmann::json::parse(std::string(report), nullptr, false);
-    if (actual.is_discarded() || expected.is_discarded() || !exactlyMatchesJson(actual, expected)) {
+    if (actual.is_discarded() || expected.is_discarded() || !exactlyMatchesJson(actual, expected))
+    {
         throw std::runtime_error("native options report does not match recomputed values");
     }
     return expectedResolution;
 }
 
 NativeGameOptionsResolution validateNativeGameOptionsReportFile(
-    const std::filesystem::path& path,
-    const NativeGameOptions& expectedOptions,
-    const RmgConfig& config)
+    const std::filesystem::path &path,
+    const NativeGameOptions &expectedOptions,
+    const RmgConfig &config)
 {
     std::error_code error;
     const std::uintmax_t size = std::filesystem::file_size(path, error);
-    if (error || size == 0 || size > kMaximumNativeGameOptionsReportBytes) {
+    if (error || size == 0 || size > kMaximumNativeGameOptionsReportBytes)
+    {
         throw std::runtime_error("native options report is missing or too large: " + path.string());
     }
 
     std::ifstream input(path, std::ios::binary);
-    if (!input) {
+    if (!input)
+    {
         throw std::runtime_error("failed to open native options report: " + path.string());
     }
     std::ostringstream buffer;
     buffer << input.rdbuf();
     const std::string report = buffer.str();
-    if ((!input.good() && !input.eof()) || report.size() != size) {
+    if ((!input.good() && !input.eof()) || report.size() != size)
+    {
         throw std::runtime_error("failed to read native options report: " + path.string());
     }
     return validateNativeGameOptionsReport(report, expectedOptions, config);
@@ -300,7 +300,7 @@ NativeGameOptionsResolution validateNativeGameOptionsReportFile(
 
 void verifyNativeGameOptions()
 {
-    constexpr std::array<std::array<int, 4>, 7> expectedSizes{{
+    constexpr std::array<std::array<int, 4>, 7> expectedSizes {{
         {{70, 73, 76, 80}},
         {{70, 73, 76, 80}},
         {{70, 73, 76, 80}},
@@ -309,25 +309,31 @@ void verifyNativeGameOptions()
         {{100, 103, 106, 110}},
         {{100, 106, 113, 120}},
     }};
-    for (int players = 2; players <= 8; ++players) {
-        for (int mapSize = 0; mapSize <= 3; ++mapSize) {
+    for (int players = 2; players <= 8; ++players)
+    {
+        for (int mapSize = 0; mapSize <= 3; ++mapSize)
+        {
             requireVerification(
-                nativeInterpolatedPlayableSize(mapSize, players)
-                    == expectedSizes[static_cast<std::size_t>(players - 2)][static_cast<std::size_t>(mapSize)],
-                "playable size golden mismatch for players=" + std::to_string(players)
-                    + " mapSize=" + std::to_string(mapSize));
+                nativeInterpolatedPlayableSize(mapSize, players) == expectedSizes[static_cast<std::size_t>(players - 2)][static_cast<std::size_t>(mapSize)],
+                "playable size golden mismatch for players=" + std::to_string(players) + " mapSize=" + std::to_string(mapSize));
         }
     }
 
     std::size_t selectorCaseCount = 0;
-    std::array<int, 7> playerCaseCounts{};
+    std::array<int, 7> playerCaseCounts {};
     const RmgConfig defaultConfig;
-    for (int terrainType = 1; terrainType <= 4; ++terrainType) {
-        for (int timeOfDay = 0; timeOfDay <= 3; ++timeOfDay) {
-            for (int climate = 0; climate <= 1; ++climate) {
-                for (int mapSize = 0; mapSize <= 3; ++mapSize) {
-                    for (int resources = 0; resources <= 3; ++resources) {
-                        for (int players = 2; players <= 8; ++players) {
+    for (int terrainType = 1; terrainType <= 4; ++terrainType)
+    {
+        for (int timeOfDay = 0; timeOfDay <= 3; ++timeOfDay)
+        {
+            for (int climate = 0; climate <= 1; ++climate)
+            {
+                for (int mapSize = 0; mapSize <= 3; ++mapSize)
+                {
+                    for (int resources = 0; resources <= 3; ++resources)
+                    {
+                        for (int players = 2; players <= 8; ++players)
+                        {
                             NativeGameOptions input;
                             input.terrainType = terrainType;
                             input.timeOfDay = timeOfDay;
@@ -335,8 +341,7 @@ void verifyNativeGameOptions()
                             input.mapSize = mapSize;
                             input.resources = resources;
                             input.players = players;
-                            input.randomizationSeed = 0x9E3779B9u
-                                * static_cast<std::uint32_t>(selectorCaseCount + 1);
+                            input.randomizationSeed = 0x9E3779B9u * static_cast<std::uint32_t>(selectorCaseCount + 1);
 
                             const NativeGameOptionsResolution result = deriveNativeGameOptions(input, defaultConfig);
                             const NativeGameOptionsResolution repeated = deriveNativeGameOptions(input, defaultConfig);
@@ -344,46 +349,13 @@ void verifyNativeGameOptions()
                                 serializeNativeGameOptionsReport(input, result),
                                 input,
                                 defaultConfig);
-                            const MapSeedOptions& derived = result.mapSeedOptions;
-                            const TerrainRanges& ranges = kTerrainRanges[static_cast<std::size_t>(terrainType - 1)];
+                            const MapSeedOptions &derived = result.mapSeedOptions;
+                            const TerrainRanges &ranges = kTerrainRanges[static_cast<std::size_t>(terrainType - 1)];
                             const Range vegetation = vegetationRange(defaultConfig, terrainType);
                             const int expectedPlayableSize = expectedSizes[static_cast<std::size_t>(input.players - 2)]
-                                [static_cast<std::size_t>(mapSize)];
+                                                                          [static_cast<std::size_t>(mapSize)];
                             requireVerification(
-                                sameMapSeedOptions(derived, repeated.mapSeedOptions)
-                                    && sameMapSeedOptions(derived, validated.mapSeedOptions)
-                                    && derived.theater == climate
-                                    && derived.mapType == terrainType
-                                    && derived.resources == resources
-                                    && derived.time == timeOfDay
-                                    && derived.numPlayers == input.players
-                                    && derived.width == mapSize
-                                    && derived.height == mapSize
-                                    && derived.nativeSeedWidth == mapSize
-                                    && derived.nativeSeedHeight == mapSize
-                                    && derived.nativeWidthInterpolation
-                                    && derived.nativeHeightInterpolation
-                                    && derived.terrainTypeOverride == -1
-                                    && derived.tiberium == std::max(1, resources * 20)
-                                    && derived.waterAmount >= ranges.water.minimum
-                                    && derived.waterAmount <= ranges.water.maximum
-                                    && derived.ruggedness >= ranges.ruggedness.minimum
-                                    && derived.ruggedness <= ranges.ruggedness.maximum
-                                    && derived.urbanPresence >= ranges.urbanPresence.minimum
-                                    && derived.urbanPresence <= ranges.urbanPresence.maximum
-                                    && derived.accessibility >= ranges.accessibility.minimum
-                                    && derived.accessibility <= ranges.accessibility.maximum
-                                    && derived.regionSize >= ranges.regionSize.minimum
-                                    && derived.regionSize <= ranges.regionSize.maximum
-                                    && derived.tiberiumLayout >= 0
-                                    && derived.tiberiumLayout <= 100
-                                    && derived.vegetation >= vegetation.minimum
-                                    && derived.vegetation <= vegetation.maximum
-                                    && result.playableWidth == expectedPlayableSize
-                                    && result.playableHeight == expectedPlayableSize
-                                    && result.randomDrawCount > 0
-                                    && repeated.randomDrawCount == result.randomDrawCount
-                                    && validated.randomDrawCount == result.randomDrawCount,
+                                sameMapSeedOptions(derived, repeated.mapSeedOptions) && sameMapSeedOptions(derived, validated.mapSeedOptions) && derived.theater == climate && derived.mapType == terrainType && derived.resources == resources && derived.time == timeOfDay && derived.numPlayers == input.players && derived.width == mapSize && derived.height == mapSize && derived.nativeSeedWidth == mapSize && derived.nativeSeedHeight == mapSize && derived.nativeWidthInterpolation && derived.nativeHeightInterpolation && derived.terrainTypeOverride == -1 && derived.tiberium == std::max(1, resources * 20) && derived.waterAmount >= ranges.water.minimum && derived.waterAmount <= ranges.water.maximum && derived.ruggedness >= ranges.ruggedness.minimum && derived.ruggedness <= ranges.ruggedness.maximum && derived.urbanPresence >= ranges.urbanPresence.minimum && derived.urbanPresence <= ranges.urbanPresence.maximum && derived.accessibility >= ranges.accessibility.minimum && derived.accessibility <= ranges.accessibility.maximum && derived.regionSize >= ranges.regionSize.minimum && derived.regionSize <= ranges.regionSize.maximum && derived.tiberiumLayout >= 0 && derived.tiberiumLayout <= 100 && derived.vegetation >= vegetation.minimum && derived.vegetation <= vegetation.maximum && result.playableWidth == expectedPlayableSize && result.playableHeight == expectedPlayableSize && result.randomDrawCount > 0 && repeated.randomDrawCount == result.randomDrawCount && validated.randomDrawCount == result.randomDrawCount,
                                 "selector matrix mismatch at case=" + std::to_string(selectorCaseCount));
                             ++playerCaseCounts[static_cast<std::size_t>(input.players - 2)];
                             ++selectorCaseCount;
@@ -395,10 +367,14 @@ void verifyNativeGameOptions()
     }
     requireVerification(selectorCaseCount == 3584, "selector matrix did not cover 3584 cases");
     requireVerification(
-        std::all_of(playerCaseCounts.begin(), playerCaseCounts.end(), [](int count) { return count > 0; }),
+        std::all_of(playerCaseCounts.begin(), playerCaseCounts.end(), [](int count)
+                    {
+                        return count > 0;
+                    }),
         "selector matrix did not exercise every player count");
 
-    struct Golden {
+    struct Golden
+    {
         int water;
         int ruggedness;
         int urbanPresence;
@@ -409,13 +385,14 @@ void verifyNativeGameOptions()
         std::uint32_t mapSeed;
         std::uint64_t draws;
     };
-    constexpr std::array<Golden, 4> goldens{{
+    constexpr std::array<Golden, 4> goldens {{
         {25, 97, 76, 97, 66, 6, 77, 58275u, 10},
         {63, 96, 97, 66, 41, 35, 92, 50959u, 12},
         {57, 97, 76, 97, 66, 6, 100, 17529u, 9},
         {57, 97, 0, 12, 33, 66, 100, 30982u, 8},
     }};
-    for (int terrainType = 1; terrainType <= 4; ++terrainType) {
+    for (int terrainType = 1; terrainType <= 4; ++terrainType)
+    {
         NativeGameOptions input;
         input.terrainType = terrainType;
         input.timeOfDay = terrainType - 1;
@@ -425,35 +402,15 @@ void verifyNativeGameOptions()
         input.players = terrainType + 1;
         input.randomizationSeed = 0x12345678u;
         const NativeGameOptionsResolution result = deriveNativeGameOptions(input);
-        const MapSeedOptions& derived = result.mapSeedOptions;
-        const Golden& expected = goldens[static_cast<std::size_t>(terrainType - 1)];
+        const MapSeedOptions &derived = result.mapSeedOptions;
+        const Golden &expected = goldens[static_cast<std::size_t>(terrainType - 1)];
         requireVerification(
-            derived.theater == input.climate
-                && derived.mapType == input.terrainType
-                && derived.resources == input.resources
-                && derived.ruggedness == expected.ruggedness
-                && derived.time == input.timeOfDay
-                && derived.waterAmount == expected.water
-                && derived.numPlayers == input.players
-                && derived.tiberium == std::max(1, input.resources * 20)
-                && derived.tiberiumLayout == expected.tiberiumLayout
-                && derived.vegetation == expected.vegetation
-                && derived.urbanPresence == expected.urbanPresence
-                && derived.width == input.mapSize
-                && derived.height == input.mapSize
-                && derived.accessibility == expected.accessibility
-                && derived.regionSize == expected.regionSize
-                && derived.seed == expected.mapSeed
-                && derived.terrainTypeOverride == -1
-                && derived.nativeWidthInterpolation
-                && derived.nativeHeightInterpolation
-                && derived.nativeSeedWidth == input.mapSize
-                && derived.nativeSeedHeight == input.mapSize
-                && result.randomDrawCount == expected.draws,
+            derived.theater == input.climate && derived.mapType == input.terrainType && derived.resources == input.resources && derived.ruggedness == expected.ruggedness && derived.time == input.timeOfDay && derived.waterAmount == expected.water && derived.numPlayers == input.players && derived.tiberium == std::max(1, input.resources * 20) && derived.tiberiumLayout == expected.tiberiumLayout && derived.vegetation == expected.vegetation && derived.urbanPresence == expected.urbanPresence && derived.width == input.mapSize && derived.height == input.mapSize && derived.accessibility == expected.accessibility && derived.regionSize == expected.regionSize && derived.seed == expected.mapSeed && derived.terrainTypeOverride == -1 && derived.nativeWidthInterpolation && derived.nativeHeightInterpolation && derived.nativeSeedWidth == input.mapSize && derived.nativeSeedHeight == input.mapSize && result.randomDrawCount == expected.draws,
             "terrain golden mismatch for terrainType=" + std::to_string(terrainType));
     }
 
-    for (int resources = 0; resources <= 3; ++resources) {
+    for (int resources = 0; resources <= 3; ++resources)
+    {
         NativeGameOptions input;
         input.resources = resources;
         const int expected = resources == 0 ? 1 : resources * 20;
@@ -467,10 +424,7 @@ void verifyNativeGameOptions()
     const NativeGameOptionsResolution first = deriveNativeGameOptions(base);
     const NativeGameOptionsResolution second = deriveNativeGameOptions(base);
     requireVerification(
-        sameMapSeedOptions(first.mapSeedOptions, second.mapSeedOptions)
-            && first.playableWidth == second.playableWidth
-            && first.playableHeight == second.playableHeight
-            && first.randomDrawCount == second.randomDrawCount,
+        sameMapSeedOptions(first.mapSeedOptions, second.mapSeedOptions) && first.playableWidth == second.playableWidth && first.playableHeight == second.playableHeight && first.randomDrawCount == second.randomDrawCount,
         "same input was not deterministic");
 
     RmgConfig lowClampedConfig;
@@ -494,60 +448,116 @@ void verifyNativeGameOptions()
         deriveNativeGameOptions(base, reversedConfig).mapSeedOptions.vegetation == 10,
         "reversed vegetation range did not collapse to maximum");
 
-    for (bool truncateMinimums : {false, true}) {
+    for (bool truncateMinimums : {false, true})
+    {
         RmgConfig shortConfig;
-        if (truncateMinimums) {
+        if (truncateMinimums)
+        {
             shortConfig.vegetationMinimums.resize(1);
-        } else {
+        }
+        else
+        {
             shortConfig.vegetationMaximums.resize(1);
         }
         bool rejected = false;
-        try {
+        try
+        {
             static_cast<void>(deriveNativeGameOptions(base, shortConfig));
-        } catch (const std::invalid_argument&) {
+        }
+        catch (const std::invalid_argument &)
+        {
             rejected = true;
         }
         requireVerification(rejected, "accepted an undersized vegetation list");
     }
 
     for (const NativeGameOptions valid : {
-            NativeGameOptions{1, 0, 0, 0, 0, 2, 0u},
-            NativeGameOptions{4, 3, 1, 3, 3, 8, std::numeric_limits<std::uint32_t>::max()},
-        }) {
+             NativeGameOptions {1, 0, 0, 0, 0, 2, 0u},
+             NativeGameOptions {4, 3, 1, 3, 3, 8, std::numeric_limits<std::uint32_t>::max()},
+         })
+    {
         static_cast<void>(deriveNativeGameOptions(valid));
     }
-    requireRejected(base, [](NativeGameOptions& value) { value.terrainType = 0; }, "terrainType");
-    requireRejected(base, [](NativeGameOptions& value) { value.terrainType = 5; }, "terrainType");
-    requireRejected(base, [](NativeGameOptions& value) { value.timeOfDay = -1; }, "timeOfDay");
-    requireRejected(base, [](NativeGameOptions& value) { value.timeOfDay = 4; }, "timeOfDay");
-    requireRejected(base, [](NativeGameOptions& value) { value.climate = -1; }, "climate");
-    requireRejected(base, [](NativeGameOptions& value) { value.climate = 2; }, "climate");
-    requireRejected(base, [](NativeGameOptions& value) { value.mapSize = -1; }, "mapSize");
-    requireRejected(base, [](NativeGameOptions& value) { value.mapSize = 4; }, "mapSize");
-    requireRejected(base, [](NativeGameOptions& value) { value.resources = -1; }, "resources");
-    requireRejected(base, [](NativeGameOptions& value) { value.resources = 4; }, "resources");
-    requireRejected(base, [](NativeGameOptions& value) { value.players = 1; }, "players");
-    requireRejected(base, [](NativeGameOptions& value) { value.players = 9; }, "players");
+    requireRejected(base, [](NativeGameOptions &value)
+                    {
+                        value.terrainType = 0;
+                    },
+                    "terrainType");
+    requireRejected(base, [](NativeGameOptions &value)
+                    {
+                        value.terrainType = 5;
+                    },
+                    "terrainType");
+    requireRejected(base, [](NativeGameOptions &value)
+                    {
+                        value.timeOfDay = -1;
+                    },
+                    "timeOfDay");
+    requireRejected(base, [](NativeGameOptions &value)
+                    {
+                        value.timeOfDay = 4;
+                    },
+                    "timeOfDay");
+    requireRejected(base, [](NativeGameOptions &value)
+                    {
+                        value.climate = -1;
+                    },
+                    "climate");
+    requireRejected(base, [](NativeGameOptions &value)
+                    {
+                        value.climate = 2;
+                    },
+                    "climate");
+    requireRejected(base, [](NativeGameOptions &value)
+                    {
+                        value.mapSize = -1;
+                    },
+                    "mapSize");
+    requireRejected(base, [](NativeGameOptions &value)
+                    {
+                        value.mapSize = 4;
+                    },
+                    "mapSize");
+    requireRejected(base, [](NativeGameOptions &value)
+                    {
+                        value.resources = -1;
+                    },
+                    "resources");
+    requireRejected(base, [](NativeGameOptions &value)
+                    {
+                        value.resources = 4;
+                    },
+                    "resources");
+    requireRejected(base, [](NativeGameOptions &value)
+                    {
+                        value.players = 1;
+                    },
+                    "players");
+    requireRejected(base, [](NativeGameOptions &value)
+                    {
+                        value.players = 9;
+                    },
+                    "players");
 
     const std::string report = serializeNativeGameOptionsReport(base, first);
     requireVerification(
-        report.find("\"mode\": \"game-native\"") != std::string::npos
-            && report.find("\"randomizationSeed\": 4294967295") != std::string::npos
-            && report.find("\"finalMapSeed\": ") != std::string::npos
-            && report.find("\"rngDrawCount\": ") != std::string::npos,
+        report.find("\"mode\": \"native\"") != std::string::npos && report.find("\"randomizationSeed\": 4294967295") != std::string::npos && report.find("\"finalMapSeed\": ") != std::string::npos && report.find("\"rngDrawCount\": ") != std::string::npos,
         "schema 1 report omitted native seed provenance");
 
     const NativeGameOptionsResolution validated = validateNativeGameOptionsReport(report, base);
     requireVerification(
-        sameMapSeedOptions(validated.mapSeedOptions, first.mapSeedOptions)
-            && validated.randomDrawCount == first.randomDrawCount,
+        sameMapSeedOptions(validated.mapSeedOptions, first.mapSeedOptions) && validated.randomDrawCount == first.randomDrawCount,
         "schema 1 report did not survive strict recomputation");
 
-    auto requireReportRejected = [&](std::string invalidReport, const char* label) {
+    auto requireReportRejected = [&](std::string invalidReport, const char *label)
+    {
         bool rejected = false;
-        try {
+        try
+        {
             static_cast<void>(validateNativeGameOptionsReport(invalidReport, base));
-        } catch (const std::runtime_error&) {
+        }
+        catch (const std::runtime_error &)
+        {
             rejected = true;
         }
         requireVerification(rejected, std::string("accepted invalid report ") + label);

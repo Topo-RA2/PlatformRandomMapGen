@@ -9,9 +9,11 @@
 #include <string>
 #include <vector>
 
-namespace rmg {
+namespace rmg
+{
 
-struct LightingSettings {
+struct LightingSettings
+{
     bool enabled = false;
     int levelIndex = 0;
     int ambient = 100;
@@ -27,7 +29,8 @@ struct LightingSettings {
     int dominatorAmbientChangeRate = 1;
 };
 
-struct BasicSceneSettings {
+struct BasicSceneSettings
+{
     int newIniFormat = 4;
     bool tiberiumGrowthEnabled = true;
     bool veinGrowthEnabled = true;
@@ -37,12 +40,14 @@ struct BasicSceneSettings {
     int initTime = 10000;
 };
 
-struct MultiplayerSessionSettings {
+struct MultiplayerSessionSettings
+{
     bool bridgeDestruction = true;
     bool crates = false;
 };
 
-struct MapDocument {
+struct MapDocument
+{
     std::string mode;
     std::uint32_t seed = 0;
     int players = 0;
@@ -66,12 +71,12 @@ struct MapDocument {
     std::vector<std::string> notes;
 };
 
-std::string writeTextMap(const MapGrid& map, const MapDocument& document);
-std::string writeYrIniMap(const MapGrid& map, const MapDocument& document);
-std::string writeYrIniProductMap(const MapGrid& map, const MapDocument& document);
-void writeTextMapFile(const std::filesystem::path& path, const MapGrid& map, const MapDocument& document);
-void writeYrIniMapFile(const std::filesystem::path& path, const MapGrid& map, const MapDocument& document);
-void writeYrIniProductMapFile(const std::filesystem::path& path, const MapGrid& map, const MapDocument& document);
-MapDocument makeNativeDocument(const MapSeedOptions& options, const RmgConfig& config, const NativeGenerationReport& report, const MapGrid& map);
+std::string writeTextMap(const MapGrid &map, const MapDocument &document);
+std::string writeYrIniMap(const MapGrid &map, const MapDocument &document);
+std::string writeYrIniProductMap(const MapGrid &map, const MapDocument &document);
+void writeTextMapFile(const std::filesystem::path &path, const MapGrid &map, const MapDocument &document);
+void writeYrIniMapFile(const std::filesystem::path &path, const MapGrid &map, const MapDocument &document);
+void writeYrIniProductMapFile(const std::filesystem::path &path, const MapGrid &map, const MapDocument &document);
+MapDocument makeNativeDocument(const MapSeedOptions &options, const RmgConfig &config, const NativeGenerationReport &report, const MapGrid &map);
 
 } // namespace rmg

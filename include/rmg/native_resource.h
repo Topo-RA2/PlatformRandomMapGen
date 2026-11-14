@@ -7,29 +7,32 @@
 #include <string_view>
 #include <vector>
 
-namespace rmg::native_assets {
+namespace rmg::native_assets
+{
 
-struct TheaterDefinition {
+struct TheaterDefinition
+{
     std::string name;
     std::string iniFile;
     std::string extension;
     std::vector<std::string> mixes;
 };
 
-[[nodiscard]] const TheaterDefinition& theaterDefinition(int index);
+[[nodiscard]] const TheaterDefinition &theaterDefinition(int index);
 
-class ResourceFileSystem {
+class ResourceFileSystem
+{
 public:
     ResourceFileSystem();
     ~ResourceFileSystem();
-    ResourceFileSystem(ResourceFileSystem&&) noexcept;
-    ResourceFileSystem& operator=(ResourceFileSystem&&) noexcept;
-    ResourceFileSystem(const ResourceFileSystem&) = delete;
-    ResourceFileSystem& operator=(const ResourceFileSystem&) = delete;
+    ResourceFileSystem(ResourceFileSystem &&) noexcept;
+    ResourceFileSystem &operator=(ResourceFileSystem &&) noexcept;
+    ResourceFileSystem(const ResourceFileSystem &) = delete;
+    ResourceFileSystem &operator=(const ResourceFileSystem &) = delete;
 
-    bool addDirectory(const std::filesystem::path& path);
+    bool addDirectory(const std::filesystem::path &path);
     void loadYuriMixes();
-    void loadTheater(const TheaterDefinition& theater);
+    void loadTheater(const TheaterDefinition &theater);
 
     [[nodiscard]] bool contains(std::string_view filename) const;
     [[nodiscard]] std::vector<std::uint8_t> open(std::string_view filename) const;

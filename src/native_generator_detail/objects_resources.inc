@@ -1,22 +1,25 @@
 void NativeMapGenerator::spawnNeutralTechBuildings(
-    MapGrid& map,
-    const MapSeedOptions& options,
-    NativeRandomizer& rng,
-    const std::vector<NativeRegion>& regions,
+    MapGrid &map,
+    const MapSeedOptions &options,
+    NativeRandomizer &rng,
+    const std::vector<NativeRegion> &regions,
     bool initialZeroQuotaRegions)
 {
     std::ofstream techTrace;
-    if (!initialZeroQuotaRegions) {
-        if (const char* dumpPath = std::getenv(kNativeTechDumpPathEnv); dumpPath != nullptr && dumpPath[0] != '\0') {
+    if (!initialZeroQuotaRegions)
+    {
+        if (const char *dumpPath = std::getenv(kNativeTechDumpPathEnv); dumpPath != nullptr && dumpPath[0] != '\0')
+        {
             techTrace.open(dumpPath, std::ios::out | std::ios::trunc);
-            if (techTrace.is_open()) {
+            if (techTrace.is_open())
+            {
                 techTrace << "event,call,round,regionIndex,quota,regionCells,attempt,raw,index,candidateCount,x,y,typeIndex,placed\n";
             }
         }
     }
 
     auto traceTech = [&techTrace](
-                         const char* event,
+                         const char *event,
                          int call,
                          int round,
                          int regionIndex,
@@ -28,8 +31,10 @@ void NativeMapGenerator::spawnNeutralTechBuildings(
                          int candidateCount,
                          Point point,
                          int typeIndex,
-                         bool placed) {
-        if (!techTrace.is_open()) {
+                         bool placed)
+    {
+        if (!techTrace.is_open())
+        {
             return;
         }
         techTrace << event << ','
@@ -49,41 +54,48 @@ void NativeMapGenerator::spawnNeutralTechBuildings(
         techTrace.flush();
     };
 
-    if (!initialZeroQuotaRegions) {
+    if (!initialZeroQuotaRegions)
+    {
         traceTech("begin", 0, -1, -1, 0, static_cast<int>(regions.size()), -1, 0, options.mapType, 0, {-1, -1}, -1, false);
     }
     int traceCall = 0;
 
-    auto rectangularFoundation = [](int width, int height) {
+    auto rectangularFoundation = [](int width, int height)
+    {
         std::vector<Point> footprint;
         footprint.reserve(static_cast<std::size_t>(std::max(0, width) * std::max(0, height)));
-        for (int y = 0; y < height; ++y) {
-            for (int x = 0; x < width; ++x) {
+        for (int y = 0; y < height; ++y)
+        {
+            for (int x = 0; x < width; ++x)
+            {
                 footprint.push_back({x, y});
             }
         }
         return footprint;
     };
-    struct NativeTechBuildingSpec {
+    struct NativeTechBuildingSpec
+    {
         int objectTypeIndex = -1;
         std::vector<Point> foundation;
     };
-    auto techBuildingSpecForType = [&rectangularFoundation](int typeValue) {
-        switch (std::clamp(typeValue, 1, 7)) {
+    auto techBuildingSpecForType = [&rectangularFoundation](int typeValue)
+    {
+        switch (std::clamp(typeValue, 1, 7))
+        {
         case 1: // CAAIRP, BuildingTypes array index 70.
-            return NativeTechBuildingSpec{70, rectangularFoundation(3, 3)};
+            return NativeTechBuildingSpec {70, rectangularFoundation(3, 3)};
         case 2: // CATHOSP, BuildingTypes array index 69.
-            return NativeTechBuildingSpec{69, rectangularFoundation(6, 4)};
+            return NativeTechBuildingSpec {69, rectangularFoundation(6, 4)};
         case 3: // CAOILD, BuildingTypes array index 71.
-            return NativeTechBuildingSpec{71, rectangularFoundation(2, 2)};
+            return NativeTechBuildingSpec {71, rectangularFoundation(2, 2)};
         case 4: // CAOUTP, BuildingTypes array index 68.
-            return NativeTechBuildingSpec{68, rectangularFoundation(4, 3)};
+            return NativeTechBuildingSpec {68, rectangularFoundation(4, 3)};
         case 5: // CAMACH, BuildingTypes array index 56.
-            return NativeTechBuildingSpec{56, rectangularFoundation(3, 3)};
+            return NativeTechBuildingSpec {56, rectangularFoundation(3, 3)};
         case 6: // CAPOWR, BuildingTypes array index 369.
-            return NativeTechBuildingSpec{369, rectangularFoundation(2, 2)};
+            return NativeTechBuildingSpec {369, rectangularFoundation(2, 2)};
         default: // CASLAB, BuildingTypes array index 313, runtime NeutralTechBuildings index 6.
-            return NativeTechBuildingSpec{313, rectangularFoundation(3, 3)};
+            return NativeTechBuildingSpec {313, rectangularFoundation(3, 3)};
         }
     };
 
@@ -91,12 +103,14 @@ void NativeMapGenerator::spawnNeutralTechBuildings(
     const Rect visibleRect = nativeLocalRect(map);
     const int nativeMapSize = mapRect.w + mapRect.h + 1;
     std::vector<Point> nativeMapgenCoords(static_cast<std::size_t>(std::max(1, nativeMapSize * nativeMapSize)), {0, 0});
-    std::unordered_map<std::uint64_t, const NativeIteratorCell*> nativeCellByIso;
+    std::unordered_map<std::uint64_t, const NativeIteratorCell *> nativeCellByIso;
     const std::vector<NativeIteratorCell> nativeIteratorCells = buildNativeIteratorCells(map, report_.isoTileOverrides);
     {
         nativeCellByIso.reserve(nativeIteratorCells.size());
-        for (const NativeIteratorCell& iteratorCell : nativeIteratorCells) {
-            if (iteratorCell.cell.x < 0 || iteratorCell.cell.y < 0 || iteratorCell.cell.x >= nativeMapSize || iteratorCell.cell.y >= nativeMapSize) {
+        for (const NativeIteratorCell &iteratorCell : nativeIteratorCells)
+        {
+            if (iteratorCell.cell.x < 0 || iteratorCell.cell.y < 0 || iteratorCell.cell.x >= nativeMapSize || iteratorCell.cell.y >= nativeMapSize)
+            {
                 continue;
             }
             nativeMapgenCoords[static_cast<std::size_t>(iteratorCell.cell.x + nativeMapSize * iteratorCell.cell.y)] = iteratorCell.cell;
@@ -104,38 +118,38 @@ void NativeMapGenerator::spawnNeutralTechBuildings(
         }
     }
 
-    auto isWithinNativeUsableArea = [mapRect, visibleRect](const NativeIteratorCell& cell) {
+    auto isWithinNativeUsableArea = [mapRect, visibleRect](const NativeIteratorCell &cell)
+    {
         int boundaryLevel = cell.level;
         const int sum = cell.cell.x + cell.cell.y;
-        if (cell.slopeIndex != 0
-            && sum < boundaryLevel + mapRect.w + 2 * visibleRect.y + 4) {
+        if (cell.slopeIndex != 0 && sum < boundaryLevel + mapRect.w + 2 * visibleRect.y + 4)
+        {
             ++boundaryLevel;
         }
-        return sum > boundaryLevel + mapRect.w + 2 * visibleRect.y
-            && sum <= boundaryLevel + mapRect.w + 2 * (visibleRect.y + visibleRect.h) + 2
-            && cell.cell.x - cell.cell.y < 2 * (visibleRect.x + visibleRect.w) - mapRect.w
-            && cell.cell.y - cell.cell.x < mapRect.w - 2 * visibleRect.x;
+        return sum > boundaryLevel + mapRect.w + 2 * visibleRect.y && sum <= boundaryLevel + mapRect.w + 2 * (visibleRect.y + visibleRect.h) + 2 && cell.cell.x - cell.cell.y < 2 * (visibleRect.x + visibleRect.w) - mapRect.w && cell.cell.y - cell.cell.x < mapRect.w - 2 * visibleRect.x;
     };
 
-    auto canPlaceTechFoundation = [
-                                      this,
-                                      &nativeCellByIso,
-                                      &isWithinNativeUsableArea](Point nativeAnchor, const std::vector<Point>& foundation) {
+    auto canPlaceTechFoundation = [this,
+                                   &nativeCellByIso,
+                                   &isWithinNativeUsableArea](Point nativeAnchor, const std::vector<Point> &foundation)
+    {
         ++report_.techBuildingFootprintChecks;
         const auto anchorIt = nativeCellByIso.find(nativeIsoKey(nativeAnchor));
-        if (anchorIt == nativeCellByIso.end() || foundation.empty()) {
+        if (anchorIt == nativeCellByIso.end() || foundation.empty())
+        {
             ++report_.techBuildingFootprintFailures;
             ++report_.techBuildingRejectedUsableArea;
             return false;
         }
 
         const int level = anchorIt->second->level;
-        for (Point offset : foundation) {
-            const Point nativeCell{nativeAnchor.x + offset.x, nativeAnchor.y + offset.y};
+        for (Point offset : foundation)
+        {
+            const Point nativeCell {nativeAnchor.x + offset.x, nativeAnchor.y + offset.y};
             const std::uint64_t nativeKey = nativeIsoKey(nativeCell);
             const auto cellIt = nativeCellByIso.find(nativeKey);
-            if (cellIt == nativeCellByIso.end()
-                || !isWithinNativeUsableArea(*cellIt->second)) {
+            if (cellIt == nativeCellByIso.end() || !isWithinNativeUsableArea(*cellIt->second))
+            {
                 ++report_.techBuildingFootprintFailures;
                 ++report_.techBuildingRejectedUsableArea;
                 return false;
@@ -144,31 +158,36 @@ void NativeMapGenerator::spawnNeutralTechBuildings(
             const bool hasObject = std::any_of(
                 report_.nativeObjectOverrides.begin(),
                 report_.nativeObjectOverrides.end(),
-                [nativeKey](const NativeObjectOverride& object) {
-                    return nativeIsoKey(object.iso) == nativeKey
-                        && object.objectAbstractType >= 0;
+                [nativeKey](const NativeObjectOverride &object)
+                {
+                    return nativeIsoKey(object.iso) == nativeKey && object.objectAbstractType >= 0;
                 });
-            if (hasObject) {
+            if (hasObject)
+            {
                 ++report_.techBuildingFootprintFailures;
                 ++report_.techBuildingRejectedObjects;
                 return false;
             }
-            if (!isNativeClearTileIndex(cellIt->second->isoTileTypeIndex)) {
+            if (!isNativeClearTileIndex(cellIt->second->isoTileTypeIndex))
+            {
                 ++report_.techBuildingFootprintFailures;
                 ++report_.techBuildingRejectedNonBlank;
                 return false;
             }
-            if (cellIt->second->level != level) {
+            if (cellIt->second->level != level)
+            {
                 ++report_.techBuildingFootprintFailures;
                 ++report_.techBuildingRejectedLevel;
                 return false;
             }
-            if (cellIt->second->landType == 3) {
+            if (cellIt->second->landType == 3)
+            {
                 ++report_.techBuildingFootprintFailures;
                 ++report_.techBuildingRejectedRock;
                 return false;
             }
-            if (nativeMapgenSurfaceBlockedKeys_.contains(nativeKey)) {
+            if (nativeMapgenSurfaceBlockedKeys_.contains(nativeKey))
+            {
                 ++report_.techBuildingFootprintFailures;
                 ++report_.techBuildingRejectedExclusion;
                 return false;
@@ -178,31 +197,37 @@ void NativeMapGenerator::spawnNeutralTechBuildings(
         return true;
     };
 
-    auto placeTechAt = [this, &map, &techBuildingSpecForType](Point anchor, Point nativeAnchor, int typeValue) {
+    auto placeTechAt = [this, &map, &techBuildingSpecForType](Point anchor, Point nativeAnchor, int typeValue)
+    {
         const NativeTechBuildingSpec spec = techBuildingSpecForType(typeValue);
-        NativeStructureOverride structure{nativeAnchor, typeValue - 1};
-        if (nativeScenarioUniqueId_ >= 0) {
+        NativeStructureOverride structure {nativeAnchor, typeValue - 1};
+        if (nativeScenarioUniqueId_ >= 0)
+        {
             const int idSpan = nativeTechUniqueIdSpan(structure.nativeTechIndex);
-            if (nativeScenarioUniqueId_ > std::numeric_limits<int>::max() - idSpan) {
+            if (nativeScenarioUniqueId_ > std::numeric_limits<int>::max() - idSpan)
+            {
                 throw std::runtime_error("native Scenario UniqueID overflow while placing neutral tech building");
             }
             structure.nativeUniqueId = ++nativeScenarioUniqueId_;
             nativeScenarioUniqueId_ += idSpan - 1;
         }
         report_.nativeStructureOverrides.push_back(std::move(structure));
-        for (Point offset : spec.foundation) {
-            const Point nativeCell{nativeAnchor.x + offset.x, nativeAnchor.y + offset.y};
+        for (Point offset : spec.foundation)
+        {
+            const Point nativeCell {nativeAnchor.x + offset.x, nativeAnchor.y + offset.y};
             report_.nativeObjectOverrides.push_back({nativeCell, 6, spec.objectTypeIndex, -1, -1});
 
             const Point source = nativeCellToSourcePoint(map, nativeCell);
-            if (map.inBounds(source)) {
-                Cell& cell = map.at(source);
+            if (map.inBounds(source))
+            {
+                Cell &cell = map.at(source);
                 cell.overlay = Overlay::Tech;
                 cell.overlayValue = typeValue;
             }
         }
-        if (spec.foundation.empty() && map.inBounds(anchor)) {
-            Cell& cell = map.at(anchor);
+        if (spec.foundation.empty() && map.inBounds(anchor))
+        {
+            Cell &cell = map.at(anchor);
             cell.overlay = Overlay::Tech;
             cell.overlayValue = typeValue;
         }
@@ -210,40 +235,44 @@ void NativeMapGenerator::spawnNeutralTechBuildings(
     };
 
     constexpr int kNativeTechTypeCount = 7;
-    auto randomTechType = [&rng] {
+    auto randomTechType = [&rng]
+    {
         return rng.randomScaledInclusive(1, kNativeTechTypeCount);
     };
 
-    auto tryPlaceInRegion = [
-                                this,
-                                &map,
-                                &rng,
-                                &techBuildingSpecForType,
-                                &canPlaceTechFoundation,
-                                &placeTechAt,
-                                &randomTechType,
-                                &traceTech,
-                                &traceCall](const NativeRegion& region) {
+    auto tryPlaceInRegion = [this,
+                             &map,
+                             &rng,
+                             &techBuildingSpecForType,
+                             &canPlaceTechFoundation,
+                             &placeTechAt,
+                             &randomTechType,
+                             &traceTech,
+                             &traceCall](const NativeRegion &region)
+    {
         ++report_.techBuildingRegionCalls;
         ++traceCall;
         const bool useNativePool = !region.nativeCells.empty();
-        const std::vector<Point>& pool = useNativePool ? region.nativeCells : region.cells;
+        const std::vector<Point> &pool = useNativePool ? region.nativeCells : region.cells;
         traceTech("call", traceCall, -1, -1, region.nativeWaypointQuota, static_cast<int>(pool.size()), -1, 0, -1, static_cast<int>(pool.size()), {-1, -1}, -1, false);
-        if (pool.empty()) {
+        if (pool.empty())
+        {
             return false;
         }
 
         const int typeValue = randomTechType();
         traceTech("type", traceCall, -1, -1, region.nativeWaypointQuota, static_cast<int>(pool.size()), -1, rng.lastRandom(), typeValue - 1, kNativeTechTypeCount, {-1, -1}, typeValue - 1, false);
         const NativeTechBuildingSpec spec = techBuildingSpecForType(typeValue);
-        for (int attempt = 0; attempt < 100; ++attempt) {
+        for (int attempt = 0; attempt < 100; ++attempt)
+        {
             ++report_.techBuildingCandidateSamples;
             const int candidateIndex = rng.randomScaledInclusive(0, static_cast<int>(pool.size()) - 1);
             const Point tracePoint = pool[static_cast<std::size_t>(candidateIndex)];
             const Point nativePoint = useNativePool ? tracePoint : sourcePointToNativeCell(map, tracePoint);
             const Point p = nativeCellToSourcePoint(map, nativePoint);
             traceTech("candidate", traceCall, -1, -1, region.nativeWaypointQuota, static_cast<int>(pool.size()), -1, rng.lastRandom(), candidateIndex, static_cast<int>(pool.size()), tracePoint, -1, false);
-            if (!map.inBounds(p) || !canPlaceTechFoundation(nativePoint, spec.foundation)) {
+            if (!map.inBounds(p) || !canPlaceTechFoundation(nativePoint, spec.foundation))
+            {
                 traceTech("attempt", traceCall, -1, -1, region.nativeWaypointQuota, static_cast<int>(pool.size()), attempt, 0, -1, static_cast<int>(pool.size()), tracePoint, -1, false);
                 continue;
             }
@@ -256,26 +285,28 @@ void NativeMapGenerator::spawnNeutralTechBuildings(
         return false;
     };
 
-    auto isNativeGlobalBlank = [&nativeCellByIso](Point nativeCell) {
+    auto isNativeGlobalBlank = [&nativeCellByIso](Point nativeCell)
+    {
         const auto cellIt = nativeCellByIso.find(nativeIsoKey(nativeCell));
-        return cellIt != nativeCellByIso.end()
-            && isNativeClearTileIndex(cellIt->second->isoTileTypeIndex);
+        return cellIt != nativeCellByIso.end() && isNativeClearTileIndex(cellIt->second->isoTileTypeIndex);
     };
 
-    auto selectGlobalBlankCell = [
-                                     this,
-                                     &rng,
-                                     &nativeMapgenCoords,
-                                     nativeMapSize,
-                                     &isNativeGlobalBlank,
-                                     &traceTech](int call, int attempt, Point* outNative) {
+    auto selectGlobalBlankCell = [this,
+                                  &rng,
+                                  &nativeMapgenCoords,
+                                  nativeMapSize,
+                                  &isNativeGlobalBlank,
+                                  &traceTech](int call, int attempt, Point *outNative)
+    {
         constexpr int maxBlankSearch = 200;
         int blankSearches = 0;
         const int candidateCount = nativeMapSize * nativeMapSize;
-        while (true) {
+        while (true)
+        {
             int index = rng.randomScaledInclusive(0, candidateCount - 1);
             Point nativeCell = nativeMapgenCoords[static_cast<std::size_t>(index)];
-            while (nativeCell.x == 0 && nativeCell.y == 0) {
+            while (nativeCell.x == 0 && nativeCell.y == 0)
+            {
                 ++report_.techBuildingBlankSearchRejects;
                 const int retryIndex = rng.randomScaledInclusive(0, candidateCount - 1);
                 index = retryIndex;
@@ -285,13 +316,15 @@ void NativeMapGenerator::spawnNeutralTechBuildings(
 
             ++report_.techBuildingCandidateSamples;
             ++blankSearches;
-            if (blankSearches > maxBlankSearch) {
+            if (blankSearches > maxBlankSearch)
+            {
                 ++report_.techBuildingGlobalFallbacks;
                 *outNative = {0, 0};
                 traceTech("global_fallback", call, -1, -1, 0, candidateCount, attempt, 0, -1, candidateCount, *outNative, -1, false);
                 return false;
             }
-            if (isNativeGlobalBlank(nativeCell)) {
+            if (isNativeGlobalBlank(nativeCell))
+            {
                 *outNative = nativeCell;
                 traceTech("global_blank", call, -1, -1, 0, candidateCount, -1, 0, -1, candidateCount, nativeCell, -1, true);
                 return true;
@@ -301,16 +334,16 @@ void NativeMapGenerator::spawnNeutralTechBuildings(
         }
     };
 
-    auto tryPlaceGlobal = [
-                              &map,
-                              &rng,
-                              &techBuildingSpecForType,
-                              &canPlaceTechFoundation,
-                              &placeTechAt,
-                              &randomTechType,
-                              &selectGlobalBlankCell,
-                              &traceTech,
-                              &traceCall]() {
+    auto tryPlaceGlobal = [&map,
+                           &rng,
+                           &techBuildingSpecForType,
+                           &canPlaceTechFoundation,
+                           &placeTechAt,
+                           &randomTechType,
+                           &selectGlobalBlankCell,
+                           &traceTech,
+                           &traceCall]()
+    {
         ++traceCall;
         const Rect mapRect = nativeSavedMapRect(map);
         const int nativeMapSize = mapRect.w + mapRect.h + 1;
@@ -319,11 +352,13 @@ void NativeMapGenerator::spawnNeutralTechBuildings(
         const int typeValue = randomTechType();
         traceTech("global_type", traceCall, -1, -1, 0, candidateCount, -1, rng.lastRandom(), typeValue - 1, kNativeTechTypeCount, {-1, -1}, typeValue - 1, false);
         const NativeTechBuildingSpec spec = techBuildingSpecForType(typeValue);
-        for (int attempt = 0; attempt < 100; ++attempt) {
+        for (int attempt = 0; attempt < 100; ++attempt)
+        {
             Point nativePoint;
             selectGlobalBlankCell(traceCall, attempt, &nativePoint);
             const Point p = nativeCellToSourcePoint(map, nativePoint);
-            if (!canPlaceTechFoundation(nativePoint, spec.foundation)) {
+            if (!canPlaceTechFoundation(nativePoint, spec.foundation))
+            {
                 traceTech("global_attempt", traceCall, -1, -1, 0, candidateCount, attempt, 0, -1, candidateCount, nativePoint, -1, false);
                 continue;
             }
@@ -336,78 +371,97 @@ void NativeMapGenerator::spawnNeutralTechBuildings(
     };
 
     int placed = 0;
-    if (initialZeroQuotaRegions) {
+    if (initialZeroQuotaRegions)
+    {
         report_.techBuildingPlacementMode = 3;
-        report_.techBuildingEligibleRegions = static_cast<int>(std::count_if(regions.begin(), regions.end(), [](const NativeRegion& region) {
-            return region.nativeWaypointQuota == 0;
-        }));
-        for (const NativeRegion& region : regions) {
-            if (region.nativeWaypointQuota != 0) {
+        report_.techBuildingEligibleRegions = static_cast<int>(std::count_if(regions.begin(), regions.end(), [](const NativeRegion &region)
+                                                                             {
+                                                                                 return region.nativeWaypointQuota == 0;
+                                                                             }));
+        for (const NativeRegion &region : regions)
+        {
+            if (region.nativeWaypointQuota != 0)
+            {
                 continue;
             }
-            if (rng.randomUnit() < 0.5 && tryPlaceInRegion(region)) {
+            if (rng.randomUnit() < 0.5 && tryPlaceInRegion(region))
+            {
                 ++placed;
             }
         }
-    } else if (options.mapType == 2) {
+    }
+    else if (options.mapType == 2)
+    {
         report_.techBuildingPlacementMode = 2;
         const int rounds = rng.randomScaledInclusive(0, 2);
         traceTech("rounds", 0, rounds, -1, 0, static_cast<int>(regions.size()), -1, rng.lastRandom(), rounds, 3, {-1, -1}, -1, false);
         report_.techBuildingRounds = rounds;
-        report_.techBuildingEligibleRegions = static_cast<int>(std::count_if(regions.begin(), regions.end(), [](const NativeRegion& region) {
-            return region.nativeWaypointQuota > 0;
-        }));
+        report_.techBuildingEligibleRegions = static_cast<int>(std::count_if(regions.begin(), regions.end(), [](const NativeRegion &region)
+                                                                             {
+                                                                                 return region.nativeWaypointQuota > 0;
+                                                                             }));
         report_.techBuildingTargets = rounds * report_.techBuildingEligibleRegions;
-        std::vector<const NativeRegion*> techRegions;
+        std::vector<const NativeRegion *> techRegions;
         techRegions.reserve(regions.size());
-        for (const NativeRegion& region : regions) {
+        for (const NativeRegion &region : regions)
+        {
             techRegions.push_back(&region);
         }
-        std::sort(techRegions.begin(), techRegions.end(), [](const NativeRegion* lhs, const NativeRegion* rhs) {
-            return lhs->id < rhs->id;
-        });
-        for (int round = 0; round < rounds; ++round) {
-            for (std::size_t regionIndex = 0; regionIndex < techRegions.size(); ++regionIndex) {
-                const NativeRegion& region = *techRegions[regionIndex];
-                if (region.nativeWaypointQuota <= 0) {
+        std::sort(techRegions.begin(), techRegions.end(), [](const NativeRegion *lhs, const NativeRegion *rhs)
+                  {
+                      return lhs->id < rhs->id;
+                  });
+        for (int round = 0; round < rounds; ++round)
+        {
+            for (std::size_t regionIndex = 0; regionIndex < techRegions.size(); ++regionIndex)
+            {
+                const NativeRegion &region = *techRegions[regionIndex];
+                if (region.nativeWaypointQuota <= 0)
+                {
                     continue;
                 }
                 const int regionCells = region.nativeCells.empty() ? static_cast<int>(region.cells.size()) : static_cast<int>(region.nativeCells.size());
                 traceTech("region", traceCall + 1, rounds - round, static_cast<int>(regionIndex), region.nativeWaypointQuota, regionCells, -1, 0, static_cast<int>(regionIndex), static_cast<int>(techRegions.size()), {-1, -1}, -1, false);
-                if (tryPlaceInRegion(region)) {
+                if (tryPlaceInRegion(region))
+                {
                     ++placed;
                 }
             }
         }
-    } else {
+    }
+    else
+    {
         report_.techBuildingPlacementMode = 1;
         const int target = rng.randomScaledInclusive(0, 4);
         traceTech("global_target", 0, target, -1, 0, static_cast<int>(regions.size()), -1, rng.lastRandom(), target, 5, {-1, -1}, -1, false);
         report_.techBuildingRounds = target;
         report_.techBuildingTargets = target;
         report_.techBuildingEligibleRegions = static_cast<int>(regions.size());
-        for (int building = 0; building < target; ++building) {
-            if (tryPlaceGlobal()) {
+        for (int building = 0; building < target; ++building)
+        {
+            if (tryPlaceGlobal())
+            {
                 ++placed;
             }
         }
     }
 
     report_.techBuildings = placed;
-    if (!initialZeroQuotaRegions) {
+    if (!initialZeroQuotaRegions)
+    {
         traceTech("end", traceCall, -1, -1, 0, static_cast<int>(regions.size()), -1, 0, -1, 0, {-1, -1}, -1, false);
     }
 }
 
 void NativeMapGenerator::placeTiberiumPatch(
-    MapGrid& map,
-    const MapSeedOptions& options,
-    const RmgConfig& config,
-    NativeRandomizer& rng,
+    MapGrid &map,
+    const MapSeedOptions &options,
+    const RmgConfig &config,
+    NativeRandomizer &rng,
     Point seed,
     int amount,
     bool rich,
-    const char* traceBranch,
+    const char *traceBranch,
     bool seedIsNative,
     double amountJitter,
     int amountRawCount,
@@ -415,21 +469,23 @@ void NativeMapGenerator::placeTiberiumPatch(
     std::uint32_t amountRaw1,
     int nativeScratchTag)
 {
-    if (amount <= 0) {
+    if (amount <= 0)
+    {
         return;
     }
     (void) options;
     (void) config;
 
-    struct ResourcePatchHeapNode {
+    struct ResourcePatchHeapNode
+    {
         Point point;
         float priority = 0.0f;
     };
-    struct ResourcePatchHeap {
-        explicit ResourcePatchHeap(int capacity)
-            : capacity(std::max(1, capacity)),
-              nodes(static_cast<std::size_t>(std::max(1, capacity))),
-              heap(static_cast<std::size_t>(std::max(1, capacity) + 1), -1)
+    struct ResourcePatchHeap
+    {
+        explicit ResourcePatchHeap(int capacity) : capacity(std::max(1, capacity)),
+                                                   nodes(static_cast<std::size_t>(std::max(1, capacity))),
+                                                   heap(static_cast<std::size_t>(std::max(1, capacity) + 1), -1)
         {
         }
 
@@ -445,21 +501,25 @@ void NativeMapGenerator::placeTiberiumPatch(
 
         bool push(Point point, double priority)
         {
-            if (allocated >= capacity) {
+            if (allocated >= capacity)
+            {
                 return false;
             }
 
             const int nodeIndex = allocated++;
             nodes[static_cast<std::size_t>(nodeIndex)] = {point, static_cast<float>(priority)};
             int slot = heapSize + 1;
-            if (slot >= capacity) {
+            if (slot >= capacity)
+            {
                 return false;
             }
 
-            while (slot > 1) {
+            while (slot > 1)
+            {
                 const int parent = slot >> 1;
                 const int parentIndex = heap[static_cast<std::size_t>(parent)];
-                if (nodes[static_cast<std::size_t>(parentIndex)].priority <= nodes[static_cast<std::size_t>(nodeIndex)].priority) {
+                if (nodes[static_cast<std::size_t>(parentIndex)].priority <= nodes[static_cast<std::size_t>(nodeIndex)].priority)
+                {
                     break;
                 }
                 heap[static_cast<std::size_t>(slot)] = parentIndex;
@@ -473,7 +533,8 @@ void NativeMapGenerator::placeTiberiumPatch(
 
         Point pop()
         {
-            if (heapSize <= 0) {
+            if (heapSize <= 0)
+            {
                 lastPoppedIndex = -1;
                 return {-1, -1};
             }
@@ -505,22 +566,27 @@ void NativeMapGenerator::placeTiberiumPatch(
         {
             int best = slot * 2;
             const int right = best + 1;
-            if (best > heapSize || nodePriority(slot) <= nodePriority(best)) {
+            if (best > heapSize || nodePriority(slot) <= nodePriority(best))
+            {
                 best = slot;
             }
-            if (right <= heapSize && nodePriority(best) > nodePriority(right)) {
+            if (right <= heapSize && nodePriority(best) > nodePriority(right))
+            {
                 best = right;
             }
 
-            while (best != slot) {
+            while (best != slot)
+            {
                 std::swap(heap[static_cast<std::size_t>(slot)], heap[static_cast<std::size_t>(best)]);
                 slot = best;
                 best = slot * 2;
                 const int nextRight = best + 1;
-                if (best > heapSize || nodePriority(slot) <= nodePriority(best)) {
+                if (best > heapSize || nodePriority(slot) <= nodePriority(best))
+                {
                     best = slot;
                 }
-                if (nextRight <= heapSize && nodePriority(best) > nodePriority(nextRight)) {
+                if (nextRight <= heapSize && nodePriority(best) > nodePriority(nextRight))
+                {
                     best = nextRight;
                 }
             }
@@ -536,83 +602,103 @@ void NativeMapGenerator::placeTiberiumPatch(
 
     ResourcePatchHeap heap(std::max(1, amount * 10));
     const Rect mapRect = nativeSavedMapRect(map);
-    auto findNativeOverlay = [this](Point nativeCell) -> NativeOverlayOverride* {
+    auto findNativeOverlay = [this](Point nativeCell) -> NativeOverlayOverride *
+    {
         const std::uint64_t key = nativeIsoKey(nativeCell);
-        for (NativeOverlayOverride& overlay : report_.nativeOverlayOverrides) {
-            if (nativeIsoKey(overlay.iso) == key) {
+        for (NativeOverlayOverride &overlay : report_.nativeOverlayOverrides)
+        {
+            if (nativeIsoKey(overlay.iso) == key)
+            {
                 return &overlay;
             }
         }
         return nullptr;
     };
-    auto findNativeObject = [this](Point nativeCell, int objectAbstractType) -> NativeObjectOverride* {
+    auto findNativeObject = [this](Point nativeCell, int objectAbstractType) -> NativeObjectOverride *
+    {
         const std::uint64_t key = nativeIsoKey(nativeCell);
-        for (NativeObjectOverride& object : report_.nativeObjectOverrides) {
-            if (nativeIsoKey(object.iso) == key && object.objectAbstractType == objectAbstractType) {
+        for (NativeObjectOverride &object : report_.nativeObjectOverrides)
+        {
+            if (nativeIsoKey(object.iso) == key && object.objectAbstractType == objectAbstractType)
+            {
                 return &object;
             }
         }
         return nullptr;
     };
-    std::unordered_map<std::uint64_t, const IsoTileOverride*> overrideByIso;
+    std::unordered_map<std::uint64_t, const IsoTileOverride *> overrideByIso;
     overrideByIso.reserve(report_.isoTileOverrides.size());
-    for (const IsoTileOverride& override : report_.isoTileOverrides) {
+    for (const IsoTileOverride &override : report_.isoTileOverrides)
+    {
         overrideByIso[nativeIsoKey(override.iso)] = &override;
     }
     const Rect visibleRect = nativeLocalRect(map);
-    auto nativeResourceLevel = [&](Point nativeCell) {
+    auto nativeResourceLevel = [&](Point nativeCell)
+    {
         const auto overrideIt = overrideByIso.find(nativeIsoKey(nativeCell));
-        if (overrideIt != overrideByIso.end()) {
+        if (overrideIt != overrideByIso.end())
+        {
             return std::clamp(overrideIt->second->level, 0, 255);
         }
         const Point source = nativeCellToSourcePoint(map, nativeCell);
         return map.inBounds(source) ? std::clamp(map.at(source).level, 0, 255) : 0;
     };
-    auto nativeResourceSlope = [&](Point nativeCell) {
+    auto nativeResourceSlope = [&](Point nativeCell)
+    {
         const auto overrideIt = overrideByIso.find(nativeIsoKey(nativeCell));
-        if (overrideIt != overrideByIso.end()) {
+        if (overrideIt != overrideByIso.end())
+        {
             return 0;
         }
         const Point source = nativeCellToSourcePoint(map, nativeCell);
         return map.inBounds(source) ? nativeSlopeIndexForCell(map.at(source)) : 0;
     };
-    auto isNativeUsableForResource = [&](Point nativeCell) {
+    auto isNativeUsableForResource = [&](Point nativeCell)
+    {
         const int workspaceIndex = nativeCell.x + (nativeCell.y << 9);
-        if (nativeCell.x < 0 || nativeCell.y < 0 || workspaceIndex > 0x3FFFF) {
+        if (nativeCell.x < 0 || nativeCell.y < 0 || workspaceIndex > 0x3FFFF)
+        {
             return false;
         }
 
         int level = nativeResourceLevel(nativeCell);
         const int sum = nativeCell.x + nativeCell.y;
-        if (nativeResourceSlope(nativeCell) != 0 && sum < level + mapRect.w + 2 * visibleRect.y + 4) {
+        if (nativeResourceSlope(nativeCell) != 0 && sum < level + mapRect.w + 2 * visibleRect.y + 4)
+        {
             ++level;
         }
 
-        if (sum <= level + mapRect.w + 2 * visibleRect.y
-            || sum > level + mapRect.w + 2 * (visibleRect.y + visibleRect.h) + 2) {
+        if (sum <= level + mapRect.w + 2 * visibleRect.y || sum > level + mapRect.w + 2 * (visibleRect.y + visibleRect.h) + 2)
+        {
             return false;
         }
-        return nativeCell.x - nativeCell.y < 2 * (visibleRect.x + visibleRect.w) - mapRect.w
-            && nativeCell.y - nativeCell.x < mapRect.w - 2 * visibleRect.x;
+        return nativeCell.x - nativeCell.y < 2 * (visibleRect.x + visibleRect.w) - mapRect.w && nativeCell.y - nativeCell.x < mapRect.w - 2 * visibleRect.x;
     };
-    auto nativeResourceTile = [&](Point nativeCell) {
+    auto nativeResourceTile = [&](Point nativeCell)
+    {
         const auto overrideIt = overrideByIso.find(nativeIsoKey(nativeCell));
-        if (overrideIt != overrideByIso.end()) {
+        if (overrideIt != overrideByIso.end())
+        {
             return nativeTileTypeIndexForOverride(*overrideIt->second);
         }
         const Point source = nativeCellToSourcePoint(map, nativeCell);
         return map.inBounds(source) ? nativeTileTypeIndexForTerrain(map.at(source)) : 0xFFFF;
     };
-    auto isNativeBlankForResource = [&](Point nativeCell) {
+    auto isNativeBlankForResource = [&](Point nativeCell)
+    {
         return isNativeClearTileIndex(nativeResourceTile(nativeCell));
     };
 
-    if (!seedIsNative) {
-        if (!map.inBounds(seed)) {
+    if (!seedIsNative)
+    {
+        if (!map.inBounds(seed))
+        {
             return;
         }
         seed = clampPoint(seed, map.bounds());
-    } else if (!isNativeUsableForResource(seed)) {
+    }
+    else if (!isNativeUsableForResource(seed))
+    {
         return;
     }
     const Point sourceSeed = seedIsNative ? nativeCellToSourcePoint(map, seed) : seed;
@@ -620,11 +706,13 @@ void NativeMapGenerator::placeTiberiumPatch(
     const Point initialNativeSeed = nativeSeed;
     const int patchIndex = report_.tiberiumPatches + 1;
     const std::size_t overlayStartCount = report_.nativeOverlayOverrides.size();
-    Point firstNativePlacement{-1, -1};
+    Point firstNativePlacement {-1, -1};
     std::unordered_set<std::uint64_t> taggedBlankCells;
     taggedBlankCells.reserve(static_cast<std::size_t>(std::max(16, amount * 2)));
-    auto resetNativeTiberiumPatchScratch = [&] {
-        if (nativeScratchTag <= 0) {
+    auto resetNativeTiberiumPatchScratch = [&]
+    {
+        if (nativeScratchTag <= 0)
+        {
             return;
         }
         nativeMapgenDataActive_ = true;
@@ -637,47 +725,61 @@ void NativeMapGenerator::placeTiberiumPatch(
     heap.push(nativeSeed, 0.0);
     ++report_.tiberiumPatchHeapPushes;
 
-    auto canTraverseNativeResourcePatch = [&](Point nativeCell) {
-        if (!isNativeUsableForResource(nativeCell)) {
+    auto canTraverseNativeResourcePatch = [&](Point nativeCell)
+    {
+        if (!isNativeUsableForResource(nativeCell))
+        {
             return false;
         }
 
-        if (!isNativeBlankForResource(nativeCell)) {
+        if (!isNativeBlankForResource(nativeCell))
+        {
             return false;
         }
-        if (NativeOverlayOverride* overlay = findNativeOverlay(nativeCell)) {
+        if (NativeOverlayOverride *overlay = findNativeOverlay(nativeCell))
+        {
             return overlay->overlayData < 11 && isNativeTiberiumOverlayType(overlay->overlayTypeIndex);
         }
         return true;
     };
-    auto canPlaceNativeResource = [&](Point nativeCell) {
-        if (!isNativeUsableForResource(nativeCell)) {
+    auto canPlaceNativeResource = [&](Point nativeCell)
+    {
+        if (!isNativeUsableForResource(nativeCell))
+        {
             return false;
         }
 
-        if (nativeSpawnExclusionKeys_.find(nativeIsoKey(nativeCell)) != nativeSpawnExclusionKeys_.end()) {
+        if (nativeSpawnExclusionKeys_.find(nativeIsoKey(nativeCell)) != nativeSpawnExclusionKeys_.end())
+        {
             return false;
         }
-        if (NativeOverlayOverride* overlay = findNativeOverlay(nativeCell)) {
+        if (NativeOverlayOverride *overlay = findNativeOverlay(nativeCell))
+        {
             return overlay->overlayData < 11;
         }
         return true;
     };
-    auto hasOpenNativeResourceOverlay = [&](Point nativeCell) {
-        if (NativeOverlayOverride* overlay = findNativeOverlay(nativeCell)) {
+    auto hasOpenNativeResourceOverlay = [&](Point nativeCell)
+    {
+        if (NativeOverlayOverride *overlay = findNativeOverlay(nativeCell))
+        {
             return overlay->overlayData < 11 && isNativeTiberiumOverlayType(overlay->overlayTypeIndex);
         }
         return false;
     };
-    auto canUseFullOverlayAsFirstResource = [&](Point nativeCell) {
-        if (!isNativeUsableForResource(nativeCell)) {
+    auto canUseFullOverlayAsFirstResource = [&](Point nativeCell)
+    {
+        if (!isNativeUsableForResource(nativeCell))
+        {
             return false;
         }
 
-        if (nativeSpawnExclusionKeys_.find(nativeIsoKey(nativeCell)) != nativeSpawnExclusionKeys_.end()) {
+        if (nativeSpawnExclusionKeys_.find(nativeIsoKey(nativeCell)) != nativeSpawnExclusionKeys_.end())
+        {
             return false;
         }
-        if (NativeOverlayOverride* overlay = findNativeOverlay(nativeCell)) {
+        if (NativeOverlayOverride *overlay = findNativeOverlay(nativeCell))
+        {
             return overlay->overlayData <= 11 && isNativeTiberiumOverlayType(overlay->overlayTypeIndex);
         }
         return false;
@@ -686,52 +788,57 @@ void NativeMapGenerator::placeTiberiumPatch(
     int placed = 0;
     int initialRetries = 1;
 
-    auto packNativeCell = [](Point nativeCell) {
+    auto packNativeCell = [](Point nativeCell)
+    {
         const auto x = static_cast<std::uint32_t>(static_cast<std::uint16_t>(nativeCell.x));
         const auto y = static_cast<std::uint32_t>(static_cast<std::uint16_t>(nativeCell.y));
         return static_cast<int>(x | (y << 16));
     };
-    auto floatBits = [](float value) {
+    auto floatBits = [](float value)
+    {
         int bits = 0;
         std::memcpy(&bits, &value, sizeof(bits));
         return bits;
     };
     std::ofstream tiberiumEventTrace;
-    if (const char* dumpPath = std::getenv(kNativeTiberiumEventDumpPathEnv); dumpPath != nullptr && dumpPath[0] != '\0') {
-        const std::filesystem::path path{dumpPath};
-        if (path.has_parent_path()) {
+    if (const char *dumpPath = std::getenv(kNativeTiberiumEventDumpPathEnv); dumpPath != nullptr && dumpPath[0] != '\0')
+    {
+        const std::filesystem::path path {dumpPath};
+        if (path.has_parent_path())
+        {
             std::filesystem::create_directories(path.parent_path());
         }
         std::error_code ec;
         const bool writeHeader = !std::filesystem::exists(path, ec) || std::filesystem::file_size(path, ec) == 0;
         tiberiumEventTrace.open(path, std::ios::out | std::ios::app);
-        if (tiberiumEventTrace.is_open() && writeHeader) {
+        if (tiberiumEventTrace.is_open() && writeHeader)
+        {
             tiberiumEventTrace
                 << "event,call,resources,regionCount,eax,ebx,ecx,edx,esi,edi,"
                    "stack0,stack4,stack8,stackC,stack10,stack14,stack18,stack1C,stack20,stack24,stack28,stack2C\n";
         }
     }
-    auto traceTiberiumEvent = [&](const char* event, Point nativeCell, int extra0, int extra1, int priorityBitsValue) {
-        if (!tiberiumEventTrace.is_open()) {
+    auto traceTiberiumEvent = [&](const char *event, Point nativeCell, int extra0, int extra1, int priorityBitsValue)
+    {
+        if (!tiberiumEventTrace.is_open())
+        {
             return;
         }
 
         int overlayType = -1;
         int overlayData = 0;
-        if (NativeOverlayOverride* overlay = findNativeOverlay(nativeCell)) {
+        if (NativeOverlayOverride *overlay = findNativeOverlay(nativeCell))
+        {
             overlayType = overlay->overlayTypeIndex;
             overlayData = overlay->overlayData;
         }
 
         int blocked = 1;
         const Point source = nativeCellToSourcePoint(map, nativeCell);
-        if (isNativeUsableForResource(nativeCell) && map.inBounds(source)) {
-            const Cell& cell = map.at(source);
-            blocked = (nativeSpawnExclusionKeys_.find(nativeIsoKey(nativeCell)) != nativeSpawnExclusionKeys_.end())
-                    || cell.cliffShoreExclusion
-                    || cell.terrainObject == TerrainObject::OrePatchLamp
-                ? 1
-                : 0;
+        if (isNativeUsableForResource(nativeCell) && map.inBounds(source))
+        {
+            const Cell &cell = map.at(source);
+            blocked = (nativeSpawnExclusionKeys_.find(nativeIsoKey(nativeCell)) != nativeSpawnExclusionKeys_.end()) || cell.cliffShoreExclusion || cell.terrainObject == TerrainObject::OrePatchLamp ? 1 : 0;
         }
 
         tiberiumEventTrace
@@ -760,9 +867,12 @@ void NativeMapGenerator::placeTiberiumPatch(
     };
 
     bool foundFirstPlacement = false;
-    while (placed < amount && initialRetries <= 10) {
-        if (heap.empty()) {
-            if (initialRetries >= 10) {
+    while (placed < amount && initialRetries <= 10)
+    {
+        if (heap.empty())
+        {
+            if (initialRetries >= 10)
+            {
                 break;
             }
             ++initialRetries;
@@ -783,10 +893,11 @@ void NativeMapGenerator::placeTiberiumPatch(
         traceTiberiumEvent("patch_pop", nativeCell, heap.size(), 0, 0);
 
         bool firstPlacementThisPop = false;
-        const bool canPlaceResource = canPlaceNativeResource(nativeCell)
-            || (!foundFirstPlacement && canUseFullOverlayAsFirstResource(nativeCell));
-        if (canPlaceResource) {
-            if (!foundFirstPlacement) {
+        const bool canPlaceResource = canPlaceNativeResource(nativeCell) || (!foundFirstPlacement && canUseFullOverlayAsFirstResource(nativeCell));
+        if (canPlaceResource)
+        {
+            if (!foundFirstPlacement)
+            {
                 foundFirstPlacement = true;
                 firstPlacementThisPop = true;
                 nativeSeed = nativeCell;
@@ -795,41 +906,53 @@ void NativeMapGenerator::placeTiberiumPatch(
                 heap.clear();
                 ++report_.tiberiumPatchFirstCellResets;
 
-                if (!rich) {
+                if (!rich)
+                {
                     const int treeVariant = rng.randomScaledInclusive(1, 3);
-                    if (NativeObjectOverride* object = findNativeObject(nativeCell, 36)) {
+                    if (NativeObjectOverride *object = findNativeObject(nativeCell, 36))
+                    {
                         object->objectTypeIndex = 43 + treeVariant;
                         object->altObjectAbstractType = -1;
                         object->altObjectTypeIndex = -1;
-                    } else {
+                    }
+                    else
+                    {
                         report_.nativeObjectOverrides.push_back({nativeCell, 36, 43 + treeVariant, -1, -1});
                     }
 
-                    if (NativeOverlayOverride* existingOverlay = findNativeOverlay(nativeCell)) {
+                    if (NativeOverlayOverride *existingOverlay = findNativeOverlay(nativeCell))
+                    {
                         existingOverlay->overlayTypeIndex = -1;
                         existingOverlay->overlayData = 0;
                         existingOverlay->landTypeOverride = -1;
                     }
                     const Point source = nativeCellToSourcePoint(map, nativeCell);
-                    if (map.inBounds(source)) {
+                    if (map.inBounds(source))
+                    {
                         map.at(source).overlay = Overlay::None;
                         map.at(source).overlayValue = 0;
                     }
                 }
             }
 
-            NativeOverlayOverride* overlay = findNativeOverlay(nativeCell);
-            if (overlay != nullptr && overlay->overlayTypeIndex >= 0) {
+            NativeOverlayOverride *overlay = findNativeOverlay(nativeCell);
+            if (overlay != nullptr && overlay->overlayTypeIndex >= 0)
+            {
                 overlay->overlayData = std::min(11, overlay->overlayData + 1);
                 ++report_.tiberiumPatchExistingOverlayIncrements;
                 traceTiberiumEvent("patch_place_inc", nativeCell, overlay->overlayData, 0, 0);
-            } else {
+            }
+            else
+            {
                 const int overlayType = rng.randomScaledInclusive(rich ? 27 : 102, rich ? 38 : 113);
-                if (overlay != nullptr) {
+                if (overlay != nullptr)
+                {
                     overlay->overlayTypeIndex = overlayType;
                     overlay->overlayData = 0;
                     overlay->landTypeOverride = firstPlacementThisPop ? 5 : -1;
-                } else {
+                }
+                else
+                {
                     report_.nativeOverlayOverrides.push_back({
                         nativeCell,
                         overlayType,
@@ -837,46 +960,61 @@ void NativeMapGenerator::placeTiberiumPatch(
                     });
                 }
                 const Point source = nativeCellToSourcePoint(map, nativeCell);
-                if (map.inBounds(source)) {
-                    Cell& cell = map.at(source);
+                if (map.inBounds(source))
+                {
+                    Cell &cell = map.at(source);
                     cell.overlay = rich ? Overlay::Gems : Overlay::Ore;
                     cell.overlayValue = 1;
                 }
                 traceTiberiumEvent("patch_place_new", nativeCell, overlayType, 0, 0);
             }
             ++placed;
-        } else {
+        }
+        else
+        {
             ++report_.tiberiumPatchRejectedCells;
         }
 
-        constexpr std::array<Point, 8> kNativePatchNeighbors{{
-            {0, -1}, {1, -1}, {1, 0}, {1, 1},
-            {0, 1}, {-1, 1}, {-1, 0}, {-1, -1},
+        constexpr std::array<Point, 8> kNativePatchNeighbors {{
+            {0, -1},
+            {1, -1},
+            {1, 0},
+            {1, 1},
+            {0, 1},
+            {-1, 1},
+            {-1, 0},
+            {-1, -1},
         }};
         Point neighborBase = nativeCell;
         bool firstPushAliasesCurrentNode = firstPlacementThisPop && poppedNodeIndex >= 0;
-        for (std::size_t offsetIndex = 0; offsetIndex < kNativePatchNeighbors.size(); ++offsetIndex) {
+        for (std::size_t offsetIndex = 0; offsetIndex < kNativePatchNeighbors.size(); ++offsetIndex)
+        {
             const Point offset = kNativePatchNeighbors[offsetIndex];
-            const Point next{neighborBase.x + offset.x, neighborBase.y + offset.y};
-            if (!isNativeUsableForResource(next)) {
+            const Point next {neighborBase.x + offset.x, neighborBase.y + offset.y};
+            if (!isNativeUsableForResource(next))
+            {
                 continue;
             }
             const std::uint64_t key = nativeIsoKey(next);
             const bool existingOverlay = hasOpenNativeResourceOverlay(next);
-            if (!existingOverlay && taggedBlankCells.find(key) != taggedBlankCells.end()) {
+            if (!existingOverlay && taggedBlankCells.find(key) != taggedBlankCells.end())
+            {
                 continue;
             }
             ++report_.tiberiumPatchCandidateChecks;
-            if (!canTraverseNativeResourcePatch(next)) {
+            if (!canTraverseNativeResourcePatch(next))
+            {
                 ++report_.tiberiumPatchRejectedCells;
                 continue;
             }
-            if (firstPushAliasesCurrentNode && heap.allocated == poppedNodeIndex) {
+            if (firstPushAliasesCurrentNode && heap.allocated == poppedNodeIndex)
+            {
                 neighborBase = next;
                 firstPushAliasesCurrentNode = false;
             }
             taggedBlankCells.insert(key);
-            if (nativeScratchTag > 0) {
+            if (nativeScratchTag > 0)
+            {
                 nativeMapgenTempTags_[key] = nativeScratchTag;
             }
             const int dx = nativeSeed.x - next.x;
@@ -885,33 +1023,41 @@ void NativeMapGenerator::placeTiberiumPatch(
             const std::uint32_t priorityRaw = rng.random();
             const float priority = nativeDoubleToFloatChop(
                 nativeSurfaceHeapPriority(distance, priorityRaw));
-            if (heap.push(next, priority)) {
+            if (heap.push(next, priority))
+            {
                 ++report_.tiberiumPatchHeapPushes;
                 traceTiberiumEvent("patch_enqueue", next, 1, static_cast<int>(offsetIndex), floatBits(priority));
             }
         }
-        if (initialRetries >= 10) {
+        if (initialRetries >= 10)
+        {
             break;
         }
     }
 
-    if (placed > 0) {
+    if (placed > 0)
+    {
         ++report_.tiberiumPatches;
     }
-    if (placed < amount) {
+    if (placed < amount)
+    {
         ++report_.tiberiumPatchUnfilled;
     }
 
-    if (const char* dumpPath = std::getenv(kNativeTiberiumDumpPathEnv); dumpPath != nullptr && dumpPath[0] != '\0') {
-        const std::filesystem::path path{dumpPath};
-        if (path.has_parent_path()) {
+    if (const char *dumpPath = std::getenv(kNativeTiberiumDumpPathEnv); dumpPath != nullptr && dumpPath[0] != '\0')
+    {
+        const std::filesystem::path path {dumpPath};
+        if (path.has_parent_path())
+        {
             std::filesystem::create_directories(path.parent_path());
         }
         std::error_code ec;
         const bool writeHeader = !std::filesystem::exists(path, ec) || std::filesystem::file_size(path, ec) == 0;
         std::ofstream out(path, std::ios::out | std::ios::app);
-        if (out.is_open()) {
-            if (writeHeader) {
+        if (out.is_open())
+        {
+            if (writeHeader)
+            {
                 out << "patch,branch,seedX,seedY,nativeSeedX,nativeSeedY,amount,rich,amountJitter,amountRawCount,amountRaw0,amountRaw1,placed,uniqueOverlays,firstX,firstY,finalCenterX,finalCenterY,rngDraws\n";
             }
             out << patchIndex << ','
@@ -938,14 +1084,15 @@ void NativeMapGenerator::placeTiberiumPatch(
 }
 
 void NativeMapGenerator::distributeTiberium(
-    MapGrid& map,
-    const MapSeedOptions& options,
-    const RmgConfig& config,
-    NativeRandomizer& rng,
-    const std::vector<NativeRegion>& regions,
-    const std::vector<Point>& starts)
+    MapGrid &map,
+    const MapSeedOptions &options,
+    const RmgConfig &config,
+    NativeRandomizer &rng,
+    const std::vector<NativeRegion> &regions,
+    const std::vector<Point> &starts)
 {
-    if (regions.empty()) {
+    if (regions.empty())
+    {
         return;
     }
 
@@ -958,7 +1105,8 @@ void NativeMapGenerator::distributeTiberium(
     report_.tiberiumBudgetCells = totalCells;
 
     bool specialRegionPatch = false;
-    switch (options.mapType) {
+    switch (options.mapType)
+    {
     case 0:
         specialRegionPatch = options.resources == 3;
         break;
@@ -975,71 +1123,79 @@ void NativeMapGenerator::distributeTiberium(
         break;
     }
 
-    const bool richWaypointPatch = options.resources == 3
-        && (options.mapType == 1 || options.mapType == 3 || options.mapType == 4);
+    const bool richWaypointPatch = options.resources == 3 && (options.mapType == 1 || options.mapType == 3 || options.mapType == 4);
     std::vector<Point> globalWaypoints;
-    for (const NativeRegion& region : regions) {
+    for (const NativeRegion &region : regions)
+    {
         const int quota = std::clamp(region.nativeWaypointQuota, 0, static_cast<int>(region.nativeWaypoints.size()));
         globalWaypoints.insert(globalWaypoints.end(), region.nativeWaypoints.begin(), region.nativeWaypoints.begin() + quota);
     }
 
-    std::vector<const NativeRegion*> regionOrder;
+    std::vector<const NativeRegion *> regionOrder;
     regionOrder.reserve(regions.size());
-    for (const NativeRegion& region : regions) {
+    for (const NativeRegion &region : regions)
+    {
         regionOrder.push_back(&region);
     }
-    std::stable_sort(regionOrder.begin(), regionOrder.end(), [](const NativeRegion* lhs, const NativeRegion* rhs) {
-        if (lhs->nativeBaseZoneId >= 0 || rhs->nativeBaseZoneId >= 0) {
-            const int lhsZone = lhs->nativeBaseZoneId >= 0
-                ? lhs->nativeBaseZoneId
-                : std::numeric_limits<int>::max();
-            const int rhsZone = rhs->nativeBaseZoneId >= 0
-                ? rhs->nativeBaseZoneId
-                : std::numeric_limits<int>::max();
-            return lhsZone < rhsZone;
-        }
-        return lhs->id < rhs->id;
-    });
+    std::stable_sort(regionOrder.begin(), regionOrder.end(), [](const NativeRegion *lhs, const NativeRegion *rhs)
+                     {
+                         if (lhs->nativeBaseZoneId >= 0 || rhs->nativeBaseZoneId >= 0)
+                         {
+                             const int lhsZone = lhs->nativeBaseZoneId >= 0 ? lhs->nativeBaseZoneId : std::numeric_limits<int>::max();
+                             const int rhsZone = rhs->nativeBaseZoneId >= 0 ? rhs->nativeBaseZoneId : std::numeric_limits<int>::max();
+                             return lhsZone < rhsZone;
+                         }
+                         return lhs->id < rhs->id;
+                     });
 
     int waypointOffset = 0;
-    for (const NativeRegion* regionPtr : regionOrder) {
-        const NativeRegion& region = *regionPtr;
+    for (const NativeRegion *regionPtr : regionOrder)
+    {
+        const NativeRegion &region = *regionPtr;
         const int quota = std::max(0, region.nativeWaypointQuota);
 
         const int nativeQuota = std::clamp(quota, 0, static_cast<int>(region.nativeResourceSeeds.size()));
 
         std::vector<Point> patchCells;
-        if (static_cast<int>(region.nativeResourceSeeds.size()) > nativeQuota) {
+        if (static_cast<int>(region.nativeResourceSeeds.size()) > nativeQuota)
+        {
             patchCells.assign(region.nativeResourceSeeds.begin() + nativeQuota, region.nativeResourceSeeds.end());
         }
         const int patchCellCount = static_cast<int>(patchCells.size());
-        const int regionPatchBase = patchCellCount > 0
-            ? nativeDoubleToInt(static_cast<double>(baseBudget) * std::max(static_cast<double>(quota), 0.5)) / patchCellCount
-            : 0;
+        const int regionPatchBase = patchCellCount > 0 ? nativeDoubleToInt(static_cast<double>(baseBudget) * std::max(static_cast<double>(quota), 0.5)) / patchCellCount : 0;
 
         int specialIndex = -1;
-        if (specialRegionPatch && !patchCells.empty()) {
-            Point anchor{-1, -1};
-            if (quota > 0 && waypointOffset < static_cast<int>(globalWaypoints.size())) {
+        if (specialRegionPatch && !patchCells.empty())
+        {
+            Point anchor {-1, -1};
+            if (quota > 0 && waypointOffset < static_cast<int>(globalWaypoints.size()))
+            {
                 int sumX = 0;
                 int sumY = 0;
                 int count = 0;
-                for (int i = 0; i < quota && waypointOffset + i < static_cast<int>(globalWaypoints.size()); ++i) {
+                for (int i = 0; i < quota && waypointOffset + i < static_cast<int>(globalWaypoints.size()); ++i)
+                {
                     sumX += globalWaypoints[static_cast<std::size_t>(waypointOffset + i)].x;
                     sumY += globalWaypoints[static_cast<std::size_t>(waypointOffset + i)].y;
                     ++count;
                 }
-                if (count > 0) {
+                if (count > 0)
+                {
                     anchor = {sumX / count, sumY / count};
                 }
-            } else {
+            }
+            else
+            {
                 anchor = patchCells[static_cast<std::size_t>(rng.randomScaledInclusive(0, patchCellCount - 1))];
             }
-            if (anchor.x >= 0) {
+            if (anchor.x >= 0)
+            {
                 int bestDistance = 500000;
-                for (std::size_t i = 0; i < patchCells.size(); ++i) {
+                for (std::size_t i = 0; i < patchCells.size(); ++i)
+                {
                     const double distance = euclidean(patchCells[i], anchor);
-                    if (distance < static_cast<double>(bestDistance)) {
+                    if (distance < static_cast<double>(bestDistance))
+                    {
                         bestDistance = nativeDoubleToInt(distance);
                         specialIndex = static_cast<int>(i);
                     }
@@ -1047,11 +1203,14 @@ void NativeMapGenerator::distributeTiberium(
             }
         }
 
-        if (!patchCells.empty()) {
-            for (std::size_t i = 0; i < patchCells.size(); ++i) {
+        if (!patchCells.empty())
+        {
+            for (std::size_t i = 0; i < patchCells.size(); ++i)
+            {
                 std::vector<std::uint32_t> amountRawValues;
                 double amountJitter = 0.0;
-                do {
+                do
+                {
                     amountRawValues.clear();
                     amountJitter = nativeX87Chop53Multiply(
                         rng.gaussianWithRawTrace(&amountRawValues),
@@ -1060,12 +1219,14 @@ void NativeMapGenerator::distributeTiberium(
                 const int nativeAmount = nativeDoubleToInt(nativeX87Chop53Add(
                     static_cast<double>(regionPatchBase),
                     amountJitter));
-                if (nativeAmount < 0) {
+                if (nativeAmount < 0)
+                {
                     continue;
                 }
                 const bool rich = specialRegionPatch && static_cast<int>(i) == specialIndex;
                 ++report_.tiberiumRegionSeeds;
-                if (rich) {
+                if (rich)
+                {
                     ++report_.tiberiumSpecialPatchSeeds;
                     ++report_.richTiberiumPatches;
                 }
@@ -1088,16 +1249,20 @@ void NativeMapGenerator::distributeTiberium(
         }
 
         std::vector<Point> waypoints;
-        for (int i = 0; i < quota && waypointOffset + i < static_cast<int>(globalWaypoints.size()); ++i) {
+        for (int i = 0; i < quota && waypointOffset + i < static_cast<int>(globalWaypoints.size()); ++i)
+        {
             waypoints.push_back(globalWaypoints[static_cast<std::size_t>(waypointOffset + i)]);
         }
-        if (!waypoints.empty() && !patchCells.empty()) {
+        if (!waypoints.empty() && !patchCells.empty())
+        {
             std::vector<double> averageDistances;
             averageDistances.reserve(waypoints.size());
             double minAverageDistance = std::numeric_limits<double>::max();
-            for (Point waypoint : waypoints) {
+            for (Point waypoint : waypoints)
+            {
                 double totalDistance = 0.0;
-                for (Point seed : patchCells) {
+                for (Point seed : patchCells)
+                {
                     totalDistance += euclidean(waypoint, seed);
                 }
                 const double averageDistance = totalDistance / static_cast<double>(patchCells.size());
@@ -1105,10 +1270,12 @@ void NativeMapGenerator::distributeTiberium(
                 minAverageDistance = std::min(minAverageDistance, averageDistance);
             }
 
-            for (std::size_t i = 0; i < waypoints.size(); ++i) {
+            for (std::size_t i = 0; i < waypoints.size(); ++i)
+            {
                 const int nativeAmount = static_cast<int>((averageDistances[i] - minAverageDistance) * 15.0) + 500;
                 ++report_.tiberiumWaypointSeeds;
-                if (richWaypointPatch) {
+                if (richWaypointPatch)
+                {
                     ++report_.richTiberiumPatches;
                 }
                 placeTiberiumPatch(

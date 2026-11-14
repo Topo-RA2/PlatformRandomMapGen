@@ -1,6 +1,6 @@
 param(
     [string]$SourcePath = (Join-Path $PSScriptRoot "..\src\native_generator.cpp"),
-    [string]$ExpectedExpandedSha256 = "97D8E4A173503D95305B3C32A65258D6D839189268606108810568F5ACEC6A23"
+    [string]$ExpectedExpandedSha256 = "F5B0985A63F2ACD8200EDAA44DB1A015975026DCF10AD5B59A0791F4FE87FA32"
 )
 
 $ErrorActionPreference = "Stop"

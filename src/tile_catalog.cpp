@@ -10,43 +10,52 @@
 #include <string>
 #include <vector>
 
-namespace rmg {
-namespace {
+namespace rmg
+{
+namespace
+{
 
-std::vector<int> parseIntList(const std::string& value)
+std::vector<int> parseIntList(const std::string &value)
 {
     std::vector<int> result;
     std::stringstream stream(value);
     std::string item;
-    while (std::getline(stream, item, ',')) {
-        if (!item.empty()) {
+    while (std::getline(stream, item, ','))
+    {
+        if (!item.empty())
+        {
             result.push_back(std::stoi(item));
         }
     }
     return result;
 }
 
-TileMapping readMapping(const IniDocument& ini, const std::string& key, TileMapping fallback)
+TileMapping readMapping(const IniDocument &ini, const std::string &key, TileMapping fallback)
 {
     const std::string raw = ini.getString("Tiles", key, "");
-    if (raw.empty()) {
+    if (raw.empty())
+    {
         return fallback;
     }
 
     const auto values = parseIntList(raw);
-    if (values.empty()) {
+    if (values.empty())
+    {
         return fallback;
     }
 
     TileMapping mapping = fallback;
     mapping.tileNum = static_cast<std::uint32_t>(std::max(0, values[0]));
-    if (values.size() > 1) {
+    if (values.size() > 1)
+    {
         mapping.subTileBase = static_cast<std::uint8_t>(std::clamp(values[1], 0, 255));
     }
-    if (values.size() > 2) {
+    if (values.size() > 2)
+    {
         mapping.subTileCount = static_cast<std::uint8_t>(std::clamp(values[2], 1, 255));
     }
-    if (values.size() > 3) {
+    if (values.size() > 3)
+    {
         mapping.variantRemap.assign(values.begin() + 3, values.end());
     }
     return mapping;
@@ -59,13 +68,15 @@ std::string tileSetSectionName(int index)
     return out.str();
 }
 
-std::vector<int> buildFirstTileBySet(const IniDocument& ini)
+std::vector<int> buildFirstTileBySet(const IniDocument &ini)
 {
     std::vector<int> firstTileBySet;
     int firstTile = 0;
-    for (int index = 0;; ++index) {
+    for (int index = 0;; ++index)
+    {
         const std::string section = tileSetSectionName(index);
-        if (!ini.hasSection(section)) {
+        if (!ini.hasSection(section))
+        {
             break;
         }
         firstTileBySet.push_back(firstTile);
@@ -74,10 +85,11 @@ std::vector<int> buildFirstTileBySet(const IniDocument& ini)
     return firstTileBySet;
 }
 
-TileMapping mappingFromSet(const IniDocument& ini, const std::vector<int>& firstTileBySet, const std::string& key, TileMapping fallback)
+TileMapping mappingFromSet(const IniDocument &ini, const std::vector<int> &firstTileBySet, const std::string &key, TileMapping fallback)
 {
     const int setNum = ini.getInt("General", key, -1);
-    if (setNum < 0 || setNum >= static_cast<int>(firstTileBySet.size())) {
+    if (setNum < 0 || setNum >= static_cast<int>(firstTileBySet.size()))
+    {
         return fallback;
     }
 
@@ -177,12 +189,14 @@ TileCatalog yrLunarCatalog()
     return catalog;
 }
 
-std::string normalizePresetName(const std::string& preset)
+std::string normalizePresetName(const std::string &preset)
 {
     std::string normalized;
     normalized.reserve(preset.size());
-    for (const unsigned char ch : preset) {
-        if (ch != '-' && ch != '_') {
+    for (const unsigned char ch : preset)
+    {
+        if (ch != '-' && ch != '_')
+        {
             normalized.push_back(static_cast<char>(std::tolower(ch)));
         }
     }
@@ -191,7 +205,7 @@ std::string normalizePresetName(const std::string& preset)
 
 } // namespace
 
-TileCatalog loadTileCatalog(const std::filesystem::path& path, TileCatalog fallback)
+TileCatalog loadTileCatalog(const std::filesystem::path &path, TileCatalog fallback)
 {
     const IniDocument ini = IniDocument::loadFile(path);
     fallback.land = readMapping(ini, "Land", fallback.land);
@@ -210,11 +224,12 @@ TileCatalog loadTileCatalog(const std::filesystem::path& path, TileCatalog fallb
     return fallback;
 }
 
-TileCatalog loadTileCatalogFromTheaterIni(const std::filesystem::path& path, TileCatalog fallback)
+TileCatalog loadTileCatalogFromTheaterIni(const std::filesystem::path &path, TileCatalog fallback)
 {
     const IniDocument ini = IniDocument::loadFile(path);
     const auto firstTileBySet = buildFirstTileBySet(ini);
-    if (firstTileBySet.empty()) {
+    if (firstTileBySet.empty())
+    {
         return fallback;
     }
 
@@ -225,11 +240,13 @@ TileCatalog loadTileCatalogFromTheaterIni(const std::filesystem::path& path, Til
     fallback.shore = mappingFromSet(ini, firstTileBySet, "ShorePieces", fallback.shore);
     fallback.dirt = mappingFromSet(ini, firstTileBySet, "SandTile", fallback.dirt);
     fallback.rough = mappingFromSet(ini, firstTileBySet, "RoughTile", fallback.rough);
-    if (fallback.rough.tileNum == TileCatalog{}.rough.tileNum) {
+    if (fallback.rough.tileNum == TileCatalog {}.rough.tileNum)
+    {
         fallback.rough = mappingFromSet(ini, firstTileBySet, "RoughGround", fallback.rough);
     }
     fallback.pave = mappingFromSet(ini, firstTileBySet, "PaveTile", fallback.pave);
-    if (fallback.pave.tileNum == TileCatalog{}.pave.tileNum) {
+    if (fallback.pave.tileNum == TileCatalog {}.pave.tileNum)
+    {
         fallback.pave = mappingFromSet(ini, firstTileBySet, "MiscPaveTile", fallback.pave);
     }
     fallback.green = mappingFromSet(ini, firstTileBySet, "GreenTile", fallback.green);
@@ -241,18 +258,20 @@ TileCatalog loadTileCatalogFromTheaterIni(const std::filesystem::path& path, Til
     return fallback;
 }
 
-bool isKnownTileCatalogPreset(const std::string& preset)
+bool isKnownTileCatalogPreset(const std::string &preset)
 {
     const std::string normalized = normalizePresetName(preset);
     return normalized == "yr" || normalized == "yurisrevenge";
 }
 
-TileCatalog loadTileCatalogPreset(const std::string& preset, int theater)
+TileCatalog loadTileCatalogPreset(const std::string &preset, int theater)
 {
-    if (!isKnownTileCatalogPreset(preset)) {
+    if (!isKnownTileCatalogPreset(preset))
+    {
         throw std::runtime_error("unknown tile catalog preset: " + preset);
     }
-    switch (theater) {
+    switch (theater)
+    {
     case 1:
         return yrSnowCatalog();
     case 3:
@@ -267,9 +286,10 @@ TileCatalog loadTileCatalogPreset(const std::string& preset, int theater)
     }
 }
 
-TileMapping tileMappingForTerrain(const TileCatalog& catalog, Terrain terrain)
+TileMapping tileMappingForTerrain(const TileCatalog &catalog, Terrain terrain)
 {
-    switch (terrain) {
+    switch (terrain)
+    {
     case Terrain::Water:
         return catalog.water;
     case Terrain::Shore:
@@ -290,9 +310,10 @@ TileMapping tileMappingForTerrain(const TileCatalog& catalog, Terrain terrain)
     return catalog.land;
 }
 
-TileMapping latTileMappingForTerrain(const TileCatalog& catalog, Terrain terrain)
+TileMapping latTileMappingForTerrain(const TileCatalog &catalog, Terrain terrain)
 {
-    switch (terrain) {
+    switch (terrain)
+    {
     case Terrain::Dirt:
         return catalog.dirtLat;
     case Terrain::Rough:
@@ -310,18 +331,19 @@ TileMapping latTileMappingForTerrain(const TileCatalog& catalog, Terrain terrain
     return tileMappingForTerrain(catalog, terrain);
 }
 
-std::uint32_t mappedTileNum(const TileMapping& mapping, int variant)
+std::uint32_t mappedTileNum(const TileMapping &mapping, int variant)
 {
     const int count = std::max(1, static_cast<int>(mapping.tileCount));
     int normalized = ((variant % count) + count) % count;
-    if (!mapping.variantRemap.empty()) {
+    if (!mapping.variantRemap.empty())
+    {
         const int remapIndex = ((variant % static_cast<int>(mapping.variantRemap.size())) + static_cast<int>(mapping.variantRemap.size())) % static_cast<int>(mapping.variantRemap.size());
         normalized = ((mapping.variantRemap[static_cast<std::size_t>(remapIndex)] % count) + count) % count;
     }
     return mapping.tileNum + static_cast<std::uint32_t>(normalized);
 }
 
-std::uint8_t mappedSubTile(const TileMapping& mapping, int variant)
+std::uint8_t mappedSubTile(const TileMapping &mapping, int variant)
 {
     const int count = std::max(1, static_cast<int>(mapping.subTileCount));
     const int normalized = ((variant % count) + count) % count;

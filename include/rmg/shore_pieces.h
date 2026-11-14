@@ -2,11 +2,11 @@
 
 #include "rmg/map_types.h"
 
-#include <vector>
+namespace rmg
+{
 
-namespace rmg {
-
-struct ShorePiece {
+struct ShorePiece
+{
     int tile = 0;
     int subTile = 0;
 };
@@ -20,8 +20,8 @@ bool isEncodedShorePiece(int encoded) noexcept;
 int shoreTemplateWidth(int piece) noexcept;
 int shoreTemplateHeight(int piece) noexcept;
 char shoreTemplateSlot(int piece, int x, int y) noexcept;
-ShorePiece shorePieceForCell(const MapGrid& map, Point point) noexcept;
-void rebuildShorePieceTiles(MapGrid& map) noexcept;
-void rebuildSimpleShorePieceTiles(MapGrid& map) noexcept;
+ShorePiece shorePieceForCell(const MapGrid &map, Point point) noexcept;
+void rebuildShorePieceTiles(MapGrid &map) noexcept;
+void rebuildSimpleShorePieceTiles(MapGrid &map) noexcept;
 
 } // namespace rmg

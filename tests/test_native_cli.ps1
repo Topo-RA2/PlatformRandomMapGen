@@ -54,6 +54,16 @@ Invoke-RmgExpectedFailure @(
     (Join-Path $runRoot "invalid-native.yrini")
 )
 
+# 已退役的模式和专属参数必须拒绝，不能落入默认原生生成。
+foreach ($mode in @("advanced", "verify-advanced-strategy", "verify-advanced-combinations")) {
+    Invoke-RmgExpectedFailure @("--mode", $mode, "--out", (Join-Path $runRoot "retired-mode.map"))
+}
+foreach ($option in @("--advanced-preset", "--base-terrain-strategy", "--topology-strategy",
+    "--spawn-strategy", "--economy-strategy", "--objective-strategy", "--symmetry-strategy",
+    "--economy-level", "--strategy-report-out", "--advanced-verify-case", "--advanced-verify-runs")) {
+    Invoke-RmgExpectedFailure @("--mode", "native", $option, "1", "--out", (Join-Path $runRoot "retired-option.map"))
+}
+
 $nativeCases = @(
     @{
         Name = "native-type1"

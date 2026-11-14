@@ -2,9 +2,11 @@
 
 #include "rmg/map_types.h"
 
-namespace rmg {
+namespace rmg
+{
 
-struct CliffPiece {
+struct CliffPiece
+{
     int tile = 0;
     int subTile = 0;
 };
@@ -24,6 +26,6 @@ int cliffPieceSubTile(int tile, int x, int y) noexcept;
 int cliffPieceCellHeight(int tile, int subTile) noexcept;
 int cliffPieceValidSlotCount(int tile) noexcept;
 
-void rebuildCliffPieceTiles(MapGrid& map, bool useCellHeightTargets = false, bool writeCellHeights = false) noexcept;
+void rebuildCliffPieceTiles(MapGrid &map, bool useCellHeightTargets = false, bool writeCellHeights = false) noexcept;
 
 } // namespace rmg

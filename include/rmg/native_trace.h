@@ -4,10 +4,12 @@
 #include <cstdint>
 #include <span>
 
-namespace rmg::native_trace {
+namespace rmg::native_trace
+{
 
 // Function IDs and event kinds intentionally match YRMod's RFT1 oracle.
-enum FunctionId : std::uint16_t {
+enum FunctionId : std::uint16_t
+{
     ProcessAllRegions = 1,
     GenerateRandomMap = 2,
     GaussianRandom = 3,
@@ -53,19 +55,22 @@ enum FunctionId : std::uint16_t {
     DecoratePonds = 339,
 };
 
-enum EventKind : std::uint8_t {
+enum EventKind : std::uint8_t
+{
     Enter = 1,
     Exit = 2,
     CallSite = 3,
 };
 
-enum ResultKind : std::uint16_t {
+enum ResultKind : std::uint16_t
+{
     ResultLegacy = 0,
     ResultNone = 1,
     ResultBinary64 = 2,
 };
 
-enum DetailKind : std::uint8_t {
+enum DetailKind : std::uint8_t
+{
     DetailNone = 0,
     DetailOrderedPackedCells = 1,
     DetailOrderedCellState = 2,
@@ -75,9 +80,10 @@ enum DetailKind : std::uint8_t {
     DetailOrderedZoneWorkspace = 6,
 };
 
-struct EventData {
-    std::array<std::uint32_t, 6> args{};
-    std::array<std::uint32_t, 4> result{};
+struct EventData
+{
+    std::array<std::uint32_t, 6> args {};
+    std::array<std::uint32_t, 4> result {};
     std::int32_t regionIndex = -1;
     std::int32_t regionId = -1;
     std::int32_t regionCount = 0;
@@ -114,14 +120,14 @@ void call(
     std::uint32_t next1 = 0,
     std::uint32_t next2 = 0,
     std::uint64_t resultBits = 0);
-void enterDetailed(std::uint32_t site, std::uint16_t functionId, const EventData& data);
+void enterDetailed(std::uint32_t site, std::uint16_t functionId, const EventData &data);
 void exitDetailed(
     std::uint32_t site,
     std::uint16_t functionId,
-    const EventData& data,
+    const EventData &data,
     std::uint8_t detailKind = DetailNone,
     std::span<const std::uint32_t> detailValues = {});
-void callDetailed(std::uint32_t site, std::uint16_t functionId, const EventData& data);
+void callDetailed(std::uint32_t site, std::uint16_t functionId, const EventData &data);
 void callWithDetail(
     std::uint32_t site,
     std::uint16_t functionId,

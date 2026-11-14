@@ -8,11 +8,13 @@
 #include <string>
 #include <string_view>
 
-namespace rmg {
+namespace rmg
+{
 
 inline constexpr std::size_t kMaximumNativeGameOptionsReportBytes = 8U * 1024U;
 
-struct NativeGameOptions {
+struct NativeGameOptions
+{
     int terrainType = 1;
     int timeOfDay = 0;
     int climate = 0;
@@ -22,7 +24,8 @@ struct NativeGameOptions {
     std::uint32_t randomizationSeed = 0;
 };
 
-struct NativeGameOptionsResolution {
+struct NativeGameOptionsResolution
+{
     MapSeedOptions mapSeedOptions;
     int playableWidth = 0;
     int playableHeight = 0;
@@ -30,22 +33,22 @@ struct NativeGameOptionsResolution {
 };
 
 NativeGameOptionsResolution deriveNativeGameOptions(
-    const NativeGameOptions& options,
-    const RmgConfig& config = {});
+    const NativeGameOptions &options,
+    const RmgConfig &config = {});
 
 std::string serializeNativeGameOptionsReport(
-    const NativeGameOptions& options,
-    const NativeGameOptionsResolution& resolution);
+    const NativeGameOptions &options,
+    const NativeGameOptionsResolution &resolution);
 
 NativeGameOptionsResolution validateNativeGameOptionsReport(
     std::string_view report,
-    const NativeGameOptions& expectedOptions,
-    const RmgConfig& config = {});
+    const NativeGameOptions &expectedOptions,
+    const RmgConfig &config = {});
 
 NativeGameOptionsResolution validateNativeGameOptionsReportFile(
-    const std::filesystem::path& path,
-    const NativeGameOptions& expectedOptions,
-    const RmgConfig& config = {});
+    const std::filesystem::path &path,
+    const NativeGameOptions &expectedOptions,
+    const RmgConfig &config = {});
 
 void verifyNativeGameOptions();
 

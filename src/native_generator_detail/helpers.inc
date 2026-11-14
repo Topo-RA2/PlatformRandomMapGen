@@ -1,4 +1,5 @@
-namespace {
+namespace
+{
 
 constexpr int kMinimumNativePatchSize = 400;
 constexpr int kNativeBaseMapLevel = 4;
@@ -21,45 +22,45 @@ constexpr double kNativePiOverTwo = std::bit_cast<double>(0x3FF921FB54442D18ull)
 constexpr double kNativeSevenPiOverFour = std::bit_cast<double>(0x4015FDBBE9BBA775ull);
 constexpr std::uint64_t kFnvOffset = 14695981039346656037ull;
 constexpr std::uint64_t kFnvPrime = 1099511628211ull;
-constexpr const char* kNativeStageCellDumpPathEnv = "RMG_NATIVE_STAGE_CELL_DUMP_PATH";
-constexpr const char* kNativeType2WorkspaceDumpPathEnv = "RMG_NATIVE_TYPE2_WORKSPACE_DUMP_PATH";
-constexpr const char* kNativeType2PatchDumpPathEnv = "RMG_NATIVE_TYPE2_PATCH_DUMP_PATH";
-constexpr const char* kNativeType2PatchStateDumpPathEnv = "RMG_NATIVE_TYPE2_PATCH_STATE_DUMP_PATH";
-constexpr const char* kNativeType2RecalcProfileEnv = "RMG_NATIVE_TYPE2_RECALC_PROFILE";
-constexpr const char* kNativeType2SmoothRngCellsEnv = "RMG_NATIVE_TYPE2_SMOOTH_RNG_CELLS";
-constexpr const char* kNativeType2CliffRestorePassesEnv = "RMG_NATIVE_TYPE2_CLIFF_RESTORE_PASSES";
-constexpr const char* kNativeType2CliffRestoreOrderEnv = "RMG_NATIVE_TYPE2_CLIFF_RESTORE_ORDER";
-constexpr const char* kNativeType2CliffRestoreAlgorithmEnv = "RMG_NATIVE_TYPE2_CLIFF_RESTORE_ALGORITHM";
-constexpr const char* kNativeType2ProcessCliffHeightEnv = "RMG_NATIVE_TYPE2_PROCESS_CLIFF_HEIGHT";
-constexpr const char* kNativeType2SmoothFootprintEnv = "RMG_NATIVE_TYPE2_SMOOTH_FOOTPRINT";
-constexpr const char* kNativeType2FinalPostpassEnv = "RMG_NATIVE_TYPE2_FINAL_POSTPASS";
-constexpr const char* kNativeType2CardinalOffsetsEnv = "RMG_NATIVE_TYPE2_CARDINAL_OFFSETS";
-constexpr const char* kNativeType2EmptyNeighborModeEnv = "RMG_NATIVE_TYPE2_EMPTY_NEIGHBOR_MODE";
-constexpr const char* kNativeType2PlaceCliffCompatEnv = "RMG_NATIVE_TYPE2_PLACE_CLIFF_COMPAT";
-constexpr const char* kNativePondDumpPathEnv = "RMG_NATIVE_POND_DUMP_PATH";
-constexpr const char* kNativeGreenDumpPathEnv = "RMG_NATIVE_GREEN_DUMP_PATH";
-constexpr const char* kNativeTechDumpPathEnv = "RMG_NATIVE_TECH_DUMP_PATH";
-constexpr const char* kNativeTiberiumDumpPathEnv = "RMG_NATIVE_TIBERIUM_DUMP_PATH";
-constexpr const char* kNativeTiberiumEventDumpPathEnv = "RMG_NATIVE_TIBERIUM_EVENT_DUMP_PATH";
-constexpr const char* kNativeSpawnDumpPathEnv = "RMG_NATIVE_SPAWN_DUMP_PATH";
-constexpr const char* kNativeSpawnCandidateDumpPathEnv = "RMG_NATIVE_SPAWN_CANDIDATE_DUMP_PATH";
-constexpr const char* kNativeSpawnExclusionEventDumpPathEnv = "RMG_NATIVE_SPAWN_EXCLUSION_EVENT_DUMP_PATH";
-constexpr const char* kNativeRegionDumpPathEnv = "RMG_NATIVE_REGION_DUMP_PATH";
-constexpr const char* kNativeOreChainDumpPathEnv = "RMG_NATIVE_ORE_CHAIN_DUMP_PATH";
-constexpr const char* kNativeOreChainRecalculateDumpPathEnv = "RMG_NATIVE_ORE_CHAIN_RECALC_DUMP_PATH";
-constexpr const char* kNativeOreChainQueueDumpPathEnv = "RMG_NATIVE_ORE_CHAIN_QUEUE_DUMP_PATH";
-constexpr const char* kNativeOreChainPlacementDumpPathEnv = "RMG_NATIVE_ORE_CHAIN_PLACEMENT_DUMP_PATH";
-constexpr const char* kNativeOreChainSeedDumpPathEnv = "RMG_NATIVE_ORE_CHAIN_SEED_DUMP_PATH";
-constexpr const char* kNativeCliffLineTracePathEnv = "RMG_NATIVE_CLIFF_LINE_TRACE_PATH";
-constexpr const char* kNativeCliffLineRecalculateDumpPathEnv = "RMG_NATIVE_CLIFF_LINE_RECALC_DUMP_PATH";
-constexpr const char* kNativeCliffLinePostDumpPathEnv = "RMG_NATIVE_CLIFF_LINE_POST_DUMP_PATH";
-constexpr const char* kNativeOreChainTracePathEnv = "RMG_NATIVE_ORE_CHAIN_TRACE_PATH";
-constexpr const char* kNativeSurfaceDumpPathEnv = "RMG_NATIVE_SURFACE_DUMP_PATH";
-constexpr const char* kNativeSurfaceCandidateDumpPathEnv = "RMG_NATIVE_SURFACE_CANDIDATE_DUMP_PATH";
-constexpr const char* kNativeTreeCenterDumpPathEnv = "RMG_NATIVE_TREE_CENTER_DUMP_PATH";
-constexpr const char* kNativeGrassDumpPathEnv = "RMG_NATIVE_GRASS_DUMP_PATH";
-constexpr const char* kNativeHeightNoiseDumpPathEnv = "RMG_NATIVE_HEIGHT_NOISE_DUMP_PATH";
-constexpr const char* kNativeHeightNoiseTraceIndexEnv = "RMG_NATIVE_HEIGHT_NOISE_TRACE_INDEX";
+constexpr const char *kNativeStageCellDumpPathEnv = "RMG_NATIVE_STAGE_CELL_DUMP_PATH";
+constexpr const char *kNativeType2WorkspaceDumpPathEnv = "RMG_NATIVE_TYPE2_WORKSPACE_DUMP_PATH";
+constexpr const char *kNativeType2PatchDumpPathEnv = "RMG_NATIVE_TYPE2_PATCH_DUMP_PATH";
+constexpr const char *kNativeType2PatchStateDumpPathEnv = "RMG_NATIVE_TYPE2_PATCH_STATE_DUMP_PATH";
+constexpr const char *kNativeType2RecalcProfileEnv = "RMG_NATIVE_TYPE2_RECALC_PROFILE";
+constexpr const char *kNativeType2SmoothRngCellsEnv = "RMG_NATIVE_TYPE2_SMOOTH_RNG_CELLS";
+constexpr const char *kNativeType2CliffRestorePassesEnv = "RMG_NATIVE_TYPE2_CLIFF_RESTORE_PASSES";
+constexpr const char *kNativeType2CliffRestoreOrderEnv = "RMG_NATIVE_TYPE2_CLIFF_RESTORE_ORDER";
+constexpr const char *kNativeType2CliffRestoreAlgorithmEnv = "RMG_NATIVE_TYPE2_CLIFF_RESTORE_ALGORITHM";
+constexpr const char *kNativeType2ProcessCliffHeightEnv = "RMG_NATIVE_TYPE2_PROCESS_CLIFF_HEIGHT";
+constexpr const char *kNativeType2SmoothFootprintEnv = "RMG_NATIVE_TYPE2_SMOOTH_FOOTPRINT";
+constexpr const char *kNativeType2FinalPostpassEnv = "RMG_NATIVE_TYPE2_FINAL_POSTPASS";
+constexpr const char *kNativeType2CardinalOffsetsEnv = "RMG_NATIVE_TYPE2_CARDINAL_OFFSETS";
+constexpr const char *kNativeType2EmptyNeighborModeEnv = "RMG_NATIVE_TYPE2_EMPTY_NEIGHBOR_MODE";
+constexpr const char *kNativeType2PlaceCliffCompatEnv = "RMG_NATIVE_TYPE2_PLACE_CLIFF_COMPAT";
+constexpr const char *kNativePondDumpPathEnv = "RMG_NATIVE_POND_DUMP_PATH";
+constexpr const char *kNativeGreenDumpPathEnv = "RMG_NATIVE_GREEN_DUMP_PATH";
+constexpr const char *kNativeTechDumpPathEnv = "RMG_NATIVE_TECH_DUMP_PATH";
+constexpr const char *kNativeTiberiumDumpPathEnv = "RMG_NATIVE_TIBERIUM_DUMP_PATH";
+constexpr const char *kNativeTiberiumEventDumpPathEnv = "RMG_NATIVE_TIBERIUM_EVENT_DUMP_PATH";
+constexpr const char *kNativeSpawnDumpPathEnv = "RMG_NATIVE_SPAWN_DUMP_PATH";
+constexpr const char *kNativeSpawnCandidateDumpPathEnv = "RMG_NATIVE_SPAWN_CANDIDATE_DUMP_PATH";
+constexpr const char *kNativeSpawnExclusionEventDumpPathEnv = "RMG_NATIVE_SPAWN_EXCLUSION_EVENT_DUMP_PATH";
+constexpr const char *kNativeRegionDumpPathEnv = "RMG_NATIVE_REGION_DUMP_PATH";
+constexpr const char *kNativeOreChainDumpPathEnv = "RMG_NATIVE_ORE_CHAIN_DUMP_PATH";
+constexpr const char *kNativeOreChainRecalculateDumpPathEnv = "RMG_NATIVE_ORE_CHAIN_RECALC_DUMP_PATH";
+constexpr const char *kNativeOreChainQueueDumpPathEnv = "RMG_NATIVE_ORE_CHAIN_QUEUE_DUMP_PATH";
+constexpr const char *kNativeOreChainPlacementDumpPathEnv = "RMG_NATIVE_ORE_CHAIN_PLACEMENT_DUMP_PATH";
+constexpr const char *kNativeOreChainSeedDumpPathEnv = "RMG_NATIVE_ORE_CHAIN_SEED_DUMP_PATH";
+constexpr const char *kNativeCliffLineTracePathEnv = "RMG_NATIVE_CLIFF_LINE_TRACE_PATH";
+constexpr const char *kNativeCliffLineRecalculateDumpPathEnv = "RMG_NATIVE_CLIFF_LINE_RECALC_DUMP_PATH";
+constexpr const char *kNativeCliffLinePostDumpPathEnv = "RMG_NATIVE_CLIFF_LINE_POST_DUMP_PATH";
+constexpr const char *kNativeOreChainTracePathEnv = "RMG_NATIVE_ORE_CHAIN_TRACE_PATH";
+constexpr const char *kNativeSurfaceDumpPathEnv = "RMG_NATIVE_SURFACE_DUMP_PATH";
+constexpr const char *kNativeSurfaceCandidateDumpPathEnv = "RMG_NATIVE_SURFACE_CANDIDATE_DUMP_PATH";
+constexpr const char *kNativeTreeCenterDumpPathEnv = "RMG_NATIVE_TREE_CENTER_DUMP_PATH";
+constexpr const char *kNativeGrassDumpPathEnv = "RMG_NATIVE_GRASS_DUMP_PATH";
+constexpr const char *kNativeHeightNoiseDumpPathEnv = "RMG_NATIVE_HEIGHT_NOISE_DUMP_PATH";
+constexpr const char *kNativeHeightNoiseTraceIndexEnv = "RMG_NATIVE_HEIGHT_NOISE_TRACE_INDEX";
 constexpr double kNativeUInt32Unit = 1.0 / 4294967295.0;
 constexpr float kNativeFloatUInt32Unit = 1.0f / 4294967296.0f;
 
@@ -72,7 +73,8 @@ int nativeTechUniqueIdSpan(int nativeTechIndex) noexcept
 }
 
 #if defined(_MSC_VER)
-class ScopedNativeX87Chop {
+class ScopedNativeX87Chop
+{
 public:
     ScopedNativeX87Chop()
     {
@@ -91,41 +93,123 @@ private:
     unsigned int previous_ = 0;
 };
 #else
-class ScopedNativeX87Chop {
+class ScopedNativeX87Chop
+{
 };
 #endif
 
-constexpr std::array<int, 42> kNativePlaceCliffGroupCompat{
-    0, 0, 0, 1, 2, 3, 4, 4, 5, 5, 5, 6, 7, 8,
-    9, 9, 10, 10, 10, 11, 12, 13, 14, 14, 15, 15, 15, 16,
-    17, 18, 19, 19, 20, 20, 21, 21, 22, 22, 23, 23, 24, 25,
+constexpr std::array<int, 42> kNativePlaceCliffGroupCompat {
+    0,
+    0,
+    0,
+    1,
+    2,
+    3,
+    4,
+    4,
+    5,
+    5,
+    5,
+    6,
+    7,
+    8,
+    9,
+    9,
+    10,
+    10,
+    10,
+    11,
+    12,
+    13,
+    14,
+    14,
+    15,
+    15,
+    15,
+    16,
+    17,
+    18,
+    19,
+    19,
+    20,
+    20,
+    21,
+    21,
+    22,
+    22,
+    23,
+    23,
+    24,
+    25,
 };
 
-constexpr std::array<int, 42> kNativePlaceCliffBandCompat{
-    4, 4, 4, 4, 4, 4, 3, 3, 2, 2, 2, 2, 2, 2,
-    1, 1, 0, 0, 0, 0, 0, 0, 7, 7, 6, 6, 6, 6,
-    6, 6, 5, 5, 3, 3, 1, 1, 7, 7, 5, 5, 4, 4,
+constexpr std::array<int, 42> kNativePlaceCliffBandCompat {
+    4,
+    4,
+    4,
+    4,
+    4,
+    4,
+    3,
+    3,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    1,
+    1,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    7,
+    7,
+    6,
+    6,
+    6,
+    6,
+    6,
+    6,
+    5,
+    5,
+    3,
+    3,
+    1,
+    1,
+    7,
+    7,
+    5,
+    5,
+    4,
+    4,
 };
 
-struct HeapNode {
+struct HeapNode
+{
     Point point;
     double priority = 0.0;
 
-    friend bool operator>(const HeapNode& lhs, const HeapNode& rhs) noexcept
+    friend bool operator>(const HeapNode &lhs, const HeapNode &rhs) noexcept
     {
         return lhs.priority > rhs.priority;
     }
 };
 
-struct SurfaceDensity {
+struct SurfaceDensity
+{
     double groundA = 0.0;
     double groundB = 0.0;
     double green = 0.0;
 };
 
-struct NativeStageCell {
+struct NativeStageCell
+{
     Point cell;
-    const Cell* source = nullptr;
+    const Cell *source = nullptr;
     int isoTileTypeIndex = 0;
     int overlayTypeIndex = -1;
     int smudgeTypeIndex = -1;
@@ -145,9 +229,10 @@ struct NativeStageCell {
     int mapgenZoneId = 0;
 };
 
-struct NativeIteratorCell {
+struct NativeIteratorCell
+{
     Point cell;
-    const Cell* source = nullptr;
+    const Cell *source = nullptr;
     int isoTileTypeIndex = kNativeTileWaterBase;
     int height = 0;
     int level = 4;
@@ -156,22 +241,25 @@ struct NativeIteratorCell {
     bool iceGrowthAllowed = false;
 };
 
-struct NativeMapgenScratchCellInfo {
+struct NativeMapgenScratchCellInfo
+{
     Point cell;
     int isoTileTypeIndex = kNativeTileWaterBase;
     int level = 4;
 };
 
-std::vector<NativeIteratorCell> buildNativeIteratorCells(const MapGrid& map, const std::vector<IsoTileOverride>& isoTileOverrides);
+std::vector<NativeIteratorCell> buildNativeIteratorCells(const MapGrid &map, const std::vector<IsoTileOverride> &isoTileOverrides);
 
-struct NativeGreenCandidate {
+struct NativeGreenCandidate
+{
     Point point;
     Point anchor;
     int facing = 0;
     bool invalidCell = false;
 };
 
-struct NativeGreenProbe {
+struct NativeGreenProbe
+{
     Point point;
     Point anchor;
     int facing = 0;
@@ -189,147 +277,147 @@ int g_nativeTileTheater = 0;
 
 constexpr int kNativeTemperateSlopeSetPiecesBase = 384;
 
-const NativeIsoTileTemplate* nativeTemperateSlopeSetPiece(int tileTypeIndex) noexcept
+const NativeIsoTileTemplate *nativeTemperateSlopeSetPiece(int tileTypeIndex) noexcept
 {
     // Theater=0 SlopeSetPieces metadata captured from the original YR TMP files.
-    static const std::array<NativeIsoTileTemplate, 10> tiles{{
+    static const std::array<NativeIsoTileTemplate, 10> tiles {{
         {384, "RAMP01.TEM", false, 3, 4, {
-            {},
-            {true, 3, 13, 11},
-            {true, 3, 13, 4},
-            {true, 4, 15, 0},
-            {true, 3, 15, 3},
-            {true, 2, 13, 4},
-            {true, 0, 15, 0},
-            {true, 0, 15, 1},
-            {true, 1, 13, 4},
-            {},
-            {true, 0, 13, 8},
-            {true, 0, 13, 4},
-        }},
+                                             {},
+                                             {true, 3, 13, 11},
+                                             {true, 3, 13, 4},
+                                             {true, 4, 15, 0},
+                                             {true, 3, 15, 3},
+                                             {true, 2, 13, 4},
+                                             {true, 0, 15, 0},
+                                             {true, 0, 15, 1},
+                                             {true, 1, 13, 4},
+                                             {},
+                                             {true, 0, 13, 8},
+                                             {true, 0, 13, 4},
+                                         }},
         {385, "RAMP02.TEM", false, 3, 4, {
-            {true, 3, 13, 4},
-            {true, 3, 13, 12},
-            {},
-            {true, 2, 13, 4},
-            {true, 3, 15, 1},
-            {true, 4, 15, 0},
-            {true, 1, 13, 4},
-            {true, 0, 15, 3},
-            {true, 0, 15, 0},
-            {true, 0, 13, 4},
-            {true, 0, 13, 7},
-            {},
-        }},
+                                             {true, 3, 13, 4},
+                                             {true, 3, 13, 12},
+                                             {},
+                                             {true, 2, 13, 4},
+                                             {true, 3, 15, 1},
+                                             {true, 4, 15, 0},
+                                             {true, 1, 13, 4},
+                                             {true, 0, 15, 3},
+                                             {true, 0, 15, 0},
+                                             {true, 0, 13, 4},
+                                             {true, 0, 13, 7},
+                                             {},
+                                         }},
         {386, "RAMP03.TEM", false, 4, 3, {
-            {true, 3, 13, 3},
-            {true, 2, 13, 3},
-            {true, 1, 13, 3},
-            {true, 0, 13, 3},
-            {true, 3, 13, 10},
-            {true, 3, 15, 2},
-            {true, 0, 15, 4},
-            {true, 0, 13, 7},
-            {},
-            {true, 4, 15, 0},
-            {true, 0, 15, 0},
-            {},
-        }},
+                                             {true, 3, 13, 3},
+                                             {true, 2, 13, 3},
+                                             {true, 1, 13, 3},
+                                             {true, 0, 13, 3},
+                                             {true, 3, 13, 10},
+                                             {true, 3, 15, 2},
+                                             {true, 0, 15, 4},
+                                             {true, 0, 13, 7},
+                                             {},
+                                             {true, 4, 15, 0},
+                                             {true, 0, 15, 0},
+                                             {},
+                                         }},
         {387, "RAMP04.TEM", false, 4, 3, {
-            {},
-            {true, 4, 15, 0},
-            {true, 0, 15, 0},
-            {},
-            {true, 3, 13, 11},
-            {true, 3, 15, 4},
-            {true, 0, 15, 2},
-            {true, 0, 13, 6},
-            {true, 3, 13, 3},
-            {true, 2, 13, 3},
-            {true, 1, 13, 3},
-            {true, 0, 13, 3},
-        }},
+                                             {},
+                                             {true, 4, 15, 0},
+                                             {true, 0, 15, 0},
+                                             {},
+                                             {true, 3, 13, 11},
+                                             {true, 3, 15, 4},
+                                             {true, 0, 15, 2},
+                                             {true, 0, 13, 6},
+                                             {true, 3, 13, 3},
+                                             {true, 2, 13, 3},
+                                             {true, 1, 13, 3},
+                                             {true, 0, 13, 3},
+                                         }},
         {388, "RAMP05.TEM", false, 3, 4, {
-            {},
-            {true, 0, 13, 5},
-            {true, 0, 13, 2},
-            {true, 0, 15, 0},
-            {true, 0, 15, 0},
-            {true, 1, 13, 2},
-            {true, 4, 13, 0},
-            {true, 3, 13, 3},
-            {true, 2, 13, 2},
-            {},
-            {true, 3, 13, 10},
-            {true, 3, 13, 2},
-        }},
+                                             {},
+                                             {true, 0, 13, 5},
+                                             {true, 0, 13, 2},
+                                             {true, 0, 15, 0},
+                                             {true, 0, 15, 0},
+                                             {true, 1, 13, 2},
+                                             {true, 4, 13, 0},
+                                             {true, 3, 13, 3},
+                                             {true, 2, 13, 2},
+                                             {},
+                                             {true, 3, 13, 10},
+                                             {true, 3, 13, 2},
+                                         }},
         {389, "RAMP06.TEM", false, 3, 4, {
-            {true, 0, 13, 2},
-            {true, 0, 13, 0},
-            {},
-            {true, 1, 13, 2},
-            {true, 0, 15, 3},
-            {true, 0, 15, 0},
-            {true, 2, 13, 2},
-            {},
-            {},
-            {true, 3, 13, 2},
-            {},
-            {},
-        }},
+                                             {true, 0, 13, 2},
+                                             {true, 0, 13, 0},
+                                             {},
+                                             {true, 1, 13, 2},
+                                             {true, 0, 15, 3},
+                                             {true, 0, 15, 0},
+                                             {true, 2, 13, 2},
+                                             {},
+                                             {},
+                                             {true, 3, 13, 2},
+                                             {},
+                                             {},
+                                         }},
         {390, "RAMP07.TEM", false, 2, 2, {
-            {true, 3, 15, 1},
-            {true, 4, 15, 0},
-            {true, 3, 13, 9},
-            {},
-        }},
+                                             {true, 3, 15, 1},
+                                             {true, 4, 15, 0},
+                                             {true, 3, 13, 9},
+                                             {},
+                                         }},
         {391, "RAMP08.TEM", false, 4, 3, {
-            {},
-            {true, 0, 15, 0},
-            {true, 4, 15, 0},
-            {},
-            {true, 0, 13, 5},
-            {true, 0, 15, 0},
-            {true, 3, 15, 4},
-            {true, 3, 13, 12},
-            {true, 0, 13, 1},
-            {true, 1, 13, 1},
-            {true, 2, 13, 1},
-            {true, 3, 13, 1},
-        }},
+                                             {},
+                                             {true, 0, 15, 0},
+                                             {true, 4, 15, 0},
+                                             {},
+                                             {true, 0, 13, 5},
+                                             {true, 0, 15, 0},
+                                             {true, 3, 15, 4},
+                                             {true, 3, 13, 12},
+                                             {true, 0, 13, 1},
+                                             {true, 1, 13, 1},
+                                             {true, 2, 13, 1},
+                                             {true, 3, 13, 1},
+                                         }},
         {392, "RAMP09.TEM", false, 4, 3, {
-            {true, 0, 13, 1},
-            {true, 1, 13, 1},
-            {true, 2, 13, 1},
-            {true, 3, 13, 1},
-            {true, 0, 13, 8},
-            {true, 0, 15, 0},
-            {},
-            {},
-            {},
-            {true, 0, 15, 0},
-            {},
-            {},
-        }},
+                                             {true, 0, 13, 1},
+                                             {true, 1, 13, 1},
+                                             {true, 2, 13, 1},
+                                             {true, 3, 13, 1},
+                                             {true, 0, 13, 8},
+                                             {true, 0, 15, 0},
+                                             {},
+                                             {},
+                                             {},
+                                             {true, 0, 15, 0},
+                                             {},
+                                             {},
+                                         }},
         {393, "RAMP10.TEM", false, 2, 2, {
-            {true, 3, 15, 2},
-            {true, 3, 13, 9},
-            {true, 4, 15, 0},
-            {},
-        }},
+                                             {true, 3, 15, 2},
+                                             {true, 3, 13, 9},
+                                             {true, 4, 15, 0},
+                                             {},
+                                         }},
     }};
 
-    if (g_nativeTileTheater != 0
-        || tileTypeIndex < kNativeTemperateSlopeSetPiecesBase
-        || tileTypeIndex >= kNativeTemperateSlopeSetPiecesBase + static_cast<int>(tiles.size())) {
+    if (g_nativeTileTheater != 0 || tileTypeIndex < kNativeTemperateSlopeSetPiecesBase || tileTypeIndex >= kNativeTemperateSlopeSetPiecesBase + static_cast<int>(tiles.size()))
+    {
         return nullptr;
     }
     return &tiles[static_cast<std::size_t>(tileTypeIndex - kNativeTemperateSlopeSetPiecesBase)];
 }
 
-int nativeSlopeSetPiecesTileBase(const NativeTheaterCatalog* catalog) noexcept
+int nativeSlopeSetPiecesTileBase(const NativeTheaterCatalog *catalog) noexcept
 {
-    if (catalog != nullptr) {
+    if (catalog != nullptr)
+    {
         return catalog->slopeSetPiecesBase;
     }
     return g_nativeTileTheater == 0 ? kNativeTemperateSlopeSetPiecesBase : -1;
@@ -345,9 +433,9 @@ int nativeRampSmoothTileBase() noexcept
     return g_nativeTileTheater == 1 ? kNativeSnowTileRampSmoothBase : kNativeTileRampSmoothBase;
 }
 
-const char* nativeSurfaceDumpPath() noexcept
+const char *nativeSurfaceDumpPath() noexcept
 {
-    const char* path = std::getenv(kNativeSurfaceDumpPathEnv);
+    const char *path = std::getenv(kNativeSurfaceDumpPathEnv);
     return (path != nullptr && path[0] != '\0') ? path : nullptr;
 }
 
@@ -361,7 +449,7 @@ void resetNativeSurfaceTrace()
 }
 
 void appendNativeSurfaceTrace(
-    const char* event,
+    const char *event,
     int index,
     Point cell,
     std::uint32_t raw,
@@ -377,20 +465,23 @@ void appendNativeSurfaceTrace(
     int objectType,
     int extra0,
     int extra1,
-    const std::string& label = {})
+    const std::string &label = {})
 {
-    const char* path = nativeSurfaceDumpPath();
-    if (path == nullptr) {
+    const char *path = nativeSurfaceDumpPath();
+    if (path == nullptr)
+    {
         return;
     }
 
     std::ofstream out(path, std::ios::out | std::ios::app);
-    if (!out.is_open()) {
+    if (!out.is_open())
+    {
         return;
     }
 
     static bool headerWritten = false;
-    if (!headerWritten) {
+    if (!headerWritten)
+    {
         out << "seq,event,index,x,y,packed,raw,value,threshold,hit,size,placed,tile,overlay,landType,firstObject,objectType,mapgenScratch,mapgenSurfaceBlocked,extra0,extra1,label\n";
         headerWritten = true;
     }
@@ -435,18 +526,21 @@ void appendNativeTreeCenterTrace(
     bool blocked,
     bool accepted)
 {
-    const char* path = std::getenv(kNativeTreeCenterDumpPathEnv);
-    if (path == nullptr || path[0] == '\0') {
+    const char *path = std::getenv(kNativeTreeCenterDumpPathEnv);
+    if (path == nullptr || path[0] == '\0')
+    {
         return;
     }
 
     std::ofstream out(path, std::ios::out | std::ios::app);
-    if (!out.is_open()) {
+    if (!out.is_open())
+    {
         return;
     }
 
     static bool headerWritten = false;
-    if (!headerWritten) {
+    if (!headerWritten)
+    {
         out << "patch,attempt,x,y,packed,raw,sampleIndex,insideDiamond,hasCoords,tile,overlay,landType,firstObject,blocked,accepted\n";
         headerWritten = true;
     }
@@ -469,10 +563,11 @@ void appendNativeTreeCenterTrace(
         << (accepted ? 1 : 0) << '\n';
 }
 
-double tracedRandomUnit(NativeRandomizer& rng, std::uint32_t* rawOut)
+double tracedRandomUnit(NativeRandomizer &rng, std::uint32_t *rawOut)
 {
     const std::uint32_t raw = rng.random();
-    if (rawOut != nullptr) {
+    if (rawOut != nullptr)
+    {
         *rawOut = raw;
     }
     return static_cast<double>(raw) * kNativeUInt32Unit;
@@ -511,8 +606,7 @@ int nativeDoubleToInt(double value) noexcept
 
 double nativeX87Chop53(double rounded, double exactMinusRounded) noexcept
 {
-    const bool roundedAwayFromZero = (rounded > 0.0 && exactMinusRounded < 0.0)
-        || (rounded < 0.0 && exactMinusRounded > 0.0);
+    const bool roundedAwayFromZero = (rounded > 0.0 && exactMinusRounded < 0.0) || (rounded < 0.0 && exactMinusRounded > 0.0);
     return roundedAwayFromZero ? std::nextafter(rounded, 0.0) : rounded;
 }
 
@@ -582,8 +676,8 @@ int nativeTiberiumBudget(int tiberium, int minimum, int maximum) noexcept
 float nativeDoubleToFloatChop(double value) noexcept
 {
     float result = static_cast<float>(value);
-    if ((value > 0.0 && static_cast<double>(result) > value)
-        || (value < 0.0 && static_cast<double>(result) < value)) {
+    if ((value > 0.0 && static_cast<double>(result) > value) || (value < 0.0 && static_cast<double>(result) < value))
+    {
         result = std::nextafter(result, 0.0f);
     }
     return result;
@@ -602,10 +696,12 @@ int nativeLegacyTrigBaseIndex(double angle) noexcept
         angle,
         static_cast<double>(kAngleScale)));
     int index = (scaled / 2) % 8192;
-    if (index < 0) {
+    if (index < 0)
+    {
         index += 8192;
     }
-    if ((scaled & 1) != 0 && index < 8191) {
+    if ((scaled & 1) != 0 && index < 8191)
+    {
         ++index;
     }
     return index;
@@ -619,7 +715,8 @@ double nativeLegacySin(double angle) noexcept
 double nativeLegacyCos(double angle) noexcept
 {
     int index = nativeLegacyTrigBaseIndex(angle) + 2048;
-    if (index >= 10240) {
+    if (index >= 10240)
+    {
         index -= 8192;
     }
     return static_cast<double>(nativeLegacySineTableValue(index));
@@ -644,7 +741,8 @@ double nativeRegionDistancePriority(
     float diamondXScale,
     float diamondYScale) noexcept
 {
-    if (diamondDx == 0 && diamondDy == 0) {
+    if (diamondDx == 0 && diamondDy == 0)
+    {
         return 0.0;
     }
 
@@ -717,18 +815,16 @@ float nativeOreChainPriority(std::uint32_t rawRandom, float distance, int placed
 #else
     const double randomUnit = static_cast<double>(rawRandom) * kNativeUInt32Unit;
     return static_cast<float>(
-        static_cast<float>(randomUnit * 10.0f)
-        + static_cast<float>(distance * 0.5f)
-        - static_cast<float>(placedBefore * 0.02f));
+        static_cast<float>(randomUnit * 10.0f) + static_cast<float>(distance * 0.5f) - static_cast<float>(placedBefore * 0.02f));
 #endif
 }
 
 int nativeInterpolatedPlayableSizeImpl(int seedSize, int players, bool highResourceTerrain) noexcept
 {
-    static constexpr std::array<int, 7> kWidthLowByPlayers{70, 70, 70, 80, 90, 100, 100};
-    static constexpr std::array<int, 7> kWidthHighByPlayers{80, 80, 80, 90, 100, 110, 120};
+    static constexpr std::array<int, 7> kWidthLowByPlayers {70, 70, 70, 80, 90, 100, 100};
+    static constexpr std::array<int, 7> kWidthHighByPlayers {80, 80, 80, 90, 100, 110, 120};
 
-    (void)highResourceTerrain;
+    (void) highResourceTerrain;
     const int index = std::clamp(players, 2, 8) - 2;
     const double scale = std::min(
         nativeX87Chop53Divide(static_cast<double>(seedSize), 3.0),
@@ -743,18 +839,19 @@ int nativeInterpolatedPlayableSizeImpl(int seedSize, int players, bool highResou
 
 int resolvedPlayableSize(int requestedSize, int players, bool highResourceTerrain, bool useNativeInterpolation) noexcept
 {
-    if (useNativeInterpolation) {
+    if (useNativeInterpolation)
+    {
         return nativeInterpolatedPlayableSizeImpl(requestedSize, players, highResourceTerrain);
     }
     return std::max(1, requestedSize);
 }
 
-int nativeSeedWidthForTreeTarget(const MapSeedOptions& options) noexcept
+int nativeSeedWidthForTreeTarget(const MapSeedOptions &options) noexcept
 {
     return std::max(0, options.nativeSeedWidth >= 0 ? options.nativeSeedWidth : options.width);
 }
 
-int nativeRegionReprocessMinimumSize(const MapGrid& map, const MapSeedOptions& options) noexcept
+int nativeRegionReprocessMinimumSize(const MapGrid &map, const MapSeedOptions &options) noexcept
 {
     const int regionSize = std::clamp(options.regionSize, 0, 100);
     const double scale = static_cast<double>(regionSize) * 0.005 + 0.05;
@@ -766,7 +863,8 @@ double nativeRegionDistanceCells(Point noisyNative, Point cellNative, Point anch
 
 bool isInsideNativeEllipse(Point p, Rect rect, int mapWidth, Point mapOffset = {})
 {
-    if (rect.w <= 0 || rect.h <= 0) {
+    if (rect.w <= 0 || rect.h <= 0)
+    {
         return false;
     }
 
@@ -786,15 +884,13 @@ bool isInsideNativeEllipseCell(Point cell, Rect rect, int mapWidth)
         nativeX87Chop53Multiply(heightRadius, heightRadius));
     const bool traceEnabled = native_trace::coreFunctionEnabled(native_trace::IsCellInsideRegion);
     native_trace::EventData traceData;
-    if (traceEnabled) {
+    if (traceEnabled)
+    {
         const std::uint64_t widthScaleBits = std::bit_cast<std::uint64_t>(inverseWidthRadiusSquared);
         const std::uint64_t heightScaleBits = std::bit_cast<std::uint64_t>(inverseHeightRadiusSquared);
-        traceData.args[0] = static_cast<std::uint32_t>(static_cast<std::uint16_t>(cell.x))
-            | (static_cast<std::uint32_t>(static_cast<std::uint16_t>(cell.y)) << 16);
-        traceData.args[1] = static_cast<std::uint32_t>(static_cast<std::uint16_t>(rect.x))
-            | (static_cast<std::uint32_t>(static_cast<std::uint16_t>(rect.y)) << 16);
-        traceData.args[2] = static_cast<std::uint32_t>(static_cast<std::uint16_t>(rect.w))
-            | (static_cast<std::uint32_t>(static_cast<std::uint16_t>(rect.h)) << 16);
+        traceData.args[0] = static_cast<std::uint32_t>(static_cast<std::uint16_t>(cell.x)) | (static_cast<std::uint32_t>(static_cast<std::uint16_t>(cell.y)) << 16);
+        traceData.args[1] = static_cast<std::uint32_t>(static_cast<std::uint16_t>(rect.x)) | (static_cast<std::uint32_t>(static_cast<std::uint16_t>(rect.y)) << 16);
+        traceData.args[2] = static_cast<std::uint32_t>(static_cast<std::uint16_t>(rect.w)) | (static_cast<std::uint32_t>(static_cast<std::uint16_t>(rect.h)) << 16);
         traceData.args[3] = 1;
         traceData.args[4] = static_cast<std::uint32_t>(widthScaleBits);
         traceData.args[5] = static_cast<std::uint32_t>(widthScaleBits >> 32);
@@ -807,8 +903,10 @@ bool isInsideNativeEllipseCell(Point cell, Rect rect, int mapWidth)
         native_trace::enterDetailed(0x59BAB0, native_trace::IsCellInsideRegion, traceData);
     }
 
-    if (rect.w <= 0 || rect.h <= 0) {
-        if (traceEnabled) {
+    if (rect.w <= 0 || rect.h <= 0)
+    {
+        if (traceEnabled)
+        {
             traceData.result[0] = 0;
             traceData.resultKind = native_trace::ResultLegacy;
             native_trace::exitDetailed(0x59BAB0, native_trace::IsCellInsideRegion, traceData);
@@ -818,9 +916,9 @@ bool isInsideNativeEllipseCell(Point cell, Rect rect, int mapWidth)
 
     const double diamondX = (static_cast<double>(cell.x - 2 * rect.x - cell.y + mapWidth - 1) * 0.5) - static_cast<double>(rect.w) * 0.5;
     const double diamondY = (static_cast<double>(cell.x - 2 * rect.y - mapWidth + cell.y - 1) * 0.5) - static_cast<double>(rect.h) * 0.5;
-    const bool result = diamondY * diamondY * inverseHeightRadiusSquared
-        + diamondX * diamondX * inverseWidthRadiusSquared < 1.0;
-    if (traceEnabled) {
+    const bool result = diamondY * diamondY * inverseHeightRadiusSquared + diamondX * diamondX * inverseWidthRadiusSquared < 1.0;
+    if (traceEnabled)
+    {
         traceData.result[0] = result ? 1u : 0u;
         traceData.resultKind = native_trace::ResultLegacy;
         native_trace::exitDetailed(0x59BAB0, native_trace::IsCellInsideRegion, traceData);
@@ -828,20 +926,22 @@ bool isInsideNativeEllipseCell(Point cell, Rect rect, int mapWidth)
     return result;
 }
 
-std::vector<Point> nativeCellCardinalSourceNeighbors(const MapGrid& map, Point p)
+std::vector<Point> nativeCellCardinalSourceNeighbors(const MapGrid &map, Point p)
 {
-    static constexpr std::array<Point, 4> kOffsets{
-        Point{1, -1},
-        Point{1, 1},
-        Point{-1, 1},
-        Point{-1, -1},
+    static constexpr std::array<Point, 4> kOffsets {
+        Point {1, -1},
+        Point {1, 1},
+        Point {-1, 1},
+        Point {-1, -1},
     };
 
     std::vector<Point> result;
     result.reserve(kOffsets.size());
-    for (Point offset : kOffsets) {
-        const Point next{p.x + offset.x, p.y + offset.y};
-        if (map.inBounds(next)) {
+    for (Point offset : kOffsets)
+    {
+        const Point next {p.x + offset.x, p.y + offset.y};
+        if (map.inBounds(next))
+        {
             result.push_back(next);
         }
     }
@@ -850,7 +950,8 @@ std::vector<Point> nativeCellCardinalSourceNeighbors(const MapGrid& map, Point p
 
 double nativeRegionDistance(Point noisyCenter, Point p, Point regionAnchor, Rect rect, int mapWidth, Point mapOffset = {})
 {
-    if (rect.w <= 0 || rect.h <= 0) {
+    if (rect.w <= 0 || rect.h <= 0)
+    {
         return euclidean(noisyCenter, p);
     }
 
@@ -864,23 +965,28 @@ double nativeRegionDistanceCells(Point noisyNative, Point cellNative, Point anch
 {
     const bool traceEnabled = native_trace::coreFunctionEnabled(native_trace::ComputeTerrainDistance);
     native_trace::EventData traceData;
-    const auto packPoint = [](Point point) {
-        return static_cast<std::uint32_t>(static_cast<std::uint16_t>(point.x))
-            | (static_cast<std::uint32_t>(static_cast<std::uint16_t>(point.y)) << 16);
+    const auto packPoint = [](Point point)
+    {
+        return static_cast<std::uint32_t>(static_cast<std::uint16_t>(point.x)) | (static_cast<std::uint32_t>(static_cast<std::uint16_t>(point.y)) << 16);
     };
 
     float diamondXScale = 1.0f;
     float diamondYScale = 1.0f;
-    if (rect.w > 0 && rect.h > 0) {
-        if (rect.w <= rect.h) {
+    if (rect.w > 0 && rect.h > 0)
+    {
+        if (rect.w <= rect.h)
+        {
             diamondXScale = nativeDoubleToFloatChop(
                 static_cast<double>(rect.h) / static_cast<double>(std::max(1, rect.w)) * 1.2);
-        } else {
+        }
+        else
+        {
             diamondYScale = nativeDoubleToFloatChop(
                 static_cast<double>(rect.w) / static_cast<double>(std::max(1, rect.h)) * 1.2);
         }
     }
-    if (traceEnabled) {
+    if (traceEnabled)
+    {
         traceData.args[0] = packPoint(noisyNative);
         traceData.args[1] = packPoint(cellNative);
         traceData.args[2] = packPoint({rect.x, rect.y});
@@ -894,8 +1000,10 @@ double nativeRegionDistanceCells(Point noisyNative, Point cellNative, Point anch
         traceData.resultKind = native_trace::ResultNone;
         native_trace::enterDetailed(0x59B940, native_trace::ComputeTerrainDistance, traceData);
     }
-    const auto finishTrace = [&](double result) {
-        if (traceEnabled) {
+    const auto finishTrace = [&](double result)
+    {
+        if (traceEnabled)
+        {
             const std::uint64_t resultBits = std::bit_cast<std::uint64_t>(result);
             traceData.result[0] = static_cast<std::uint32_t>(resultBits);
             traceData.result[1] = static_cast<std::uint32_t>(resultBits >> 32);
@@ -907,7 +1015,8 @@ double nativeRegionDistanceCells(Point noisyNative, Point cellNative, Point anch
         return result;
     };
 
-    if (rect.w <= 0 || rect.h <= 0) {
+    if (rect.w <= 0 || rect.h <= 0)
+    {
         return finishTrace(euclidean(noisyNative, cellNative));
     }
 
@@ -930,7 +1039,8 @@ double nativeRegionDistanceCells(Point noisyNative, Point cellNative, Point anch
 
 double nativeRegionSeedDistance(Point p, Point regionAnchor, Rect rect, int mapWidth, Point mapOffset = {})
 {
-    if (rect.w <= 0 || rect.h <= 0) {
+    if (rect.w <= 0 || rect.h <= 0)
+    {
         return euclidean(p, regionAnchor);
     }
 
@@ -938,13 +1048,15 @@ double nativeRegionSeedDistance(Point p, Point regionAnchor, Rect rect, int mapW
     const Point anchorNative = toNativeCellCoords(offsetPoint(regionAnchor, mapOffset), mapWidth);
     double xScale = 1.0;
     double yScale = 1.0;
-    if (rect.h <= rect.w) {
+    if (rect.h <= rect.w)
+    {
         yScale = static_cast<double>(rect.w) / std::max(1.0, static_cast<double>(rect.h)) * 1.2;
-    } else {
+    }
+    else
+    {
         xScale = static_cast<double>(rect.h) / std::max(1.0, static_cast<double>(rect.w)) * 1.2;
     }
-    return static_cast<double>(std::abs(cellNative.x - anchorNative.x)) * xScale
-        + static_cast<double>(std::abs(cellNative.y - anchorNative.y)) * yScale;
+    return static_cast<double>(std::abs(cellNative.x - anchorNative.x)) * xScale + static_cast<double>(std::abs(cellNative.y - anchorNative.y)) * yScale;
 }
 
 double nativeAreaRatio(std::uint32_t raw)
@@ -952,53 +1064,54 @@ double nativeAreaRatio(std::uint32_t raw)
     return 0.45 + static_cast<double>(raw) * (1.0 / 4294967296.0) * 0.05;
 }
 
-bool isNativeHighResourceMode(const MapSeedOptions& options) noexcept
+bool isNativeHighResourceMode(const MapSeedOptions &options) noexcept
 {
     return options.mapType == 3 || options.mapType == 4;
 }
 
 // GenerateRandomMap reads MapSeedClass +0x3C (MapType) at 0x58E2F9 and
 // removes level 0 candidates for the special MapType 3/4 pipelines.
-bool nativeRegionLevelZeroCandidateRemoved(const MapSeedOptions& options) noexcept
+bool nativeRegionLevelZeroCandidateRemoved(const MapSeedOptions &options) noexcept
 {
     return options.mapType == 3 || options.mapType == 4;
 }
 
 bool nativeType2FinalPostpassEnabled() noexcept
 {
-    const char* value = std::getenv(kNativeType2FinalPostpassEnv);
+    const char *value = std::getenv(kNativeType2FinalPostpassEnv);
     return value != nullptr && value[0] == '1';
 }
 
-int nativeSurfaceDataCount(const MapGrid& map) noexcept
+int nativeSurfaceDataCount(const MapGrid &map) noexcept
 {
-    const Rect mapRect = map.hasNativeGeometry()
-        ? map.nativeMapRect()
-        : Rect{0, 0, map.width() + 4, map.height() + 12};
+    const Rect mapRect = map.hasNativeGeometry() ? map.nativeMapRect() : Rect {0, 0, map.width() + 4, map.height() + 12};
     return 2 * mapRect.w * (mapRect.h + 4);
 }
 
-Rect nativeSavedMapRect(const MapGrid& map) noexcept
+Rect nativeSavedMapRect(const MapGrid &map) noexcept
 {
-    if (map.hasNativeGeometry()) {
+    if (map.hasNativeGeometry())
+    {
         return map.nativeMapRect();
     }
     return {0, 0, std::max(1, map.width()) + 4, std::max(1, map.height()) + 12};
 }
 
-Rect nativeLocalRect(const MapGrid& map) noexcept
+Rect nativeLocalRect(const MapGrid &map) noexcept
 {
-    if (map.hasNativeGeometry()) {
+    if (map.hasNativeGeometry())
+    {
         return map.nativeLocalRect();
     }
     return {2, 5, std::max(1, map.width()), std::max(1, map.height())};
 }
 
-void adjustNativeGaussianRange(double& mean, double& deviation, double minimum, double maximum)
+void adjustNativeGaussianRange(double &mean, double &deviation, double minimum, double maximum)
 {
     const double lowerEdge = nativeX87Chop53Add(mean, -deviation);
     const double upperEdge = nativeX87Chop53Add(mean, deviation);
-    if (lowerEdge > maximum || upperEdge < minimum) {
+    if (lowerEdge > maximum || upperEdge < minimum)
+    {
         deviation = nativeX87Chop53Multiply(
             nativeX87Chop53Add(maximum, -minimum),
             0.5);
@@ -1006,11 +1119,12 @@ void adjustNativeGaussianRange(double& mean, double& deviation, double minimum, 
     }
 }
 
-double clampGaussian(NativeRandomizer& rng, double mean, double deviation, double minimum, double maximum)
+double clampGaussian(NativeRandomizer &rng, double mean, double deviation, double minimum, double maximum)
 {
     adjustNativeGaussianRange(mean, deviation, minimum, maximum);
     double value = mean;
-    do {
+    do
+    {
         value = nativeX87Chop53Add(
             nativeX87Chop53Multiply(rng.gaussian(), deviation),
             mean);
@@ -1026,13 +1140,15 @@ void traceCliffLineGaussianParameters(
     int zone,
     Point seed)
 {
-    if (!native_trace::active()) {
+    if (!native_trace::active())
+    {
         return;
     }
 
     native_trace::EventData data;
-    const std::array<double, 3> values{angle, mean, deviation};
-    for (std::size_t index = 0; index < values.size(); ++index) {
+    const std::array<double, 3> values {angle, mean, deviation};
+    for (std::size_t index = 0; index < values.size(); ++index)
+    {
         const std::uint64_t bits = std::bit_cast<std::uint64_t>(values[index]);
         data.args[index * 2] = static_cast<std::uint32_t>(bits);
         data.args[index * 2 + 1] = static_cast<std::uint32_t>(bits >> 32);
@@ -1044,7 +1160,7 @@ void traceCliffLineGaussianParameters(
 }
 
 double clampCliffLineGaussian(
-    NativeRandomizer& rng,
+    NativeRandomizer &rng,
     double mean,
     double deviation,
     double minimum,
@@ -1056,7 +1172,8 @@ double clampCliffLineGaussian(
 {
     adjustNativeGaussianRange(mean, deviation, minimum, maximum);
     double value = mean;
-    do {
+    do
+    {
         traceCliffLineGaussianParameters(traceSite, angle, mean, deviation, zone, seed);
         value = nativeX87Chop53Add(
             nativeX87Chop53Multiply(rng.gaussian(), deviation),
@@ -1065,32 +1182,34 @@ double clampCliffLineGaussian(
     return value;
 }
 
-int randomNativeSurfaceMean(NativeRandomizer& rng)
+int randomNativeSurfaceMean(NativeRandomizer &rng)
 {
     int value = 20;
-    do {
+    do
+    {
         value = nativeDoubleToInt(rng.randomUnit() * 21.0 + 20.0);
     } while (value > 40);
     return value;
 }
 
-int randomNativeSurfaceBlobSize(NativeRandomizer& rng, int mean, double deviation = 20.0)
+int randomNativeSurfaceBlobSize(NativeRandomizer &rng, int mean, double deviation = 20.0)
 {
     double effectiveMean = static_cast<double>(mean);
     double effectiveDeviation = deviation;
-    if (effectiveMean - effectiveDeviation > 80.0 || effectiveMean + effectiveDeviation < 4.0) {
+    if (effectiveMean - effectiveDeviation > 80.0 || effectiveMean + effectiveDeviation < 4.0)
+    {
         effectiveMean = 42.0;
         effectiveDeviation = 38.0;
     }
     return std::max(1, nativeDoubleToInt(clampGaussian(rng, effectiveMean, effectiveDeviation, 4.0, 80.0)));
 }
 
-int randomNativeSimpleSurfaceBlobSize(NativeRandomizer& rng)
+int randomNativeSimpleSurfaceBlobSize(NativeRandomizer &rng)
 {
     return std::max(1, nativeDoubleToInt(clampGaussian(rng, 20.0, 15.0, 4.0, 60.0)));
 }
 
-double randomNativeTreePatchChance(NativeRandomizer& rng)
+double randomNativeTreePatchChance(NativeRandomizer &rng)
 {
     return clampGaussian(rng, 0.2, 0.1, 0.05, 0.4);
 }
@@ -1117,15 +1236,17 @@ int nativeTreeTarget(int seedWidth, int vegetation, int maxTrees) noexcept
         static_cast<double>(std::max(0, maxTrees))));
 }
 
-int randomNativeTreePatchSize(NativeRandomizer& rng)
+int randomNativeTreePatchSize(NativeRandomizer &rng)
 {
     return std::max(1, nativeDoubleToInt(clampGaussian(rng, 25.0, 10.0, 10.0, 35.0)));
 }
 
-int randomNativeFloatScaledInclusive(NativeRandomizer& rng, int minValue, int maxValue, std::uint32_t* rawOut = nullptr)
+int randomNativeFloatScaledInclusive(NativeRandomizer &rng, int minValue, int maxValue, std::uint32_t *rawOut = nullptr)
 {
-    if (minValue == maxValue) {
-        if (rawOut != nullptr) {
+    if (minValue == maxValue)
+    {
+        if (rawOut != nullptr)
+        {
             *rawOut = 0;
         }
         return minValue;
@@ -1138,34 +1259,40 @@ int randomNativeFloatScaledInclusive(NativeRandomizer& rng, int minValue, int ma
 
     int candidate = hi + 1;
     std::uint32_t raw = 0;
-    while (candidate > hi) {
+    while (candidate > hi)
+    {
         raw = rng.random();
         const double scaled = nativeX87Chop53Multiply(
             nativeX87Chop53Multiply(static_cast<double>(raw), span),
             kNativeUInt32Unit);
         candidate = nativeDoubleToInt(nativeX87Chop53Add(scaled, base));
     }
-    if (rawOut != nullptr) {
+    if (rawOut != nullptr)
+    {
         *rawOut = raw;
     }
     return candidate;
 }
 
-void clearTags(MapGrid& map, int tag)
+void clearTags(MapGrid &map, int tag)
 {
-    for (auto& cell : map.cells()) {
-        if (cell.tempTag == tag) {
+    for (auto &cell : map.cells())
+    {
+        if (cell.tempTag == tag)
+        {
             cell.tempTag = 0;
         }
     }
 }
 
-std::vector<Point> passableCells(const MapGrid& map)
+std::vector<Point> passableCells(const MapGrid &map)
 {
     std::vector<Point> result;
     result.reserve(static_cast<std::size_t>(map.width() * map.height()));
-    for (const auto& cell : map.cells()) {
-        if (isPassable(cell)) {
+    for (const auto &cell : map.cells())
+    {
+        if (isPassable(cell))
+        {
             result.push_back({cell.x, cell.y});
         }
     }
@@ -1174,43 +1301,31 @@ std::vector<Point> passableCells(const MapGrid& map)
 
 bool isResourcePatchCompatibleOverlay(Overlay overlay) noexcept
 {
-    return overlay == Overlay::None
-        || overlay == Overlay::Ore
-        || overlay == Overlay::Gems
-        || overlay == Overlay::Start
-        || overlay == Overlay::Tech
-        || overlay == Overlay::NeutralBuilding
-        || overlay == Overlay::NeutralUnit
-        || overlay == Overlay::TerrainChain;
+    return overlay == Overlay::None || overlay == Overlay::Ore || overlay == Overlay::Gems || overlay == Overlay::Start || overlay == Overlay::Tech || overlay == Overlay::NeutralBuilding || overlay == Overlay::NeutralUnit || overlay == Overlay::TerrainChain;
 }
 
-bool isCandidateResourceCell(const Cell& cell)
+bool isCandidateResourceCell(const Cell &cell)
 {
-    return isPassable(cell)
-        && !cell.spawnExclusion
-        && !cell.cliffShoreExclusion
-        && cell.terrainObject != TerrainObject::OrePatchLamp
-        && isResourcePatchCompatibleOverlay(cell.overlay);
+    return isPassable(cell) && !cell.spawnExclusion && !cell.cliffShoreExclusion && cell.terrainObject != TerrainObject::OrePatchLamp && isResourcePatchCompatibleOverlay(cell.overlay);
 }
 
-bool canTraverseResourcePatch(const Cell& cell)
+bool canTraverseResourcePatch(const Cell &cell)
 {
-    return isPassable(cell)
-        && cell.terrainObject != TerrainObject::OrePatchLamp
-        && isResourcePatchCompatibleOverlay(cell.overlay);
+    return isPassable(cell) && cell.terrainObject != TerrainObject::OrePatchLamp && isResourcePatchCompatibleOverlay(cell.overlay);
 }
 
-int nativeLandTypeForCell(const Cell& cell) noexcept;
+int nativeLandTypeForCell(const Cell &cell) noexcept;
 
-bool isNativeRegionPassable(const Cell& cell) noexcept
+bool isNativeRegionPassable(const Cell &cell) noexcept
 {
     return isPassable(cell) && cell.terrain != Terrain::Green;
 }
 
-bool isNativeRegionCandidateCell(const Cell& cell, Point nativeCell) noexcept
+bool isNativeRegionCandidateCell(const Cell &cell, Point nativeCell) noexcept
 {
     (void) nativeCell;
-    if (!isPassable(cell)) {
+    if (!isPassable(cell))
+    {
         return false;
     }
     return cell.terrain != Terrain::Shore;
@@ -1218,20 +1333,23 @@ bool isNativeRegionCandidateCell(const Cell& cell, Point nativeCell) noexcept
 
 bool isNativeRegionCandidateShoreSubTile(int variant, int subTile) noexcept
 {
-    if (variant < 0 || variant >= 42 || subTile < 0) {
+    if (variant < 0 || variant >= 42 || subTile < 0)
+    {
         return false;
     }
     const int piece = variant + 1;
     const int width = shoreTemplateWidth(piece);
-    if (width <= 0) {
+    if (width <= 0)
+    {
         return false;
     }
     return shoreTemplateSlot(piece, subTile % width, subTile / width) == 'L';
 }
 
-bool isNativeRegionCandidateOverride(const IsoTileOverride& isoOverride) noexcept
+bool isNativeRegionCandidateOverride(const IsoTileOverride &isoOverride) noexcept
 {
-    switch (isoOverride.terrain) {
+    switch (isoOverride.terrain)
+    {
     case Terrain::Water:
     case Terrain::Cliff:
     case Terrain::Pave:
@@ -1247,42 +1365,37 @@ bool isNativeRegionCandidateOverride(const IsoTileOverride& isoOverride) noexcep
     return false;
 }
 
-bool isMapgenBlankCell(const Cell& cell)
+bool isMapgenBlankCell(const Cell &cell)
 {
-    return isSolidLand(cell)
-        && cell.overlay == Overlay::None
-        && cell.terrainObject == TerrainObject::None;
+    return isSolidLand(cell) && cell.overlay == Overlay::None && cell.terrainObject == TerrainObject::None;
 }
 
-bool isNativeBlankTile(const Cell& cell)
+bool isNativeBlankTile(const Cell &cell)
 {
-    return cell.terrain == Terrain::Land
-        && cell.overlay == Overlay::None
-        && cell.terrainObject == TerrainObject::None;
+    return cell.terrain == Terrain::Land && cell.overlay == Overlay::None && cell.terrainObject == TerrainObject::None;
 }
 
-bool isGroundTileBlobCandidateCell(const Cell& cell, bool allowPave)
+bool isGroundTileBlobCandidateCell(const Cell &cell, bool allowPave)
 {
     // Engine SlopeIndex is a tile placement attribute; this model's slope is an export
     // subtile variant, so cliff/shore exclusion carries the unsafe-edge filter here.
-    if (cell.spawnExclusion
-        || cell.cliffShoreExclusion
-        || cell.overlay != Overlay::None
-        || cell.terrainObject != TerrainObject::None) {
+    if (cell.spawnExclusion || cell.cliffShoreExclusion || cell.overlay != Overlay::None || cell.terrainObject != TerrainObject::None)
+    {
         return false;
     }
-    if (cell.terrain == Terrain::Pave) {
+    if (cell.terrain == Terrain::Pave)
+    {
         return allowPave;
     }
     return isMapgenBlankCell(cell);
 }
 
-bool isVegetationDensityAnchorCell(const Cell& cell)
+bool isVegetationDensityAnchorCell(const Cell &cell)
 {
     return cell.terrain == Terrain::Cliff;
 }
 
-std::size_t mapIndex(const MapGrid& map, Point p)
+std::size_t mapIndex(const MapGrid &map, Point p)
 {
     return static_cast<std::size_t>(p.y * map.width() + p.x);
 }
@@ -1298,18 +1411,16 @@ Point nativeCellToMapPoint(Point cell, int mapWidth) noexcept
 bool isInsideNativeCellDiamond(Point cell, Rect mapRect) noexcept
 {
     const int workspaceSize = mapRect.w + mapRect.h + 1;
-    if (cell.x < 0 || cell.y < 0 || cell.x >= workspaceSize || cell.y >= workspaceSize) {
+    if (cell.x < 0 || cell.y < 0 || cell.x >= workspaceSize || cell.y >= workspaceSize)
+    {
         return false;
     }
 
     const int sum = cell.x + cell.y;
-    return sum > mapRect.w
-        && cell.x - cell.y < mapRect.w
-        && cell.y - cell.x < mapRect.w
-        && sum <= mapRect.w + 2 * mapRect.h;
+    return sum > mapRect.w && cell.x - cell.y < mapRect.w && cell.y - cell.x < mapRect.w && sum <= mapRect.w + 2 * mapRect.h;
 }
 
-Point nativeCellToSourcePoint(const MapGrid& map, Point nativeCell) noexcept
+Point nativeCellToSourcePoint(const MapGrid &map, Point nativeCell) noexcept
 {
     const Rect mapRect = nativeSavedMapRect(map);
     const Rect localRect = nativeLocalRect(map);
@@ -1317,11 +1428,11 @@ Point nativeCellToSourcePoint(const MapGrid& map, Point nativeCell) noexcept
     return {mapPoint.x - localRect.x, mapPoint.y - localRect.y};
 }
 
-Point sourcePointToNativeCell(const MapGrid& map, Point source) noexcept
+Point sourcePointToNativeCell(const MapGrid &map, Point source) noexcept
 {
     const Rect mapRect = nativeSavedMapRect(map);
     const Rect localRect = nativeLocalRect(map);
-    const Point mapPoint{source.x + localRect.x, source.y + localRect.y};
+    const Point mapPoint {source.x + localRect.x, source.y + localRect.y};
     return {mapPoint.x + mapPoint.y + 1, mapRect.w - mapPoint.x + mapPoint.y};
 }
 
@@ -1335,8 +1446,7 @@ Point nativeDisplayToIso(int dx, int row, int width)
 
 std::uint64_t nativeIsoKey(Point iso) noexcept
 {
-    return (static_cast<std::uint64_t>(static_cast<std::uint32_t>(iso.x)) << 32)
-        | static_cast<std::uint32_t>(iso.y);
+    return (static_cast<std::uint64_t>(static_cast<std::uint32_t>(iso.x)) << 32) | static_cast<std::uint32_t>(iso.y);
 }
 
 int nativeMapgenScratchTagForCell(Point nativeCell) noexcept
@@ -1344,42 +1454,47 @@ int nativeMapgenScratchTagForCell(Point nativeCell) noexcept
     return nativeCell.x + (nativeCell.y << 9);
 }
 
-bool canTraverseTreePatchCell(const Cell& cell)
+bool canTraverseTreePatchCell(const Cell &cell)
 {
     return !cell.spawnExclusion && !cell.cliffShoreExclusion;
 }
 
-bool canPlaceTreePatchCell(const Cell& cell)
+bool canPlaceTreePatchCell(const Cell &cell)
 {
     return isMapgenBlankCell(cell) && cell.terrain != Terrain::Rough;
 }
 
-enum class DecorationUnitRejection {
+enum class DecorationUnitRejection
+{
     None,
     Bounds,
     Occupied,
     Exclusion
 };
 
-DecorationUnitRejection decorationUnitRejection(const MapGrid& map, Point p)
+DecorationUnitRejection decorationUnitRejection(const MapGrid &map, Point p)
 {
-    if (!map.inBounds(p)) {
+    if (!map.inBounds(p))
+    {
         return DecorationUnitRejection::Bounds;
     }
 
-    const Cell& cell = map.at(p);
-    if (cell.overlay != Overlay::None || cell.terrainObject != TerrainObject::None) {
+    const Cell &cell = map.at(p);
+    if (cell.overlay != Overlay::None || cell.terrainObject != TerrainObject::None)
+    {
         return DecorationUnitRejection::Occupied;
     }
-    if (!isPassable(cell) || cell.spawnExclusion || cell.cliffShoreExclusion) {
+    if (!isPassable(cell) || cell.spawnExclusion || cell.cliffShoreExclusion)
+    {
         return DecorationUnitRejection::Exclusion;
     }
     return DecorationUnitRejection::None;
 }
 
-int overlayValue(const Cell& cell)
+int overlayValue(const Cell &cell)
 {
-    if (cell.overlay != Overlay::Ore && cell.overlay != Overlay::Gems) {
+    if (cell.overlay != Overlay::Ore && cell.overlay != Overlay::Gems)
+    {
         return 0;
     }
     return std::max(1, cell.overlayValue);
@@ -1387,10 +1502,12 @@ int overlayValue(const Cell& cell)
 
 int nativeTiberiumGroupForOverlay(int overlayTypeIndex) noexcept
 {
-    if (overlayTypeIndex >= 102 && overlayTypeIndex <= 113) {
+    if (overlayTypeIndex >= 102 && overlayTypeIndex <= 113)
+    {
         return 0;
     }
-    if (overlayTypeIndex >= 27 && overlayTypeIndex <= 38) {
+    if (overlayTypeIndex >= 27 && overlayTypeIndex <= 38)
+    {
         return 1;
     }
     return -1;
@@ -1398,36 +1515,48 @@ int nativeTiberiumGroupForOverlay(int overlayTypeIndex) noexcept
 
 int nativeTiberiumOverlayDataForNeighborCount(int count) noexcept
 {
-    constexpr std::array<int, 9> kOverlayDataByNeighborCount{{0, 1, 3, 4, 6, 7, 8, 10, 11}};
+    constexpr std::array<int, 9> kOverlayDataByNeighborCount {{0, 1, 3, 4, 6, 7, 8, 10, 11}};
     return kOverlayDataByNeighborCount[static_cast<std::size_t>(std::clamp(count, 0, 8))];
 }
 
-void recalculateNativeTiberiumOverlayData(std::vector<NativeOverlayOverride>& overlays)
+void recalculateNativeTiberiumOverlayData(std::vector<NativeOverlayOverride> &overlays)
 {
     std::unordered_map<std::uint64_t, int> tiberiumGroupByIso;
     tiberiumGroupByIso.reserve(overlays.size());
-    for (const NativeOverlayOverride& overlay : overlays) {
+    for (const NativeOverlayOverride &overlay : overlays)
+    {
         const int group = nativeTiberiumGroupForOverlay(overlay.overlayTypeIndex);
-        if (group >= 0) {
+        if (group >= 0)
+        {
             tiberiumGroupByIso[nativeIsoKey(overlay.iso)] = group;
         }
     }
 
-    constexpr std::array<Point, 8> kAdjacent{{
-        {0, -1}, {1, -1}, {1, 0}, {1, 1},
-        {0, 1}, {-1, 1}, {-1, 0}, {-1, -1},
+    constexpr std::array<Point, 8> kAdjacent {{
+        {0, -1},
+        {1, -1},
+        {1, 0},
+        {1, 1},
+        {0, 1},
+        {-1, 1},
+        {-1, 0},
+        {-1, -1},
     }};
-    for (NativeOverlayOverride& overlay : overlays) {
+    for (NativeOverlayOverride &overlay : overlays)
+    {
         const int group = nativeTiberiumGroupForOverlay(overlay.overlayTypeIndex);
-        if (group < 0) {
+        if (group < 0)
+        {
             continue;
         }
 
         int sameTypeNeighbors = 0;
-        for (Point offset : kAdjacent) {
-            const Point neighbor{overlay.iso.x + offset.x, overlay.iso.y + offset.y};
+        for (Point offset : kAdjacent)
+        {
+            const Point neighbor {overlay.iso.x + offset.x, overlay.iso.y + offset.y};
             const auto it = tiberiumGroupByIso.find(nativeIsoKey(neighbor));
-            if (it != tiberiumGroupByIso.end() && it->second == group) {
+            if (it != tiberiumGroupByIso.end() && it->second == group)
+            {
                 ++sameTypeNeighbors;
             }
         }
@@ -1435,13 +1564,13 @@ void recalculateNativeTiberiumOverlayData(std::vector<NativeOverlayOverride>& ov
     }
 }
 
-void hashByte(std::uint64_t& hash, std::uint8_t value)
+void hashByte(std::uint64_t &hash, std::uint8_t value)
 {
     hash ^= value;
     hash *= kFnvPrime;
 }
 
-void hashU32(std::uint64_t& hash, std::uint32_t value)
+void hashU32(std::uint64_t &hash, std::uint32_t value)
 {
     hashByte(hash, static_cast<std::uint8_t>(value & 0xFFu));
     hashByte(hash, static_cast<std::uint8_t>((value >> 8) & 0xFFu));
@@ -1449,30 +1578,30 @@ void hashU32(std::uint64_t& hash, std::uint32_t value)
     hashByte(hash, static_cast<std::uint8_t>((value >> 24) & 0xFFu));
 }
 
-void hashI32(std::uint64_t& hash, int value)
+void hashI32(std::uint64_t &hash, int value)
 {
     hashU32(hash, static_cast<std::uint32_t>(value));
 }
 
-void hashBool(std::uint64_t& hash, bool value)
+void hashBool(std::uint64_t &hash, bool value)
 {
     hashByte(hash, value ? 1 : 0);
 }
 
 std::string hex64(std::uint64_t value)
 {
-    char buffer[17]{};
+    char buffer[17] {};
     std::snprintf(buffer, sizeof(buffer), "%016llX", static_cast<unsigned long long>(value));
     return buffer;
 }
 
-void hashCellPosition(std::uint64_t& hash, const Cell& cell)
+void hashCellPosition(std::uint64_t &hash, const Cell &cell)
 {
     hashI32(hash, cell.x);
     hashI32(hash, cell.y);
 }
 
-void hashPointPosition(std::uint64_t& hash, Point p)
+void hashPointPosition(std::uint64_t &hash, Point p)
 {
     hashI32(hash, p.x);
     hashI32(hash, p.y);
@@ -1480,22 +1609,27 @@ void hashPointPosition(std::uint64_t& hash, Point p)
 
 int nativeLandTypeForTile(Terrain terrain, int variant, int subTile) noexcept
 {
-    switch (terrain) {
-    case Terrain::Water: {
+    switch (terrain)
+    {
+    case Terrain::Water:
+    {
         const int waterVariant = std::clamp(variant, 0, 13);
         return (waterVariant == 6 || waterVariant == 7 || waterVariant == 13) ? 3 : 2;
     }
     case Terrain::Land:
         return 0;
-    case Terrain::Shore: {
+    case Terrain::Shore:
+    {
         const int piece = std::clamp(variant, 0, 41) + 1;
         const int width = std::max(1, shoreTemplateWidth(piece));
         const int slot = std::max(0, subTile);
         const char shoreSlot = shoreTemplateSlot(piece, slot % width, slot / width);
-        if (shoreSlot == 'W') {
+        if (shoreSlot == 'W')
+        {
             return 6;
         }
-        if (shoreSlot == 'L') {
+        if (shoreSlot == 'L')
+        {
             return 7;
         }
         return 0;
@@ -1517,17 +1651,31 @@ int nativeLandTypeForTmpTerrainType(std::uint8_t terrainType) noexcept
 {
     // dword_8288E4, indexed by the TMP slot TerrainType byte in
     // IsometricTileTypeClass::GetLandType (0x544BE0).
-    static constexpr std::array<int, 16> kLandTypes{{
-        0, 8, 8, 8, 8, 10, 9, 3, 3, 2, 6, 1, 1, 0, 7, 3,
+    static constexpr std::array<int, 16> kLandTypes {{
+        0,
+        8,
+        8,
+        8,
+        8,
+        10,
+        9,
+        3,
+        3,
+        2,
+        6,
+        1,
+        1,
+        0,
+        7,
+        3,
     }};
-    return terrainType < kLandTypes.size()
-        ? kLandTypes[terrainType]
-        : -1;
+    return terrainType < kLandTypes.size() ? kLandTypes[terrainType] : -1;
 }
 
 int nativeFinalLatLandTypeForTile(Terrain terrain, int variant, int subTile) noexcept
 {
-    if (terrain == Terrain::Rough) {
+    if (terrain == Terrain::Rough)
+    {
         return g_nativeTileTheater == 1 && variant != 0 ? 7 : 0;
     }
     return nativeLandTypeForTile(terrain, variant, subTile);
@@ -1538,28 +1686,29 @@ bool isNativeHeightSlopeIndex(int slopeIndex) noexcept
     return slopeIndex > 0 && slopeIndex < kNativeHeightSlopeCount;
 }
 
-bool isNativeHeightSlopeCell(const Cell& cell) noexcept
+bool isNativeHeightSlopeCell(const Cell &cell) noexcept
 {
-    return cell.landType == 3
-        && isSolidLand(cell)
-        && isNativeHeightSlopeIndex(cell.slope);
+    return cell.landType == 3 && isSolidLand(cell) && isNativeHeightSlopeIndex(cell.slope);
 }
 
-int nativeLandTypeForCell(const Cell& cell) noexcept
+int nativeLandTypeForCell(const Cell &cell) noexcept
 {
-    if (isEncodedShorePiece(cell.slope)) {
+    if (isEncodedShorePiece(cell.slope))
+    {
         const ShorePiece piece = decodeShorePiece(cell.slope);
         return nativeLandTypeForTile(Terrain::Shore, piece.tile, piece.subTile);
     }
-    if (isEncodedCliffPiece(cell.slope)) {
+    if (isEncodedCliffPiece(cell.slope))
+    {
         return 3;
     }
     return nativeLandTypeForTile(cell.terrain, std::max(0, cell.slope), cell.height);
 }
 
-int nativeSlopeIndexForCell(const Cell& cell) noexcept
+int nativeSlopeIndexForCell(const Cell &cell) noexcept
 {
-    if (isEncodedShorePiece(cell.slope) || isEncodedCliffPiece(cell.slope)) {
+    if (isEncodedShorePiece(cell.slope) || isEncodedCliffPiece(cell.slope))
+    {
         return 0;
     }
     return isNativeHeightSlopeCell(cell) ? cell.slope : 0;
@@ -1567,7 +1716,8 @@ int nativeSlopeIndexForCell(const Cell& cell) noexcept
 
 int nativeTileTypeIndexForTerrainValue(Terrain terrain, int variant) noexcept
 {
-    switch (terrain) {
+    switch (terrain)
+    {
     case Terrain::Water:
         return kNativeTileWaterBase + std::clamp(variant, 0, 13);
     case Terrain::Land:
@@ -1588,19 +1738,23 @@ int nativeTileTypeIndexForTerrainValue(Terrain terrain, int variant) noexcept
     return kNativeTileClear;
 }
 
-int nativeTileTypeIndexForTerrain(const Cell& cell) noexcept
+int nativeTileTypeIndexForTerrain(const Cell &cell) noexcept
 {
-    if (isEncodedShorePiece(cell.slope)) {
+    if (isEncodedShorePiece(cell.slope))
+    {
         return kNativeTileShoreBase + std::clamp(decodeShorePiece(cell.slope).tile, 0, 41);
     }
-    if (isEncodedCliffPiece(cell.slope)) {
+    if (isEncodedCliffPiece(cell.slope))
+    {
         return kNativeTileCliffBase + std::clamp(decodeCliffPiece(cell.slope).tile, 0, 39);
     }
-    if (isNativeHeightSlopeCell(cell)) {
+    if (isNativeHeightSlopeCell(cell))
+    {
         return kNativeTileRampBase + cell.slope - 1;
     }
 
-    switch (cell.terrain) {
+    switch (cell.terrain)
+    {
     case Terrain::Water:
         return nativeTileTypeIndexForTerrainValue(Terrain::Water, std::max(0, cell.slope));
     case Terrain::Land:
@@ -1621,12 +1775,14 @@ int nativeTileTypeIndexForTerrain(const Cell& cell) noexcept
     return kNativeTileClear;
 }
 
-int nativeTileTypeIndexForOverride(const IsoTileOverride& override) noexcept
+int nativeTileTypeIndexForOverride(const IsoTileOverride &override) noexcept
 {
-    if (override.nativeTileTypeIndex >= 0) {
+    if (override.nativeTileTypeIndex >= 0)
+    {
         return override.nativeTileTypeIndex;
     }
-    if (isNativeHeightSlopeIndex(override.slopeIndex)) {
+    if (isNativeHeightSlopeIndex(override.slopeIndex))
+    {
         return kNativeTileRampBase + override.slopeIndex - 1;
     }
     return nativeTileTypeIndexForTerrainValue(override.terrain, override.variant);
@@ -1648,49 +1804,51 @@ bool isNativeShoreTileIndex(int tile) noexcept
 }
 
 bool isNativeFlatSlopeBlockingTile(
-    const NativeTheaterCatalog* catalog,
+    const NativeTheaterCatalog *catalog,
     int tile,
     int height) noexcept
 {
-    const auto inTileRange = [tile](int base, int count) {
+    const auto inTileRange = [tile](int base, int count)
+    {
         return base >= 0 && tile >= base && tile < base + count;
     };
-    if (catalog == nullptr) {
+    if (catalog == nullptr)
+    {
         return isNativeCliffRangeTileIndex(tile);
     }
-    if (inTileRange(catalog->cliffSetBase, 40)
-        || inTileRange(catalog->cliffRampsBase, 20)
-        || inTileRange(catalog->slopeSetPiecesBase, 10)
-        || inTileRange(catalog->slopeSetPieces2Base, 10)
-        || inTileRange(catalog->waterCavesBase, 4)
-        || inTileRange(catalog->bridgeSetBase, 16)
-        || inTileRange(catalog->woodBridgeSetBase, 16)
-        || inTileRange(catalog->destroyableCliffsBase, 2)
-        || inTileRange(catalog->waterCliffsBase, 28)) {
+    if (inTileRange(catalog->cliffSetBase, 40) || inTileRange(catalog->cliffRampsBase, 20) || inTileRange(catalog->slopeSetPiecesBase, 10) || inTileRange(catalog->slopeSetPieces2Base, 10) || inTileRange(catalog->waterCavesBase, 4) || inTileRange(catalog->bridgeSetBase, 16) || inTileRange(catalog->woodBridgeSetBase, 16) || inTileRange(catalog->destroyableCliffsBase, 2) || inTileRange(catalog->waterCliffsBase, 28))
+    {
         return true;
     }
 
-    const auto cornerBlocks = [&](int base, auto edgeBlocks) {
-        if (!inTileRange(base, 4)) {
+    const auto cornerBlocks = [&](int base, auto edgeBlocks)
+    {
+        if (!inTileRange(base, 4))
+        {
             return false;
         }
-        if (tile != base && tile != base + 3) {
+        if (tile != base && tile != base + 3)
+        {
             return true;
         }
         return edgeBlocks(height);
     };
-    return cornerBlocks(catalog->waterfallEastBase, [](int subTile) {
-            return subTile != 0 && subTile != 4;
-        })
-        || cornerBlocks(catalog->waterfallWestBase, [](int subTile) {
-            return subTile != 1 && subTile != 3;
-        })
-        || cornerBlocks(catalog->waterfallSouthBase, [](int subTile) {
-            return subTile >= 2;
-        })
-        || cornerBlocks(catalog->waterfallNorthBase, [](int subTile) {
-            return subTile != 2 && subTile != 3;
-        });
+    return cornerBlocks(catalog->waterfallEastBase, [](int subTile)
+                        {
+                            return subTile != 0 && subTile != 4;
+                        }) ||
+           cornerBlocks(catalog->waterfallWestBase, [](int subTile)
+                        {
+                            return subTile != 1 && subTile != 3;
+                        }) ||
+           cornerBlocks(catalog->waterfallSouthBase, [](int subTile)
+                        {
+                            return subTile >= 2;
+                        }) ||
+           cornerBlocks(catalog->waterfallNorthBase, [](int subTile)
+                        {
+                            return subTile != 2 && subTile != 3;
+                        });
 }
 
 bool isNativeGreenTileIndex(int tile) noexcept
@@ -1706,9 +1864,7 @@ bool isNativePaveTileIndex(int tile) noexcept
 
 bool isNativeMapgenWetOrGreenTileIndex(int tile) noexcept
 {
-    return isNativeShoreTileIndex(tile)
-        || (tile >= kNativeTileWaterBase && tile < kNativeTileDirtBase)
-        || isNativeGreenTileIndex(tile);
+    return isNativeShoreTileIndex(tile) || (tile >= kNativeTileWaterBase && tile < kNativeTileDirtBase) || isNativeGreenTileIndex(tile);
 }
 
 bool isNativeMapgenBlankOrGreenTileIndex(int tile) noexcept
@@ -1717,14 +1873,15 @@ bool isNativeMapgenBlankOrGreenTileIndex(int tile) noexcept
 }
 
 std::unordered_map<std::uint64_t, NativeMapgenScratchCellInfo> buildNativeMapgenScratchCellInfo(
-    const MapGrid& map,
-    const std::vector<IsoTileOverride>& isoTileOverrides)
+    const MapGrid &map,
+    const std::vector<IsoTileOverride> &isoTileOverrides)
 {
     std::unordered_map<std::uint64_t, NativeMapgenScratchCellInfo> cells;
     const std::vector<NativeIteratorCell> iteratorCells = buildNativeIteratorCells(map, isoTileOverrides);
     cells.reserve(iteratorCells.size() * 2);
-    for (const NativeIteratorCell& iteratorCell : iteratorCells) {
-        cells[nativeIsoKey(iteratorCell.cell)] = NativeMapgenScratchCellInfo{
+    for (const NativeIteratorCell &iteratorCell : iteratorCells)
+    {
+        cells[nativeIsoKey(iteratorCell.cell)] = NativeMapgenScratchCellInfo {
             iteratorCell.cell,
             iteratorCell.isoTileTypeIndex,
             iteratorCell.level,
@@ -1733,16 +1890,19 @@ std::unordered_map<std::uint64_t, NativeMapgenScratchCellInfo> buildNativeMapgen
     return cells;
 }
 
-std::vector<Point> nativeMapgenWorkspaceScanOrder(const MapGrid& map)
+std::vector<Point> nativeMapgenWorkspaceScanOrder(const MapGrid &map)
 {
     const Rect mapRect = nativeSavedMapRect(map);
     const int workspaceSize = mapRect.w + mapRect.h + 1;
     std::vector<Point> cells;
     cells.reserve(static_cast<std::size_t>(workspaceSize * workspaceSize / 2));
-    for (int y = 0; y < workspaceSize; ++y) {
-        for (int x = 0; x < workspaceSize; ++x) {
-            const Point cell{x, y};
-            if ((x != 0 || y != 0) && isInsideNativeCellDiamond(cell, mapRect)) {
+    for (int y = 0; y < workspaceSize; ++y)
+    {
+        for (int x = 0; x < workspaceSize; ++x)
+        {
+            const Point cell {x, y};
+            if ((x != 0 || y != 0) && isInsideNativeCellDiamond(cell, mapRect))
+            {
                 cells.push_back(cell);
             }
         }
@@ -1750,7 +1910,7 @@ std::vector<Point> nativeMapgenWorkspaceScanOrder(const MapGrid& map)
     return cells;
 }
 
-std::vector<Point> nativeMapCellIteratorScanOrder(const MapGrid& map)
+std::vector<Point> nativeMapCellIteratorScanOrder(const MapGrid &map)
 {
     const Rect mapRect = nativeSavedMapRect(map);
     const int workspaceSize = mapRect.w + mapRect.h + 1;
@@ -1760,27 +1920,35 @@ std::vector<Point> nativeMapCellIteratorScanOrder(const MapGrid& map)
     int nextY = mapRect.w;
     int remainingOnDiagonal = mapRect.w - 1;
     const int maxIterations = std::max(1, workspaceSize * workspaceSize * 2);
-    for (int i = 0; i < maxIterations; ++i) {
-        const Point current{nextX, nextY};
-        if (remainingOnDiagonal != 0) {
+    for (int i = 0; i < maxIterations; ++i)
+    {
+        const Point current {nextX, nextY};
+        if (remainingOnDiagonal != 0)
+        {
             ++nextX;
             --nextY;
             --remainingOnDiagonal;
-        } else {
+        }
+        else
+        {
             const int oldNextY = nextY;
             const int oldNextX = nextX;
             nextX = oldNextY;
             nextY = oldNextX;
-            if (((oldNextY - mapRect.w + oldNextX - 1) & 1) != 0) {
+            if (((oldNextY - mapRect.w + oldNextX - 1) & 1) != 0)
+            {
                 remainingOnDiagonal = mapRect.w - 1;
                 nextY = oldNextX + 1;
-            } else {
+            }
+            else
+            {
                 remainingOnDiagonal = mapRect.w - 2;
                 nextX = oldNextY + 1;
             }
         }
 
-        if (!isInsideNativeCellDiamond(current, mapRect)) {
+        if (!isInsideNativeCellDiamond(current, mapRect))
+        {
             break;
         }
         cells.push_back(current);
@@ -1788,7 +1956,8 @@ std::vector<Point> nativeMapCellIteratorScanOrder(const MapGrid& map)
     return cells;
 }
 
-enum class NativeLatGroup {
+enum class NativeLatGroup
+{
     None,
     Dirt,
     Rough,
@@ -1798,7 +1967,8 @@ enum class NativeLatGroup {
 
 NativeLatGroup nativeLatGroupForTerrain(Terrain terrain) noexcept
 {
-    switch (terrain) {
+    switch (terrain)
+    {
     case Terrain::Dirt:
         return NativeLatGroup::Dirt;
     case Terrain::Rough:
@@ -1819,14 +1989,14 @@ bool isNativeLatTerrain(Terrain terrain) noexcept
 
 bool isNativeTileInLatGroup(int tile, NativeLatGroup group) noexcept
 {
-    switch (group) {
+    switch (group)
+    {
     case NativeLatGroup::Dirt:
         return tile >= kNativeTileDirtBase && tile <= kNativeTileDirtBase + 16;
     case NativeLatGroup::Rough:
         return tile >= kNativeTileRoughBase && tile <= kNativeTileRoughBase + 16;
     case NativeLatGroup::Green:
-        return isNativeGreenTileIndex(tile)
-            || isNativeShoreTileIndex(tile);
+        return isNativeGreenTileIndex(tile) || isNativeShoreTileIndex(tile);
     case NativeLatGroup::Pave:
         return tile >= kNativeTilePaveBase && tile <= kNativeTilePaveBase + 16;
     default:
@@ -1835,25 +2005,28 @@ bool isNativeTileInLatGroup(int tile, NativeLatGroup group) noexcept
 }
 
 int nativeLatVariantForCell(
-    const std::unordered_map<std::uint64_t, int>& tileByIso,
+    const std::unordered_map<std::uint64_t, int> &tileByIso,
     Point iso,
     NativeLatGroup group,
     bool missingNeighborIsSameGroup = false,
     int missingNeighborTile = -1) noexcept
 {
     int mask = 0;
-    constexpr Point offsets[]{{0, -1}, {1, 0}, {0, 1}, {-1, 0}};
-    for (int i = 0; i < 4; ++i) {
-        const Point neighbor{iso.x + offsets[i].x, iso.y + offsets[i].y};
+    constexpr Point offsets[] {{0, -1}, {1, 0}, {0, 1}, {-1, 0}};
+    for (int i = 0; i < 4; ++i)
+    {
+        const Point neighbor {iso.x + offsets[i].x, iso.y + offsets[i].y};
         const auto it = tileByIso.find(nativeIsoKey(neighbor));
-        if (it == tileByIso.end()) {
-            const bool missingMatchesGroup = missingNeighborTile >= 0
-                ? isNativeTileInLatGroup(missingNeighborTile, group)
-                : missingNeighborIsSameGroup && group == NativeLatGroup::Green;
-            if (!missingMatchesGroup) {
+        if (it == tileByIso.end())
+        {
+            const bool missingMatchesGroup = missingNeighborTile >= 0 ? isNativeTileInLatGroup(missingNeighborTile, group) : missingNeighborIsSameGroup && group == NativeLatGroup::Green;
+            if (!missingMatchesGroup)
+            {
                 mask |= 1 << i;
             }
-        } else if (!isNativeTileInLatGroup(it->second, group)) {
+        }
+        else if (!isNativeTileInLatGroup(it->second, group))
+        {
             mask |= 1 << i;
         }
     }
@@ -1861,8 +2034,8 @@ int nativeLatVariantForCell(
 }
 
 void upsertIsoTileOverride(
-    std::vector<IsoTileOverride>& overrides,
-    std::unordered_map<std::uint64_t, std::size_t>& indexByIso,
+    std::vector<IsoTileOverride> &overrides,
+    std::unordered_map<std::uint64_t, std::size_t> &indexByIso,
     Point iso,
     Terrain terrain,
     int variant,
@@ -1872,8 +2045,9 @@ void upsertIsoTileOverride(
 {
     const int landType = nativeLandTypeForTile(terrain, variant, subTile);
     const std::uint64_t key = nativeIsoKey(iso);
-    if (const auto it = indexByIso.find(key); it != indexByIso.end()) {
-        IsoTileOverride& override = overrides[it->second];
+    if (const auto it = indexByIso.find(key); it != indexByIso.end())
+    {
+        IsoTileOverride &override = overrides[it->second];
         override.terrain = terrain;
         override.variant = variant;
         override.subTile = subTile;
@@ -1898,23 +2072,27 @@ void upsertIsoTileOverride(
 }
 
 void refreshNativeLatOverridesWithTileMap(
-    std::vector<IsoTileOverride>& overrides,
-    const std::unordered_map<std::uint64_t, int>* baseTileByIso,
+    std::vector<IsoTileOverride> &overrides,
+    const std::unordered_map<std::uint64_t, int> *baseTileByIso,
     bool finalLandTypes = false,
     bool missingNeighborIsSameGroup = false,
     int missingNeighborTile = -1)
 {
     std::unordered_map<std::uint64_t, int> tileByIso;
     tileByIso.reserve((baseTileByIso ? baseTileByIso->size() : 0) + overrides.size());
-    if (baseTileByIso != nullptr) {
+    if (baseTileByIso != nullptr)
+    {
         tileByIso.insert(baseTileByIso->begin(), baseTileByIso->end());
     }
-    for (const IsoTileOverride& override : overrides) {
+    for (const IsoTileOverride &override : overrides)
+    {
         tileByIso[nativeIsoKey(override.iso)] = nativeTileTypeIndexForOverride(override);
     }
 
-    for (IsoTileOverride& override : overrides) {
-        if (!isNativeLatTerrain(override.terrain)) {
+    for (IsoTileOverride &override : overrides)
+    {
+        if (!isNativeLatTerrain(override.terrain))
+        {
             continue;
         }
         override.variant = nativeLatVariantForCell(
@@ -1923,19 +2101,20 @@ void refreshNativeLatOverridesWithTileMap(
             nativeLatGroupForTerrain(override.terrain),
             missingNeighborIsSameGroup,
             missingNeighborTile);
-        if (!finalLandTypes && (override.terrain == Terrain::Dirt || override.terrain == Terrain::Rough)) {
+        if (!finalLandTypes && (override.terrain == Terrain::Dirt || override.terrain == Terrain::Rough))
+        {
             override.landType = 0;
-        } else {
-            override.landType = finalLandTypes
-                ? nativeFinalLatLandTypeForTile(override.terrain, override.variant, override.subTile)
-                : nativeLandTypeForTile(override.terrain, override.variant, override.subTile);
+        }
+        else
+        {
+            override.landType = finalLandTypes ? nativeFinalLatLandTypeForTile(override.terrain, override.variant, override.subTile) : nativeLandTypeForTile(override.terrain, override.variant, override.subTile);
         }
         tileByIso[nativeIsoKey(override.iso)] = nativeTileTypeIndexForOverride(override);
     }
 }
 
 void refreshNativeLatOverrides(
-    std::vector<IsoTileOverride>& overrides,
+    std::vector<IsoTileOverride> &overrides,
     bool finalLandTypes = false,
     bool missingNeighborIsSameGroup = false,
     int missingNeighborTile = -1)
@@ -1949,38 +2128,44 @@ void refreshNativeLatOverrides(
 }
 
 void refreshNativeRampSmoothOverrides(
-    const std::vector<NativeIteratorCell>& iteratorCells,
-    std::vector<IsoTileOverride>& overrides)
+    const std::vector<NativeIteratorCell> &iteratorCells,
+    std::vector<IsoTileOverride> &overrides)
 {
     std::unordered_map<std::uint64_t, int> slopeByIso;
     slopeByIso.reserve(iteratorCells.size());
-    for (const NativeIteratorCell& cell : iteratorCells) {
+    for (const NativeIteratorCell &cell : iteratorCells)
+    {
         slopeByIso[nativeIsoKey(cell.cell)] = cell.slopeIndex;
     }
 
     const int smoothBase = nativeRampSmoothTileBase();
-    auto neighborHasNoSlope = [&slopeByIso](Point cell) {
+    auto neighborHasNoSlope = [&slopeByIso](Point cell)
+    {
         const auto it = slopeByIso.find(nativeIsoKey(cell));
         return it == slopeByIso.end() || it->second == 0;
     };
 
     // CellClass::SetupLAT_47CA80 uses two slope-specific cardinal neighbors to
     // select one of three smooth-ramp joins, or the plain ramp when both join.
-    for (IsoTileOverride& override : overrides) {
+    for (IsoTileOverride &override : overrides)
+    {
         const int tile = nativeTileTypeIndexForOverride(override);
         const bool rampTile = tile >= kNativeTileRampBase && tile <= kNativeTileRampBase + 19;
         const bool smoothRampTile = tile >= smoothBase && tile <= smoothBase + 11;
-        if ((!rampTile && !smoothRampTile) || !isNativeHeightSlopeIndex(override.slopeIndex)) {
+        if ((!rampTile && !smoothRampTile) || !isNativeHeightSlopeIndex(override.slopeIndex))
+        {
             continue;
         }
-        if (override.slopeIndex > 4) {
+        if (override.slopeIndex > 4)
+        {
             override.nativeTileTypeIndex = kNativeTileRampBase + override.slopeIndex - 1;
             continue;
         }
 
         Point firstOffset;
         Point secondOffset;
-        switch (override.slopeIndex) {
+        switch (override.slopeIndex)
+        {
         case 1:
             firstOffset = {-1, 0};
             secondOffset = {1, 0};
@@ -2000,21 +2185,21 @@ void refreshNativeRampSmoothOverrides(
         }
 
         int mask = 0;
-        if (neighborHasNoSlope({override.iso.x + firstOffset.x, override.iso.y + firstOffset.y})) {
+        if (neighborHasNoSlope({override.iso.x + firstOffset.x, override.iso.y + firstOffset.y}))
+        {
             mask |= 1;
         }
-        if (neighborHasNoSlope({override.iso.x + secondOffset.x, override.iso.y + secondOffset.y})) {
+        if (neighborHasNoSlope({override.iso.x + secondOffset.x, override.iso.y + secondOffset.y}))
+        {
             mask |= 2;
         }
-        override.nativeTileTypeIndex = mask == 0
-            ? kNativeTileRampBase + override.slopeIndex - 1
-            : smoothBase + (override.slopeIndex - 1) * 3 + mask - 1;
+        override.nativeTileTypeIndex = mask == 0 ? kNativeTileRampBase + override.slopeIndex - 1 : smoothBase + (override.slopeIndex - 1) * 3 + mask - 1;
     }
 }
 
 void refreshNativeLatOverridesForMap(
-    const MapGrid& map,
-    std::vector<IsoTileOverride>& overrides,
+    const MapGrid &map,
+    std::vector<IsoTileOverride> &overrides,
     bool finalLandTypes = false,
     bool missingNeighborIsSameGroup = false,
     int missingNeighborTile = -1)
@@ -2022,7 +2207,8 @@ void refreshNativeLatOverridesForMap(
     std::unordered_map<std::uint64_t, int> baseTileByIso;
     const std::vector<NativeIteratorCell> iteratorCells = buildNativeIteratorCells(map, overrides);
     baseTileByIso.reserve(iteratorCells.size());
-    for (const NativeIteratorCell& cell : iteratorCells) {
+    for (const NativeIteratorCell &cell : iteratorCells)
+    {
         baseTileByIso[nativeIsoKey(cell.cell)] = cell.isoTileTypeIndex;
     }
     refreshNativeLatOverridesWithTileMap(
@@ -2035,7 +2221,7 @@ void refreshNativeLatOverridesForMap(
 }
 
 void upsertNativeObjectOverride(
-    std::vector<NativeObjectOverride>& overrides,
+    std::vector<NativeObjectOverride> &overrides,
     Point iso,
     int objectAbstractType,
     int objectTypeIndex,
@@ -2043,8 +2229,10 @@ void upsertNativeObjectOverride(
     int altObjectTypeIndex = -1)
 {
     const std::uint64_t key = nativeIsoKey(iso);
-    for (NativeObjectOverride& override : overrides) {
-        if (nativeIsoKey(override.iso) != key) {
+    for (NativeObjectOverride &override : overrides)
+    {
+        if (nativeIsoKey(override.iso) != key)
+        {
             continue;
         }
         override.objectAbstractType = objectAbstractType;
@@ -2057,23 +2245,26 @@ void upsertNativeObjectOverride(
     overrides.push_back({iso, objectAbstractType, objectTypeIndex, altObjectAbstractType, altObjectTypeIndex});
 }
 
-int nativeGreenLatVariantForCell(const std::unordered_map<std::uint64_t, int>& tileByIso, Point iso) noexcept
+int nativeGreenLatVariantForCell(const std::unordered_map<std::uint64_t, int> &tileByIso, Point iso) noexcept
 {
     int mask = 0;
-    constexpr Point offsets[]{{0, -1}, {1, 0}, {0, 1}, {-1, 0}};
-    for (int i = 0; i < 4; ++i) {
-        const Point neighbor{iso.x + offsets[i].x, iso.y + offsets[i].y};
+    constexpr Point offsets[] {{0, -1}, {1, 0}, {0, 1}, {-1, 0}};
+    for (int i = 0; i < 4; ++i)
+    {
+        const Point neighbor {iso.x + offsets[i].x, iso.y + offsets[i].y};
         const auto it = tileByIso.find(nativeIsoKey(neighbor));
-        if (it != tileByIso.end() && isNativeClearTileIndex(it->second)) {
+        if (it != tileByIso.end() && isNativeClearTileIndex(it->second))
+        {
             mask |= 1 << i;
         }
     }
     return mask == 0 ? 0 : std::min(mask + 1, 15);
 }
 
-int nativeOverlayTypeIndexForCell(const Cell& cell) noexcept
+int nativeOverlayTypeIndexForCell(const Cell &cell) noexcept
 {
-    switch (cell.overlay) {
+    switch (cell.overlay)
+    {
     case Overlay::None:
     case Overlay::Tree:
     case Overlay::Tech:
@@ -2096,29 +2287,26 @@ int nativeOverlayTypeIndexForCell(const Cell& cell) noexcept
 
 bool isNativeTiberiumOverlayType(int overlayTypeIndex) noexcept
 {
-    return (overlayTypeIndex >= 27 && overlayTypeIndex <= 38)
-        || (overlayTypeIndex >= 102 && overlayTypeIndex <= 113);
+    return (overlayTypeIndex >= 27 && overlayTypeIndex <= 38) || (overlayTypeIndex >= 102 && overlayTypeIndex <= 113);
 }
 
-int nativeObjectAbstractTypeForCell(const Cell& cell) noexcept
+int nativeObjectAbstractTypeForCell(const Cell &cell) noexcept
 {
-    if (cell.terrainObject != TerrainObject::None
-        || cell.overlay == Overlay::Tree
-        || cell.overlay == Overlay::Tech
-        || cell.overlay == Overlay::NeutralBuilding
-        || cell.overlay == Overlay::NeutralUnit
-        || cell.overlay == Overlay::TerrainChain) {
+    if (cell.terrainObject != TerrainObject::None || cell.overlay == Overlay::Tree || cell.overlay == Overlay::Tech || cell.overlay == Overlay::NeutralBuilding || cell.overlay == Overlay::NeutralUnit || cell.overlay == Overlay::TerrainChain)
+    {
         return 0;
     }
     return -1;
 }
 
-int nativeObjectTypeIndexForCell(const Cell& cell) noexcept
+int nativeObjectTypeIndexForCell(const Cell &cell) noexcept
 {
-    if (cell.terrainObject != TerrainObject::None) {
+    if (cell.terrainObject != TerrainObject::None)
+    {
         return 100 + cell.terrainObjectValue;
     }
-    switch (cell.overlay) {
+    switch (cell.overlay)
+    {
     case Overlay::Tree:
         return 200 + cell.overlayValue;
     case Overlay::Tech:
@@ -2141,80 +2329,91 @@ int nativeObjectTypeIndexForCell(const Cell& cell) noexcept
 }
 
 std::vector<NativeStageCell> buildNativeStageCells(
-    const MapGrid& map,
+    const MapGrid &map,
     bool initializedClear,
-    const std::vector<IsoTileOverride>* isoTileOverrides,
-    const std::vector<NativeOverlayOverride>* nativeOverlayOverrides,
-    const std::vector<NativeObjectOverride>* nativeObjectOverrides,
-    const std::unordered_set<std::uint64_t>* mapgenSurfaceBlockedKeys,
-    const std::unordered_map<std::uint64_t, int>* mapgenTempTags,
-    const std::unordered_map<std::uint64_t, int>* mapgenZoneIds,
+    const std::vector<IsoTileOverride> *isoTileOverrides,
+    const std::vector<NativeOverlayOverride> *nativeOverlayOverrides,
+    const std::vector<NativeObjectOverride> *nativeObjectOverrides,
+    const std::unordered_set<std::uint64_t> *mapgenSurfaceBlockedKeys,
+    const std::unordered_map<std::uint64_t, int> *mapgenTempTags,
+    const std::unordered_map<std::uint64_t, int> *mapgenZoneIds,
     bool mapgenDataActive,
     int mapgenDefaultTempTag,
     int mapgenDefaultZoneId)
 {
     const Rect mapRect = nativeSavedMapRect(map);
     const Rect localRect = nativeLocalRect(map);
-    std::unordered_map<std::uint64_t, const IsoTileOverride*> overrideByIso;
-    if (isoTileOverrides != nullptr) {
+    std::unordered_map<std::uint64_t, const IsoTileOverride *> overrideByIso;
+    if (isoTileOverrides != nullptr)
+    {
         overrideByIso.reserve(isoTileOverrides->size());
-        for (const IsoTileOverride& override : *isoTileOverrides) {
+        for (const IsoTileOverride &override : *isoTileOverrides)
+        {
             overrideByIso[nativeIsoKey(override.iso)] = &override;
         }
     }
-    std::unordered_map<std::uint64_t, const NativeOverlayOverride*> overlayByIso;
-    if (nativeOverlayOverrides != nullptr) {
+    std::unordered_map<std::uint64_t, const NativeOverlayOverride *> overlayByIso;
+    if (nativeOverlayOverrides != nullptr)
+    {
         overlayByIso.reserve(nativeOverlayOverrides->size());
-        for (const NativeOverlayOverride& override : *nativeOverlayOverrides) {
+        for (const NativeOverlayOverride &override : *nativeOverlayOverrides)
+        {
             overlayByIso[nativeIsoKey(override.iso)] = &override;
         }
     }
-    std::unordered_map<std::uint64_t, const NativeObjectOverride*> objectByIso;
-    if (nativeObjectOverrides != nullptr) {
+    std::unordered_map<std::uint64_t, const NativeObjectOverride *> objectByIso;
+    if (nativeObjectOverrides != nullptr)
+    {
         objectByIso.reserve(nativeObjectOverrides->size());
-        for (const NativeObjectOverride& override : *nativeObjectOverrides) {
+        for (const NativeObjectOverride &override : *nativeObjectOverrides)
+        {
             objectByIso[nativeIsoKey(override.iso)] = &override;
         }
     }
     std::vector<NativeStageCell> cells;
     cells.reserve(static_cast<std::size_t>(mapRect.w * mapRect.h / 2 + mapRect.w));
 
-    for (int row = 0; row < mapRect.h; ++row) {
-        for (int dx = 0; dx < mapRect.w * 2 - 1; ++dx) {
+    for (int row = 0; row < mapRect.h; ++row)
+    {
+        for (int dx = 0; dx < mapRect.w * 2 - 1; ++dx)
+        {
             const Point cellCoords = nativeDisplayToIso(dx, row, mapRect.w);
-            if (!contains(mapRect, cellCoords)) {
+            if (!contains(mapRect, cellCoords))
+            {
                 continue;
             }
 
             NativeStageCell projected;
             projected.cell = cellCoords;
             const std::uint64_t scratchKey = nativeIsoKey(cellCoords);
-            if (mapgenDataActive) {
+            if (mapgenDataActive)
+            {
                 projected.mapgenSurfaceBlocked = mapgenSurfaceBlockedKeys != nullptr && mapgenSurfaceBlockedKeys->find(scratchKey) != mapgenSurfaceBlockedKeys->end() ? 1 : 0;
-                const auto tempIt = mapgenTempTags == nullptr ? std::unordered_map<std::uint64_t, int>::const_iterator{} : mapgenTempTags->find(scratchKey);
+                const auto tempIt = mapgenTempTags == nullptr ? std::unordered_map<std::uint64_t, int>::const_iterator {} : mapgenTempTags->find(scratchKey);
                 projected.mapgenTempTag = mapgenTempTags != nullptr && tempIt != mapgenTempTags->end() ? tempIt->second : mapgenDefaultTempTag;
-                const auto zoneIt = mapgenZoneIds == nullptr ? std::unordered_map<std::uint64_t, int>::const_iterator{} : mapgenZoneIds->find(scratchKey);
+                const auto zoneIt = mapgenZoneIds == nullptr ? std::unordered_map<std::uint64_t, int>::const_iterator {} : mapgenZoneIds->find(scratchKey);
                 projected.mapgenZoneId = mapgenZoneIds != nullptr && zoneIt != mapgenZoneIds->end() ? zoneIt->second : mapgenDefaultZoneId;
             }
-            if (initializedClear) {
+            if (initializedClear)
+            {
                 cells.push_back(projected);
                 continue;
             }
             projected.isoTileTypeIndex = kNativeTileWaterBase;
 
             const auto overrideIt = overrideByIso.find(nativeIsoKey(cellCoords));
-            const IsoTileOverride* isoOverride = overrideIt == overrideByIso.end() ? nullptr : overrideIt->second;
+            const IsoTileOverride *isoOverride = overrideIt == overrideByIso.end() ? nullptr : overrideIt->second;
             const Point mapPoint = nativeCellToMapPoint(cellCoords, mapRect.w);
-            if (contains(localRect, mapPoint)) {
-                const Point sourcePoint{mapPoint.x - localRect.x, mapPoint.y - localRect.y};
-                if (map.inBounds(sourcePoint)) {
-                    const Cell& source = map.at(sourcePoint);
+            if (contains(localRect, mapPoint))
+            {
+                const Point sourcePoint {mapPoint.x - localRect.x, mapPoint.y - localRect.y};
+                if (map.inBounds(sourcePoint))
+                {
+                    const Cell &source = map.at(sourcePoint);
                     projected.source = &source;
                     projected.isoTileTypeIndex = nativeTileTypeIndexForTerrain(source);
                     projected.overlayTypeIndex = nativeOverlayTypeIndexForCell(source);
-                    projected.height = isEncodedShorePiece(source.slope)
-                        ? std::clamp(decodeShorePiece(source.slope).subTile, 0, 255)
-                        : std::clamp(source.height, 0, 255);
+                    projected.height = isEncodedShorePiece(source.slope) ? std::clamp(decodeShorePiece(source.slope).subTile, 0, 255) : std::clamp(source.height, 0, 255);
                     projected.level = std::clamp(source.level, 0, 255);
                     projected.slopeIndex = nativeSlopeIndexForCell(source);
                     projected.overlayData = overlayValue(source);
@@ -2222,19 +2421,22 @@ std::vector<NativeStageCell> buildNativeStageCells(
                     projected.landType = source.landType;
                     projected.objectAbstractType = nativeObjectAbstractTypeForCell(source);
                     projected.objectTypeIndex = nativeObjectTypeIndexForCell(source);
-                    if ((source.overlay == Overlay::Tree || source.overlay == Overlay::Tech) && nativeObjectOverrides != nullptr) {
+                    if ((source.overlay == Overlay::Tree || source.overlay == Overlay::Tech) && nativeObjectOverrides != nullptr)
+                    {
                         projected.objectAbstractType = -1;
                         projected.objectTypeIndex = -1;
                         projected.altObjectAbstractType = -1;
                         projected.altObjectTypeIndex = -1;
                     }
-                    if ((source.overlay == Overlay::Ore || source.overlay == Overlay::Gems || source.overlay == Overlay::Grass) && nativeOverlayOverrides != nullptr) {
+                    if ((source.overlay == Overlay::Ore || source.overlay == Overlay::Gems || source.overlay == Overlay::Grass) && nativeOverlayOverrides != nullptr)
+                    {
                         projected.overlayTypeIndex = -1;
                         projected.overlayData = 0;
                     }
                 }
             }
-            if (isoOverride != nullptr) {
+            if (isoOverride != nullptr)
+            {
                 projected.isoTileTypeIndex = nativeTileTypeIndexForOverride(*isoOverride);
                 projected.height = std::clamp(isoOverride->subTile, 0, 255);
                 projected.level = std::clamp(isoOverride->level, 0, 255);
@@ -2243,15 +2445,18 @@ std::vector<NativeStageCell> buildNativeStageCells(
                 projected.landType = isoOverride->landType;
             }
             const auto overlayIt = overlayByIso.find(nativeIsoKey(cellCoords));
-            if (overlayIt != overlayByIso.end()) {
+            if (overlayIt != overlayByIso.end())
+            {
                 projected.overlayTypeIndex = overlayIt->second->overlayTypeIndex;
                 projected.overlayData = overlayIt->second->overlayData;
-                if (overlayIt->second->landTypeOverride >= 0) {
+                if (overlayIt->second->landTypeOverride >= 0)
+                {
                     projected.landType = overlayIt->second->landTypeOverride;
                 }
             }
             const auto objectIt = objectByIso.find(nativeIsoKey(cellCoords));
-            if (objectIt != objectByIso.end()) {
+            if (objectIt != objectByIso.end())
+            {
                 projected.objectAbstractType = objectIt->second->objectAbstractType;
                 projected.objectTypeIndex = objectIt->second->objectTypeIndex;
                 projected.altObjectAbstractType = objectIt->second->altObjectAbstractType;
@@ -2262,16 +2467,18 @@ std::vector<NativeStageCell> buildNativeStageCells(
         }
     }
 
-    std::sort(cells.begin(), cells.end(), [](const NativeStageCell& lhs, const NativeStageCell& rhs) {
-        if (lhs.cell.y != rhs.cell.y) {
-            return lhs.cell.y < rhs.cell.y;
-        }
-        return lhs.cell.x < rhs.cell.x;
-    });
+    std::sort(cells.begin(), cells.end(), [](const NativeStageCell &lhs, const NativeStageCell &rhs)
+              {
+                  if (lhs.cell.y != rhs.cell.y)
+                  {
+                      return lhs.cell.y < rhs.cell.y;
+                  }
+                  return lhs.cell.x < rhs.cell.x;
+              });
     return cells;
 }
 
-std::vector<NativeIteratorCell> buildNativeIteratorCells(const MapGrid& map, const std::vector<IsoTileOverride>& isoTileOverrides)
+std::vector<NativeIteratorCell> buildNativeIteratorCells(const MapGrid &map, const std::vector<IsoTileOverride> &isoTileOverrides)
 {
     const Rect mapRect = nativeSavedMapRect(map);
     const Rect localRect = nativeLocalRect(map);
@@ -2279,24 +2486,25 @@ std::vector<NativeIteratorCell> buildNativeIteratorCells(const MapGrid& map, con
     const int diamondBoundsMin = mapRect.w;
     const int diamondBoundsMax = mapRect.w + 2 * mapRect.h;
 
-    std::unordered_map<std::uint64_t, const IsoTileOverride*> overrideByIso;
+    std::unordered_map<std::uint64_t, const IsoTileOverride *> overrideByIso;
     overrideByIso.reserve(isoTileOverrides.size());
-    for (const IsoTileOverride& override : isoTileOverrides) {
+    for (const IsoTileOverride &override : isoTileOverrides)
+    {
         overrideByIso[nativeIsoKey(override.iso)] = &override;
     }
 
-    auto workspaceInRange = [&](Point cell) {
+    auto workspaceInRange = [&](Point cell)
+    {
         return cell.x >= 0 && cell.y >= 0 && cell.x < workspaceSize && cell.y < workspaceSize;
     };
-    auto insideNativeDiamond = [&](Point cell) {
-        if (!workspaceInRange(cell)) {
+    auto insideNativeDiamond = [&](Point cell)
+    {
+        if (!workspaceInRange(cell))
+        {
             return false;
         }
         const int sum = cell.x + cell.y;
-        return sum > diamondBoundsMin
-            && cell.x - cell.y < diamondBoundsMin
-            && cell.y - cell.x < diamondBoundsMin
-            && sum <= diamondBoundsMax;
+        return sum > diamondBoundsMin && cell.x - cell.y < diamondBoundsMin && cell.y - cell.x < diamondBoundsMin && sum <= diamondBoundsMax;
     };
 
     std::vector<NativeIteratorCell> cells;
@@ -2306,51 +2514,60 @@ std::vector<NativeIteratorCell> buildNativeIteratorCells(const MapGrid& map, con
     int nextY = mapRect.w;
     int currentY = mapRect.w - 1;
     const int maxIterations = std::max(1, workspaceSize * workspaceSize * 2);
-    for (int i = 0; i < maxIterations; ++i) {
-        const Point current{nextX, nextY};
-        if (currentY != 0) {
+    for (int i = 0; i < maxIterations; ++i)
+    {
+        const Point current {nextX, nextY};
+        if (currentY != 0)
+        {
             ++nextX;
             --nextY;
             --currentY;
-        } else {
+        }
+        else
+        {
             const int oldNextY = nextY;
             const int oldNextX = nextX;
             nextX = oldNextY;
             nextY = oldNextX;
-            if (((oldNextY - mapRect.w + oldNextX - 1) & 1) != 0) {
+            if (((oldNextY - mapRect.w + oldNextX - 1) & 1) != 0)
+            {
                 currentY = mapRect.w - 1;
                 nextY = oldNextX + 1;
-            } else {
+            }
+            else
+            {
                 currentY = mapRect.w - 2;
                 nextX = oldNextY + 1;
             }
         }
 
-        if (!insideNativeDiamond(current)) {
+        if (!insideNativeDiamond(current))
+        {
             break;
         }
 
         NativeIteratorCell projected;
         projected.cell = current;
         const auto overrideIt = overrideByIso.find(nativeIsoKey(current));
-        const IsoTileOverride* isoOverride = overrideIt == overrideByIso.end() ? nullptr : overrideIt->second;
+        const IsoTileOverride *isoOverride = overrideIt == overrideByIso.end() ? nullptr : overrideIt->second;
         const Point mapPoint = nativeCellToMapPoint(current, mapRect.w);
-        if (contains(localRect, mapPoint)) {
-            const Point sourcePoint{mapPoint.x - localRect.x, mapPoint.y - localRect.y};
-            if (map.inBounds(sourcePoint)) {
-                const Cell& source = map.at(sourcePoint);
+        if (contains(localRect, mapPoint))
+        {
+            const Point sourcePoint {mapPoint.x - localRect.x, mapPoint.y - localRect.y};
+            if (map.inBounds(sourcePoint))
+            {
+                const Cell &source = map.at(sourcePoint);
                 projected.source = &source;
                 projected.isoTileTypeIndex = nativeTileTypeIndexForTerrain(source);
-                projected.height = isEncodedShorePiece(source.slope)
-                    ? std::clamp(decodeShorePiece(source.slope).subTile, 0, 255)
-                    : std::clamp(source.height, 0, 255);
+                projected.height = isEncodedShorePiece(source.slope) ? std::clamp(decodeShorePiece(source.slope).subTile, 0, 255) : std::clamp(source.height, 0, 255);
                 projected.level = std::clamp(source.level, 0, 255);
                 projected.slopeIndex = nativeSlopeIndexForCell(source);
                 projected.landType = source.landType;
                 projected.iceGrowthAllowed = source.iceGrowthAllowed;
             }
         }
-        if (isoOverride != nullptr) {
+        if (isoOverride != nullptr)
+        {
             projected.height = std::clamp(isoOverride->subTile, 0, 255);
             projected.level = std::clamp(isoOverride->level, 0, 255);
             projected.slopeIndex = std::clamp(isoOverride->slopeIndex, 0, kNativeHeightSlopeCount - 1);
@@ -2365,13 +2582,15 @@ std::vector<NativeIteratorCell> buildNativeIteratorCells(const MapGrid& map, con
 
 std::uint32_t packNativeCell(Point cell) noexcept;
 
-struct NativePondTraceSnapshot {
+struct NativePondTraceSnapshot
+{
     std::uint64_t hash = kFnvOffset;
     std::uint32_t slotCount = 0;
     std::vector<std::uint32_t> detail;
 };
 
-struct NativeZoneWorkspaceTraceSnapshot {
+struct NativeZoneWorkspaceTraceSnapshot
+{
     std::uint64_t hash = kFnvOffset;
     std::uint32_t slotCount = 0;
     std::uint32_t regionCount = 0;
@@ -2381,17 +2600,17 @@ struct NativeZoneWorkspaceTraceSnapshot {
 };
 
 NativeZoneWorkspaceTraceSnapshot captureNativeZoneWorkspaceTraceSnapshot(
-    const MapGrid& map,
-    const std::vector<IsoTileOverride>& isoTileOverrides,
-    const std::unordered_map<std::uint64_t, int>& scratchIds,
-    const std::unordered_map<std::uint64_t, int>& zoneIds,
-    const std::unordered_map<std::uint64_t, int>& cacheFlags,
+    const MapGrid &map,
+    const std::vector<IsoTileOverride> &isoTileOverrides,
+    const std::unordered_map<std::uint64_t, int> &scratchIds,
+    const std::unordered_map<std::uint64_t, int> &zoneIds,
+    const std::unordered_map<std::uint64_t, int> &cacheFlags,
     int defaultScratchId,
     int defaultZoneId,
     int defaultCacheFlags,
-    const std::vector<int>& zoneLevels,
-    const std::vector<int>& zoneCellCounts,
-    const std::vector<unsigned char>& zoneWetFlags,
+    const std::vector<int> &zoneLevels,
+    const std::vector<int> &zoneCellCounts,
+    const std::vector<unsigned char> &zoneWetFlags,
     Point invalidCellPoint,
     int invalidCellTile,
     bool includeDetail)
@@ -2402,9 +2621,10 @@ NativeZoneWorkspaceTraceSnapshot captureNativeZoneWorkspaceTraceSnapshot(
     const Rect mapRect = nativeSavedMapRect(map);
     const int mapSize = mapRect.w + mapRect.h + 1;
     const std::vector<NativeIteratorCell> iteratorCells = buildNativeIteratorCells(map, isoTileOverrides);
-    std::unordered_map<std::uint64_t, const NativeIteratorCell*> cellByIso;
+    std::unordered_map<std::uint64_t, const NativeIteratorCell *> cellByIso;
     cellByIso.reserve(iteratorCells.size());
-    for (const NativeIteratorCell& cell : iteratorCells) {
+    for (const NativeIteratorCell &cell : iteratorCells)
+    {
         cellByIso[nativeIsoKey(cell.cell)] = &cell;
     }
 
@@ -2412,18 +2632,17 @@ NativeZoneWorkspaceTraceSnapshot captureNativeZoneWorkspaceTraceSnapshot(
     snapshot.slotCount = static_cast<std::uint32_t>(mapSize * mapSize);
     snapshot.regionCount = static_cast<std::uint32_t>(zoneLevels.size());
     snapshot.nextZoneId = snapshot.regionCount;
-    snapshot.valueCount = kPreambleWords
-        + snapshot.slotCount * kWordsPerSlot
-        + snapshot.regionCount * kWordsPerRegionHeader;
-    if (includeDetail) {
+    snapshot.valueCount = kPreambleWords + snapshot.slotCount * kWordsPerSlot + snapshot.regionCount * kWordsPerRegionHeader;
+    if (includeDetail)
+    {
         snapshot.detail.reserve(
-            kPreambleWords
-            + static_cast<std::size_t>(snapshot.slotCount) * kWordsPerSlot
-            + static_cast<std::size_t>(snapshot.regionCount) * kWordsPerRegionHeader);
+            kPreambleWords + static_cast<std::size_t>(snapshot.slotCount) * kWordsPerSlot + static_cast<std::size_t>(snapshot.regionCount) * kWordsPerRegionHeader);
     }
-    const auto append = [&](std::uint32_t value) {
+    const auto append = [&](std::uint32_t value)
+    {
         hashU32(snapshot.hash, value);
-        if (includeDetail) {
+        if (includeDetail)
+        {
             snapshot.detail.push_back(value);
         }
     };
@@ -2439,21 +2658,22 @@ NativeZoneWorkspaceTraceSnapshot captureNativeZoneWorkspaceTraceSnapshot(
 
     std::vector<Point> zoneSeeds(snapshot.regionCount);
     std::vector<unsigned char> hasZoneSeed(snapshot.regionCount, 0);
-    for (int y = 0; y < mapSize; ++y) {
-        for (int x = 0; x < mapSize; ++x) {
-            const Point point{x, y};
+    for (int y = 0; y < mapSize; ++y)
+    {
+        for (int x = 0; x < mapSize; ++x)
+        {
+            const Point point {x, y};
             const std::uint64_t key = nativeIsoKey(point);
             const auto cellIt = cellByIso.find(key);
-            const NativeIteratorCell* cell = cellIt == cellByIso.end() ? nullptr : cellIt->second;
+            const NativeIteratorCell *cell = cellIt == cellByIso.end() ? nullptr : cellIt->second;
             const auto scratchIt = scratchIds.find(key);
             const auto zoneIt = zoneIds.find(key);
             const auto cacheIt = cacheFlags.find(key);
             const int scratchId = scratchIt == scratchIds.end() ? defaultScratchId : scratchIt->second;
             const int zoneId = zoneIt == zoneIds.end() ? defaultZoneId : zoneIt->second;
             const int cachedFlags = cacheIt == cacheFlags.end() ? defaultCacheFlags : cacheIt->second;
-            if (zoneId >= 0
-                && zoneId < static_cast<int>(snapshot.regionCount)
-                && !hasZoneSeed[static_cast<std::size_t>(zoneId)]) {
+            if (zoneId >= 0 && zoneId < static_cast<int>(snapshot.regionCount) && !hasZoneSeed[static_cast<std::size_t>(zoneId)])
+            {
                 zoneSeeds[static_cast<std::size_t>(zoneId)] = point;
                 hasZoneSeed[static_cast<std::size_t>(zoneId)] = 1;
             }
@@ -2471,7 +2691,8 @@ NativeZoneWorkspaceTraceSnapshot captureNativeZoneWorkspaceTraceSnapshot(
         }
     }
 
-    for (std::size_t index = 0; index < zoneLevels.size(); ++index) {
+    for (std::size_t index = 0; index < zoneLevels.size(); ++index)
+    {
         const bool wet = index < zoneWetFlags.size() && zoneWetFlags[index] != 0;
         const int cellCount = index < zoneCellCounts.size() ? zoneCellCounts[index] : 0;
         append(static_cast<std::uint32_t>(index));
@@ -2487,9 +2708,9 @@ NativeZoneWorkspaceTraceSnapshot captureNativeZoneWorkspaceTraceSnapshot(
 }
 
 NativePondTraceSnapshot captureNativePondTraceSnapshot(
-    const MapGrid& map,
-    const std::vector<IsoTileOverride>& isoTileOverrides,
-    const std::unordered_map<std::uint64_t, int>& zoneIds,
+    const MapGrid &map,
+    const std::vector<IsoTileOverride> &isoTileOverrides,
+    const std::unordered_map<std::uint64_t, int> &zoneIds,
     int defaultZoneId,
     bool mapgenDataActive,
     Point invalidCellPoint,
@@ -2499,19 +2720,22 @@ NativePondTraceSnapshot captureNativePondTraceSnapshot(
     const Rect mapRect = nativeSavedMapRect(map);
     const int mapSize = mapRect.w + mapRect.h + 1;
     const std::vector<NativeIteratorCell> iteratorCells = buildNativeIteratorCells(map, isoTileOverrides);
-    std::unordered_map<std::uint64_t, const NativeIteratorCell*> cellByIso;
+    std::unordered_map<std::uint64_t, const NativeIteratorCell *> cellByIso;
     cellByIso.reserve(iteratorCells.size());
-    for (const NativeIteratorCell& cell : iteratorCells) {
+    for (const NativeIteratorCell &cell : iteratorCells)
+    {
         cellByIso[nativeIsoKey(cell.cell)] = &cell;
     }
 
     NativePondTraceSnapshot snapshot;
     snapshot.slotCount = static_cast<std::uint32_t>(mapSize * mapSize + 1);
-    if (includeDetail) {
+    if (includeDetail)
+    {
         snapshot.detail.reserve(static_cast<std::size_t>(snapshot.slotCount) * 7);
     }
-    const auto appendState = [&](Point point, int tile, int height, int level, int slope, int zone, std::uint32_t kind) {
-        const std::array<std::uint32_t, 7> values{
+    const auto appendState = [&](Point point, int tile, int height, int level, int slope, int zone, std::uint32_t kind)
+    {
+        const std::array<std::uint32_t, 7> values {
             packNativeCell(point),
             static_cast<std::uint32_t>(tile),
             static_cast<std::uint32_t>(height),
@@ -2520,25 +2744,31 @@ NativePondTraceSnapshot captureNativePondTraceSnapshot(
             static_cast<std::uint32_t>(zone),
             kind,
         };
-        for (std::uint32_t value : values) {
+        for (std::uint32_t value : values)
+        {
             hashU32(snapshot.hash, value);
-            if (includeDetail) {
+            if (includeDetail)
+            {
                 snapshot.detail.push_back(value);
             }
         }
     };
 
-    for (int y = 0; y < mapSize; ++y) {
-        for (int x = 0; x < mapSize; ++x) {
-            const Point point{x, y};
+    for (int y = 0; y < mapSize; ++y)
+    {
+        for (int x = 0; x < mapSize; ++x)
+        {
+            const Point point {x, y};
             const auto cellIt = cellByIso.find(nativeIsoKey(point));
-            if (cellIt == cellByIso.end()) {
+            if (cellIt == cellByIso.end())
+            {
                 appendState(point, -1, -1, -1, -1, -1, 0);
                 continue;
             }
-            const NativeIteratorCell& cell = *cellIt->second;
+            const NativeIteratorCell &cell = *cellIt->second;
             int zone = -1;
-            if (mapgenDataActive) {
+            if (mapgenDataActive)
+            {
                 const auto zoneIt = zoneIds.find(nativeIsoKey(point));
                 zone = zoneIt == zoneIds.end() ? defaultZoneId : zoneIt->second;
             }
@@ -2558,35 +2788,33 @@ NativePondTraceSnapshot captureNativePondTraceSnapshot(
 
 std::uint32_t packNativeCell(Point cell) noexcept
 {
-    return static_cast<std::uint32_t>(static_cast<std::uint16_t>(cell.x))
-        | (static_cast<std::uint32_t>(static_cast<std::uint16_t>(cell.y)) << 16);
+    return static_cast<std::uint32_t>(static_cast<std::uint16_t>(cell.x)) | (static_cast<std::uint32_t>(static_cast<std::uint16_t>(cell.y)) << 16);
 }
 
-void hashNativeCell(std::uint32_t& hash, Point cell) noexcept
+void hashNativeCell(std::uint32_t &hash, Point cell) noexcept
 {
     const std::uint32_t packed = packNativeCell(cell);
-    for (int shift = 0; shift < 32; shift += 8) {
+    for (int shift = 0; shift < 32; shift += 8)
+    {
         hash ^= (packed >> shift) & 0xFFu;
         hash *= 16777619u;
     }
 }
 
 std::vector<Point> collectNativeZoneBoundaryCells(
-    const std::vector<NativeIteratorCell>& iteratorCells,
+    const std::vector<NativeIteratorCell> &iteratorCells,
     Rect mapRect,
-    const std::unordered_map<std::uint64_t, int>& zoneIds,
+    const std::unordered_map<std::uint64_t, int> &zoneIds,
     int defaultZoneId,
     int targetZoneId,
     int regionIndex,
     int regionCount,
     int regionCellCount,
     Point firstRegionCell,
-    Point* invalidCellPoint = nullptr,
+    Point *invalidCellPoint = nullptr,
     bool forceTrace = false)
 {
-    const bool traceBoundary = native_trace::active() && (forceTrace
-        || native_trace::currentFunctionId() == native_trace::BuildRegionNeighborList
-        || native_trace::currentFunctionId() == native_trace::ProcessRegionBridgesAndCliffs);
+    const bool traceBoundary = native_trace::active() && (forceTrace || native_trace::currentFunctionId() == native_trace::BuildRegionNeighborList || native_trace::currentFunctionId() == native_trace::ProcessRegionBridgesAndCliffs);
     native_trace::EventData traceData;
     traceData.regionIndex = regionIndex;
     traceData.regionId = targetZoneId;
@@ -2594,55 +2822,74 @@ std::vector<Point> collectNativeZoneBoundaryCells(
     traceData.regionCellCount = regionCellCount;
     traceData.cellX = static_cast<std::int16_t>(firstRegionCell.x);
     traceData.cellY = static_cast<std::int16_t>(firstRegionCell.y);
-    if (traceBoundary) {
+    if (traceBoundary)
+    {
         native_trace::enterDetailed(0x58D410, native_trace::CollectZoneBoundaryCells, traceData);
     }
 
-    const auto zoneFor = [&](Point cell) {
+    const auto zoneFor = [&](Point cell)
+    {
         const auto it = zoneIds.find(nativeIsoKey(cell));
         return it == zoneIds.end() ? defaultZoneId : it->second;
     };
-    constexpr std::array<Point, 8> kNeighbors{{
-        {0, -1}, {1, -1}, {1, 0}, {1, 1},
-        {0, 1}, {-1, 1}, {-1, 0}, {-1, -1},
+    constexpr std::array<Point, 8> kNeighbors {{
+        {0, -1},
+        {1, -1},
+        {1, 0},
+        {1, 1},
+        {0, 1},
+        {-1, 1},
+        {-1, 0},
+        {-1, -1},
     }};
 
     std::vector<Point> boundary;
     boundary.reserve(static_cast<std::size_t>(std::max(0, regionCellCount)));
-    for (const NativeIteratorCell& iteratorCell : iteratorCells) {
-        if (zoneFor(iteratorCell.cell) != targetZoneId) {
+    for (const NativeIteratorCell &iteratorCell : iteratorCells)
+    {
+        if (zoneFor(iteratorCell.cell) != targetZoneId)
+        {
             continue;
         }
         bool isBoundary = false;
-        for (Point offset : kNeighbors) {
-            const Point neighbor{iteratorCell.cell.x + offset.x, iteratorCell.cell.y + offset.y};
-            if (!isInsideNativeCellDiamond(neighbor, mapRect)) {
-                if (invalidCellPoint != nullptr) {
+        for (Point offset : kNeighbors)
+        {
+            const Point neighbor {iteratorCell.cell.x + offset.x, iteratorCell.cell.y + offset.y};
+            if (!isInsideNativeCellDiamond(neighbor, mapRect))
+            {
+                if (invalidCellPoint != nullptr)
+                {
                     *invalidCellPoint = neighbor;
                 }
                 continue;
             }
             isBoundary = isBoundary || zoneFor(neighbor) != targetZoneId;
         }
-        if (isBoundary) {
+        if (isBoundary)
+        {
             boundary.push_back(iteratorCell.cell);
         }
     }
 
-    if (traceBoundary) {
+    if (traceBoundary)
+    {
         std::uint32_t orderedHash = 2166136261u;
         std::vector<std::uint32_t> detailValues;
-        if (native_trace::detailRequested()) {
+        if (native_trace::detailRequested())
+        {
             detailValues.reserve(boundary.size());
         }
         traceData.args[3] = 0xFFFFFFFFu;
         traceData.args[4] = 0xFFFFFFFFu;
         traceData.args[5] = 0xFFFFFFFFu;
-        for (std::size_t index = 0; index < boundary.size(); ++index) {
-            if (index < 3) {
+        for (std::size_t index = 0; index < boundary.size(); ++index)
+        {
+            if (index < 3)
+            {
                 traceData.args[3 + index] = packNativeCell(boundary[index]);
             }
-            if (native_trace::detailRequested()) {
+            if (native_trace::detailRequested())
+            {
                 detailValues.push_back(packNativeCell(boundary[index]));
             }
             hashNativeCell(orderedHash, boundary[index]);
@@ -2663,20 +2910,17 @@ std::vector<Point> collectNativeZoneBoundaryCells(
 
 bool isNativeCellWithinUsableArea(
     Point cell,
-    const NativeIteratorCell& iteratorCell,
+    const NativeIteratorCell &iteratorCell,
     Rect mapRect,
     Rect visibleRect) noexcept
 {
     int level = iteratorCell.level;
     const int sum = cell.x + cell.y;
-    if (iteratorCell.slopeIndex != 0
-        && sum < level + mapRect.w + 2 * visibleRect.y + 4) {
+    if (iteratorCell.slopeIndex != 0 && sum < level + mapRect.w + 2 * visibleRect.y + 4)
+    {
         ++level;
     }
-    return sum > level + mapRect.w + 2 * visibleRect.y
-        && sum <= level + mapRect.w + 2 * (visibleRect.y + visibleRect.h) + 2
-        && cell.x - cell.y < 2 * (visibleRect.x + visibleRect.w) - mapRect.w
-        && cell.y - cell.x < mapRect.w - 2 * visibleRect.x;
+    return sum > level + mapRect.w + 2 * visibleRect.y && sum <= level + mapRect.w + 2 * (visibleRect.y + visibleRect.h) + 2 && cell.x - cell.y < 2 * (visibleRect.x + visibleRect.w) - mapRect.w && cell.y - cell.x < mapRect.w - 2 * visibleRect.x;
 }
 
 bool hasEnoughNativeCellsInZone(
@@ -2686,22 +2930,27 @@ bool hasEnoughNativeCellsInZone(
     int targetZoneId,
     int required,
     Rect mapRect,
-    const std::unordered_map<std::uint64_t, int>& zoneIds,
+    const std::unordered_map<std::uint64_t, int> &zoneIds,
     int defaultZoneId)
 {
-    if (width <= 0 || height <= 0) {
+    if (width <= 0 || height <= 0)
+    {
         return false;
     }
     int matching = 0;
-    for (int y = 0; y < height; ++y) {
-        for (int x = 0; x < width; ++x) {
-            const Point cell{topLeft.x + x, topLeft.y + y};
-            if (!isInsideNativeCellDiamond(cell, mapRect)) {
+    for (int y = 0; y < height; ++y)
+    {
+        for (int x = 0; x < width; ++x)
+        {
+            const Point cell {topLeft.x + x, topLeft.y + y};
+            if (!isInsideNativeCellDiamond(cell, mapRect))
+            {
                 continue;
             }
             const auto it = zoneIds.find(nativeIsoKey(cell));
             const int zoneId = it == zoneIds.end() ? defaultZoneId : it->second;
-            if (zoneId == targetZoneId && ++matching >= required) {
+            if (zoneId == targetZoneId && ++matching >= required)
+            {
                 return true;
             }
         }
@@ -2709,7 +2958,8 @@ bool hasEnoughNativeCellsInZone(
     return false;
 }
 
-struct NativeCliffNeighborMaskResult {
+struct NativeCliffNeighborMaskResult
+{
     int mask = 0;
     bool centerAccepted = false;
 };
@@ -2719,12 +2969,12 @@ NativeCliffNeighborMaskResult nativeCliffNeighborMask(
     int highRegionId,
     float fallbackBias,
     Rect mapRect,
-    const std::unordered_map<std::uint64_t, int>& zoneIds,
+    const std::unordered_map<std::uint64_t, int> &zoneIds,
     int defaultZoneId)
 {
     const int required = nativeDoubleToInt(
         (15.0 - 5.0) * (1.0 - static_cast<double>(fallbackBias)) + 5.0);
-    const Point centerTopLeft{cell.x - 2, cell.y - 2};
+    const Point centerTopLeft {cell.x - 2, cell.y - 2};
     if (!hasEnoughNativeCellsInZone(
             centerTopLeft,
             5,
@@ -2733,23 +2983,33 @@ NativeCliffNeighborMaskResult nativeCliffNeighborMask(
             required,
             mapRect,
             zoneIds,
-            defaultZoneId)) {
+            defaultZoneId))
+    {
         return {};
     }
 
-    constexpr std::array<int, 9> kNeighborMasks{{
-        0x40, 0x80, 0x01,
-        0x20, 0x00, 0x02,
-        0x10, 0x08, 0x04,
+    constexpr std::array<int, 9> kNeighborMasks {{
+        0x40,
+        0x80,
+        0x01,
+        0x20,
+        0x00,
+        0x02,
+        0x10,
+        0x08,
+        0x04,
     }};
     NativeCliffNeighborMaskResult result;
     result.centerAccepted = true;
-    for (int row = 0; row < 3; ++row) {
-        for (int column = 0; column < 3; ++column) {
-            if (row == 1 && column == 1) {
+    for (int row = 0; row < 3; ++row)
+    {
+        for (int column = 0; column < 3; ++column)
+        {
+            if (row == 1 && column == 1)
+            {
                 continue;
             }
-            const Point blockTopLeft{
+            const Point blockTopLeft {
                 centerTopLeft.x + (column - 1) * 5,
                 centerTopLeft.y + (row - 1) * 5,
             };
@@ -2761,7 +3021,8 @@ NativeCliffNeighborMaskResult nativeCliffNeighborMask(
                     required,
                     mapRect,
                     zoneIds,
-                    defaultZoneId)) {
+                    defaultZoneId))
+            {
                 result.mask |= kNeighborMasks[static_cast<std::size_t>(row * 3 + column)];
             }
         }
@@ -2769,18 +3030,20 @@ NativeCliffNeighborMaskResult nativeCliffNeighborMask(
     return result;
 }
 
-void dumpNativeStageCellsIfRequested(const std::string& stageName, const std::vector<NativeStageCell>& nativeCells)
+void dumpNativeStageCellsIfRequested(const std::string &stageName, const std::vector<NativeStageCell> &nativeCells)
 {
-    const char* dumpPath = std::getenv(kNativeStageCellDumpPathEnv);
-    if (dumpPath == nullptr || dumpPath[0] == '\0') {
+    const char *dumpPath = std::getenv(kNativeStageCellDumpPathEnv);
+    if (dumpPath == nullptr || dumpPath[0] == '\0')
+    {
         return;
     }
 
-    std::filesystem::path path{dumpPath};
+    std::filesystem::path path {dumpPath};
     path += ".";
     path += stageName.empty() ? "unnamed" : stageName;
     path += ".csv";
-    if (!path.parent_path().empty()) {
+    if (!path.parent_path().empty())
+    {
         std::filesystem::create_directories(path.parent_path());
     }
 
@@ -2789,7 +3052,8 @@ void dumpNativeStageCellsIfRequested(const std::string& stageName, const std::ve
            "overlayData,smudgeData,iceGrowth,landType,objectAbstractType,objectTypeIndex,"
            "altObjectAbstractType,altObjectTypeIndex,mapgenSurfaceBlocked,mapgenTempTag,mapgenZoneId\n";
     int index = 0;
-    for (const NativeStageCell& cell : nativeCells) {
+    for (const NativeStageCell &cell : nativeCells)
+    {
         out << stageName << ','
             << index++ << ','
             << cell.cell.x << ','
@@ -2814,40 +3078,44 @@ void dumpNativeStageCellsIfRequested(const std::string& stageName, const std::ve
     }
 }
 
-int cardinalBoundaryVariant(const MapGrid& map, Point p, bool (*matches)(const Cell&))
+int cardinalBoundaryVariant(const MapGrid &map, Point p, bool (*matches)(const Cell &))
 {
     int mask = 0;
-    if (map.inBounds({p.x, p.y - 1}) && matches(map.at({p.x, p.y - 1}))) {
+    if (map.inBounds({p.x, p.y - 1}) && matches(map.at({p.x, p.y - 1})))
+    {
         mask |= 1;
     }
-    if (map.inBounds({p.x + 1, p.y}) && matches(map.at({p.x + 1, p.y}))) {
+    if (map.inBounds({p.x + 1, p.y}) && matches(map.at({p.x + 1, p.y})))
+    {
         mask |= 2;
     }
-    if (map.inBounds({p.x, p.y + 1}) && matches(map.at({p.x, p.y + 1}))) {
+    if (map.inBounds({p.x, p.y + 1}) && matches(map.at({p.x, p.y + 1})))
+    {
         mask |= 4;
     }
-    if (map.inBounds({p.x - 1, p.y}) && matches(map.at({p.x - 1, p.y}))) {
+    if (map.inBounds({p.x - 1, p.y}) && matches(map.at({p.x - 1, p.y})))
+    {
         mask |= 8;
     }
     return mask;
 }
 
-bool isLandBoundaryCell(const Cell& cell)
+bool isLandBoundaryCell(const Cell &cell)
 {
     return isSolidLand(cell) || cell.terrain == Terrain::Cliff;
 }
 
-bool isLowerCliffBoundaryCell(const Cell& cell)
+bool isLowerCliffBoundaryCell(const Cell &cell)
 {
     return cell.terrain != Terrain::Cliff && !isWet(cell);
 }
 
-bool isNativeShorePiece(const Cell& cell)
+bool isNativeShorePiece(const Cell &cell)
 {
     return cell.terrain == Terrain::Shore;
 }
 
-bool isNativeGreenAnchor(const Cell& cell)
+bool isNativeGreenAnchor(const Cell &cell)
 {
     return cell.terrain == Terrain::Green;
 }
@@ -2856,7 +3124,8 @@ int cliffPlateauDirection(double angle)
 {
     const double dx = std::cos(angle);
     const double dy = std::sin(angle);
-    if (std::abs(dx) >= std::abs(dy)) {
+    if (std::abs(dx) >= std::abs(dy))
+    {
         return dx >= 0.0 ? 2 : 6;
     }
     return dy >= 0.0 ? 4 : 0;
@@ -2864,7 +3133,8 @@ int cliffPlateauDirection(double angle)
 
 Point directionOffset(int direction)
 {
-    switch (direction) {
+    switch (direction)
+    {
     case 0:
         return {0, -1};
     case 2:

@@ -11,27 +11,39 @@
 #include <unordered_map>
 #include <unordered_set>
 
-namespace rmg {
-namespace {
+namespace rmg
+{
+namespace
+{
 
 constexpr int kNativeInitialMapLevel = 4;
 constexpr int kNativeHeightSlopeCount = 19;
 
-void appendKeyValue(std::ostringstream& out, const std::string& key, const std::string& value)
+void appendKeyValue(std::ostringstream &out, const std::string &key, const std::string &value)
 {
     out << key << '=' << value << '\n';
 }
 
-void appendKeyValue(std::ostringstream& out, const std::string& key, int value)
+void appendKeyValue(std::ostringstream &out, const std::string &key, int value)
 {
     out << key << '=' << value << '\n';
 }
 
-void writeNativeProductEdge(std::ostringstream& out)
+void writeNativeProductEdge(std::ostringstream &out)
 {
     static constexpr char nativeEdgeBytes[] = {
-        '\x8B', '\x41', '\x04', '\x8B', '\x4C', '\x24', '\x04',
-        '\x8B', '\x04', '\x88', '\xC2', '\x04',
+        '\x8B',
+        '\x41',
+        '\x04',
+        '\x8B',
+        '\x4C',
+        '\x24',
+        '\x04',
+        '\x8B',
+        '\x04',
+        '\x88',
+        '\xC2',
+        '\x04',
     };
     out << "Edge=";
     out.write(nativeEdgeBytes, sizeof(nativeEdgeBytes));
@@ -45,11 +57,13 @@ std::string pointToString(Point p)
     return out.str();
 }
 
-std::string joinInts(const std::vector<int>& values)
+std::string joinInts(const std::vector<int> &values)
 {
     std::ostringstream out;
-    for (std::size_t i = 0; i < values.size(); ++i) {
-        if (i > 0) {
+    for (std::size_t i = 0; i < values.size(); ++i)
+    {
+        if (i > 0)
+        {
             out << ',';
         }
         out << values[i];
@@ -57,11 +71,13 @@ std::string joinInts(const std::vector<int>& values)
     return out.str();
 }
 
-std::string joinStrings(const std::vector<std::string>& values)
+std::string joinStrings(const std::vector<std::string> &values)
 {
     std::ostringstream out;
-    for (std::size_t i = 0; i < values.size(); ++i) {
-        if (i > 0) {
+    for (std::size_t i = 0; i < values.size(); ++i)
+    {
+        if (i > 0)
+        {
             out << ',';
         }
         out << values[i];
@@ -74,12 +90,14 @@ int packedCell(Point p)
     return p.x + p.y * 1000;
 }
 
-bool isNativeHeightSlope(const Cell& cell) noexcept
+bool isNativeHeightSlope(const Cell &cell) noexcept
 {
-    if (cell.landType != 3 || cell.slope <= 0 || cell.slope >= kNativeHeightSlopeCount) {
+    if (cell.landType != 3 || cell.slope <= 0 || cell.slope >= kNativeHeightSlopeCount)
+    {
         return false;
     }
-    switch (cell.terrain) {
+    switch (cell.terrain)
+    {
     case Terrain::Land:
     case Terrain::Dirt:
     case Terrain::Rough:
@@ -94,29 +112,35 @@ bool isNativeHeightSlope(const Cell& cell) noexcept
     return false;
 }
 
-bool isNativeHeightSlope(const IsoTileOverride& override) noexcept
+bool isNativeHeightSlope(const IsoTileOverride &override) noexcept
 {
     return override.slopeIndex > 0 && override.slopeIndex < kNativeHeightSlopeCount;
 }
 
-int tileVariantForCell(const Cell& cell)
+int tileVariantForCell(const Cell &cell)
 {
-    if (isEncodedCliffPiece(cell.slope)) {
+    if (isEncodedCliffPiece(cell.slope))
+    {
         return decodeCliffPiece(cell.slope).tile;
     }
-    if (isEncodedShorePiece(cell.slope)) {
+    if (isEncodedShorePiece(cell.slope))
+    {
         return decodeShorePiece(cell.slope).tile;
     }
-    if (cell.terrain == Terrain::Water) {
+    if (cell.terrain == Terrain::Water)
+    {
         return std::clamp(cell.slope, 0, 7);
     }
-    if (cell.terrain == Terrain::Shore) {
+    if (cell.terrain == Terrain::Shore)
+    {
         return decodeShorePiece(cell.slope).tile;
     }
-    if (cell.terrain == Terrain::Cliff) {
+    if (cell.terrain == Terrain::Cliff)
+    {
         return std::clamp(cell.slope, 0, 15);
     }
-    if (isNativeHeightSlope(cell)) {
+    if (isNativeHeightSlope(cell))
+    {
         return cell.slope - 1;
     }
     return std::clamp(cell.slope, 0, 15);
@@ -124,89 +148,99 @@ int tileVariantForCell(const Cell& cell)
 
 bool canUseClearLat(Terrain terrain) noexcept
 {
-    return terrain == Terrain::Dirt
-        || terrain == Terrain::Rough
-        || terrain == Terrain::Pave
-        || terrain == Terrain::Green;
+    return terrain == Terrain::Dirt || terrain == Terrain::Rough || terrain == Terrain::Pave || terrain == Terrain::Green;
 }
 
-int clearLatMaskForCell(const MapGrid& map, Point p)
+int clearLatMaskForCell(const MapGrid &map, Point p)
 {
-    const Cell& cell = map.at(p);
-    if (!canUseClearLat(cell.terrain)) {
+    const Cell &cell = map.at(p);
+    if (!canUseClearLat(cell.terrain))
+    {
         return 0;
     }
 
     int mask = 0;
-    constexpr Point offsets[]{{0, -1}, {1, 0}, {0, 1}, {-1, 0}};
-    for (int i = 0; i < 4; ++i) {
-        const Point neighbor{p.x + offsets[i].x, p.y + offsets[i].y};
-        if (!map.inBounds(neighbor)) {
+    constexpr Point offsets[] {{0, -1}, {1, 0}, {0, 1}, {-1, 0}};
+    for (int i = 0; i < 4; ++i)
+    {
+        const Point neighbor {p.x + offsets[i].x, p.y + offsets[i].y};
+        if (!map.inBounds(neighbor))
+        {
             continue;
         }
         const Terrain adjacent = map.at(neighbor).terrain;
-        if (adjacent == Terrain::Land) {
+        if (adjacent == Terrain::Land)
+        {
             mask |= 1 << i;
         }
     }
     return mask;
 }
 
-TileMapping exportTileMappingForCell(const TileCatalog& catalog, const MapGrid& map, Point p)
+TileMapping exportTileMappingForCell(const TileCatalog &catalog, const MapGrid &map, Point p)
 {
-    const Cell& cell = map.at(p);
-    if (isEncodedCliffPiece(cell.slope)) {
+    const Cell &cell = map.at(p);
+    if (isEncodedCliffPiece(cell.slope))
+    {
         return catalog.cliff;
     }
-    if (isEncodedShorePiece(cell.slope)) {
+    if (isEncodedShorePiece(cell.slope))
+    {
         return catalog.shore;
     }
-    if (isNativeHeightSlope(cell)) {
+    if (isNativeHeightSlope(cell))
+    {
         return catalog.ramp;
     }
-    if (clearLatMaskForCell(map, p) != 0) {
+    if (clearLatMaskForCell(map, p) != 0)
+    {
         return latTileMappingForTerrain(catalog, cell.terrain);
     }
     return tileMappingForTerrain(catalog, cell.terrain);
 }
 
-int exportTileVariantForCell(const MapGrid& map, Point p)
+int exportTileVariantForCell(const MapGrid &map, Point p)
 {
-    const Cell& cell = map.at(p);
-    if (isEncodedCliffPiece(cell.slope)) {
+    const Cell &cell = map.at(p);
+    if (isEncodedCliffPiece(cell.slope))
+    {
         return decodeCliffPiece(cell.slope).tile;
     }
-    if (isEncodedShorePiece(cell.slope)) {
+    if (isEncodedShorePiece(cell.slope))
+    {
         return decodeShorePiece(cell.slope).tile;
     }
-    if (isNativeHeightSlope(cell)) {
+    if (isNativeHeightSlope(cell))
+    {
         return cell.slope - 1;
     }
     const int latMask = clearLatMaskForCell(map, p);
-    if (latMask != 0) {
+    if (latMask != 0)
+    {
         return latMask - 1;
     }
     return tileVariantForCell(cell);
 }
 
-std::uint32_t terrainTileId(const TileCatalog& catalog, const MapGrid& map, Point p)
+std::uint32_t terrainTileId(const TileCatalog &catalog, const MapGrid &map, Point p)
 {
     return mappedTileNum(exportTileMappingForCell(catalog, map, p), exportTileVariantForCell(map, p));
 }
 
-std::uint8_t exportLevelForCell(const Cell& cell) noexcept
+std::uint8_t exportLevelForCell(const Cell &cell) noexcept
 {
     return static_cast<std::uint8_t>(std::clamp(cell.level, 0, 255));
 }
 
-std::uint8_t exportIceGrowthForCell(const Cell& cell) noexcept
+std::uint8_t exportIceGrowthForCell(const Cell &cell) noexcept
 {
     return cell.iceGrowthAllowed ? 1 : 0;
 }
 
-int overlayIdForCell(const Cell& cell)
+int overlayIdForCell(const Cell &cell)
 {
-    switch (cell.overlay) {
+    switch (cell.overlay)
+    {
     case Overlay::Ore:
         return 102;
     case Overlay::Gems:
@@ -227,12 +261,14 @@ int overlayIdForCell(const Cell& cell)
     return -1;
 }
 
-int overlayDataForCell(const Cell& cell)
+int overlayDataForCell(const Cell &cell)
 {
-    if (cell.overlay == Overlay::Ore || cell.overlay == Overlay::Gems) {
+    if (cell.overlay == Overlay::Ore || cell.overlay == Overlay::Gems)
+    {
         return std::clamp(cell.overlayValue, 1, 255);
     }
-    if (cell.overlay == Overlay::Bridge) {
+    if (cell.overlay == Overlay::Bridge)
+    {
         return std::clamp(cell.overlayValue, 0, 17);
     }
     return 0;
@@ -262,18 +298,18 @@ std::string fixedRatio(int value, int divisor, int precision)
     return out.str();
 }
 
-std::string pseudoPackLine(const Cell& cell)
+std::string pseudoPackLine(const Cell &cell)
 {
     std::ostringstream out;
     out << hexByte(cell.x)
         << hexByte(cell.y)
-        << hexByte(static_cast<int>(mappedTileNum(tileMappingForTerrain(TileCatalog{}, cell.terrain), tileVariantForCell(cell))))
+        << hexByte(static_cast<int>(mappedTileNum(tileMappingForTerrain(TileCatalog {}, cell.terrain), tileVariantForCell(cell))))
         << hexByte(cell.level)
         << hexByte(cell.slope < 0 ? 0xFF : cell.slope);
     return out.str();
 }
 
-std::string overlayPackLine(const Cell& cell)
+std::string overlayPackLine(const Cell &cell)
 {
     std::ostringstream out;
     out << hexByte(cell.x)
@@ -283,29 +319,35 @@ std::string overlayPackLine(const Cell& cell)
     return out.str();
 }
 
-std::uint8_t subTileForCell(const TileCatalog& catalog, const MapGrid& map, Point p, bool preserveSubTiles)
+std::uint8_t subTileForCell(const TileCatalog &catalog, const MapGrid &map, Point p, bool preserveSubTiles)
 {
-    const Cell& cell = map.at(p);
-    if (isEncodedShorePiece(cell.slope)) {
+    const Cell &cell = map.at(p);
+    if (isEncodedShorePiece(cell.slope))
+    {
         return static_cast<std::uint8_t>(decodeShorePiece(cell.slope).subTile);
     }
-    if (!preserveSubTiles) {
+    if (!preserveSubTiles)
+    {
         return 0;
     }
 
     const TileMapping mapping = exportTileMappingForCell(catalog, map, p);
     const int variant = exportTileVariantForCell(map, p);
-    if (isNativeHeightSlope(cell) || cell.terrain == Terrain::Cliff || isEncodedCliffPiece(cell.slope)) {
+    if (isNativeHeightSlope(cell) || cell.terrain == Terrain::Cliff || isEncodedCliffPiece(cell.slope))
+    {
         return 0;
     }
-    if (cell.terrain == Terrain::Water) {
+    if (cell.terrain == Terrain::Water)
+    {
         return mappedSubTile(mapping, std::clamp(variant, 0, 7));
     }
-    if (cell.terrain == Terrain::Shore) {
+    if (cell.terrain == Terrain::Shore)
+    {
         const ShorePiece piece = decodeShorePiece(cell.slope);
         return piece.subTile > 0 ? static_cast<std::uint8_t>(piece.subTile) : mappedSubTile(mapping, std::clamp(variant, 0, 41));
     }
-    if (cell.terrain == Terrain::Cliff) {
+    if (cell.terrain == Terrain::Cliff)
+    {
         return mappedSubTile(mapping, std::clamp(variant, 0, 15));
     }
     return mappedSubTile(mapping, std::clamp(variant, 0, 15));
@@ -324,30 +366,32 @@ Point realToIso(Point p, int width)
     return displayToIso(p.x * 2, p.y, width);
 }
 
-void validateYrIniIsoBounds(const MapGrid& map)
+void validateYrIniIsoBounds(const MapGrid &map)
 {
-    if (map.width() + map.height() > 512) {
+    if (map.width() + map.height() > 512)
+    {
         throw std::runtime_error("yrini export requires width + height <= 512 for RA2/YR iso coordinates");
     }
 }
 
-void writeEncodedSection(std::ostringstream& out, const std::string& sectionName, const std::string& encoded, std::size_t lineLength)
+void writeEncodedSection(std::ostringstream &out, const std::string &sectionName, const std::string &encoded, std::size_t lineLength)
 {
     out << '[' << sectionName << "]\n";
     const auto lines = ra2::pack::splitEncodedSection(encoded, lineLength);
-    for (std::size_t i = 0; i < lines.size(); ++i) {
+    for (std::size_t i = 0; i < lines.size(); ++i)
+    {
         out << (i + 1) << '=' << lines[i] << '\n';
     }
     out << '\n';
 }
 
-void appendU16(std::vector<std::uint8_t>& out, std::uint16_t value)
+void appendU16(std::vector<std::uint8_t> &out, std::uint16_t value)
 {
     out.push_back(static_cast<std::uint8_t>(value & 0xFFu));
     out.push_back(static_cast<std::uint8_t>((value >> 8) & 0xFFu));
 }
 
-void appendI32(std::vector<std::uint8_t>& out, int value)
+void appendI32(std::vector<std::uint8_t> &out, int value)
 {
     const auto unsignedValue = static_cast<std::uint32_t>(value);
     out.push_back(static_cast<std::uint8_t>(unsignedValue & 0xFFu));
@@ -356,41 +400,42 @@ void appendI32(std::vector<std::uint8_t>& out, int value)
     out.push_back(static_cast<std::uint8_t>((unsignedValue >> 24) & 0xFFu));
 }
 
-void appendU16LE(std::vector<std::uint8_t>& out, std::uint16_t value)
+void appendU16LE(std::vector<std::uint8_t> &out, std::uint16_t value)
 {
     appendU16(out, value);
 }
 
-void appendU32LE(std::vector<std::uint8_t>& out, std::uint32_t value)
+void appendU32LE(std::vector<std::uint8_t> &out, std::uint32_t value)
 {
     appendI32(out, static_cast<int>(value));
 }
 
-std::string cyclicChoice(const std::vector<std::string>& values, int value, const std::string& fallback)
+std::string cyclicChoice(const std::vector<std::string> &values, int value, const std::string &fallback)
 {
-    if (values.empty()) {
+    if (values.empty())
+    {
         return fallback;
     }
     const int normalized = std::max(1, value) - 1;
     return values[static_cast<std::size_t>(normalized % static_cast<int>(values.size()))];
 }
 
-std::string structureTypeForTech(const RmgConfig& config, int value)
+std::string structureTypeForTech(const RmgConfig &config, int value)
 {
     return cyclicChoice(config.techBuildings, value, "CAOILD");
 }
 
-std::string structureTypeForCivilian(const RmgConfig& config, int value)
+std::string structureTypeForCivilian(const RmgConfig &config, int value)
 {
     return cyclicChoice(config.civilianBuildings, value, "CABHUT");
 }
 
-std::string unitTypeForNeutral(const RmgConfig& config, int value)
+std::string unitTypeForNeutral(const RmgConfig &config, int value)
 {
     return cyclicChoice(config.neutralUnits, value, "CIV1");
 }
 
-std::string terrainChainType(const RmgConfig& config, int value)
+std::string terrainChainType(const RmgConfig &config, int value)
 {
     return cyclicChoice(config.terrainChainObjects, value, "ROCK01");
 }
@@ -409,18 +454,20 @@ std::string treeType(int value)
     return out.str();
 }
 
-std::string orePatchLampType(const MapDocument& document, int value)
+std::string orePatchLampType(const MapDocument &document, int value)
 {
-    const auto& lamps = document.theater == 1 ? document.rmgConfig.snowOrePatchLamps : document.rmgConfig.temperateOrePatchLamps;
+    const auto &lamps = document.theater == 1 ? document.rmgConfig.snowOrePatchLamps : document.rmgConfig.temperateOrePatchLamps;
     return cyclicChoice(lamps, value, "INGALITE");
 }
 
 std::string nativeTerrainTypeName(int objectTypeIndex)
 {
-    if (objectTypeIndex >= 14 && objectTypeIndex <= 38) {
+    if (objectTypeIndex >= 14 && objectTypeIndex <= 38)
+    {
         return treeType(objectTypeIndex - 13);
     }
-    if (objectTypeIndex >= 44 && objectTypeIndex <= 46) {
+    if (objectTypeIndex >= 44 && objectTypeIndex <= 46)
+    {
         return tiberiumTreeType(objectTypeIndex - 43);
     }
     return {};
@@ -428,7 +475,7 @@ std::string nativeTerrainTypeName(int objectTypeIndex)
 
 std::string nativeTechStructureType(int nativeTechIndex)
 {
-    static const std::vector<std::string> techBuildings{
+    static const std::vector<std::string> techBuildings {
         "CAAIRP",
         "CATHOSP",
         "CAOILD",
@@ -437,22 +484,24 @@ std::string nativeTechStructureType(int nativeTechIndex)
         "CAPOWR",
         "CASLAB",
     };
-    if (nativeTechIndex < 0 || nativeTechIndex >= static_cast<int>(techBuildings.size())) {
+    if (nativeTechIndex < 0 || nativeTechIndex >= static_cast<int>(techBuildings.size()))
+    {
         return "CAOILD";
     }
     return techBuildings[static_cast<std::size_t>(nativeTechIndex)];
 }
 
 void writeNativeStructureOverride(
-    std::ostringstream& out,
-    int& structureIndex,
-    const NativeStructureOverride& structure)
+    std::ostringstream &out,
+    int &structureIndex,
+    const NativeStructureOverride &structure)
 {
     const int sellable = structure.nativeTechIndex == 1 ? 1 : 0;
     const int key = structure.nativeUniqueId >= 0 ? structure.nativeUniqueId : structureIndex;
     ++structureIndex;
     out << (structure.nativeSaveKey.empty() ? std::to_string(key) : structure.nativeSaveKey) << '=';
-    if (!structure.nativeSaveValue.empty()) {
+    if (!structure.nativeSaveValue.empty())
+    {
         out << structure.nativeSaveValue << '\n';
         return;
     }
@@ -462,7 +511,8 @@ void writeNativeStructureOverride(
 
 std::string theaterName(int theater)
 {
-    switch (theater) {
+    switch (theater)
+    {
     case 0:
         return "TEMPERATE";
     case 1:
@@ -482,7 +532,7 @@ std::string theaterName(int theater)
 
 std::string multiplayerColor(int index)
 {
-    static const std::vector<std::string> colors{
+    static const std::vector<std::string> colors {
         "Gold",
         "DarkRed",
         "DarkBlue",
@@ -495,7 +545,7 @@ std::string multiplayerColor(int index)
     return colors[static_cast<std::size_t>(std::max(0, index) % static_cast<int>(colors.size()))];
 }
 
-void writeHouseSection(std::ostringstream& out, const std::string& house, const std::string& color, const std::string& side)
+void writeHouseSection(std::ostringstream &out, const std::string &house, const std::string &color, const std::string &side)
 {
     out << '[' << house << "]\n";
     out << "TechLevel=0\n";
@@ -506,16 +556,17 @@ void writeHouseSection(std::ostringstream& out, const std::string& house, const 
     out << "Country=" << side << "\n\n";
 }
 
-int indexedOrFallback(const std::vector<int>& values, int index, int fallback)
+int indexedOrFallback(const std::vector<int> &values, int index, int fallback)
 {
-    if (values.empty()) {
+    if (values.empty())
+    {
         return fallback;
     }
     const int clampedIndex = std::clamp(index, 0, static_cast<int>(values.size()) - 1);
     return values[static_cast<std::size_t>(clampedIndex)];
 }
 
-LightingSettings makeLightingSettings(const MapSeedOptions& options, const RmgConfig& config)
+LightingSettings makeLightingSettings(const MapSeedOptions &options, const RmgConfig &config)
 {
     LightingSettings lighting;
     lighting.enabled = true;
@@ -529,9 +580,10 @@ LightingSettings makeLightingSettings(const MapSeedOptions& options, const RmgCo
     return lighting;
 }
 
-void writeLightingSection(std::ostringstream& out, const LightingSettings& lighting)
+void writeLightingSection(std::ostringstream &out, const LightingSettings &lighting)
 {
-    if (!lighting.enabled) {
+    if (!lighting.enabled)
+    {
         return;
     }
 
@@ -557,7 +609,8 @@ void writeLightingSection(std::ostringstream& out, const LightingSettings& light
     out << "DominatorAmbientChangeRate=" << fixedRatio(lighting.dominatorAmbientChangeRate, 1000, 3) << "\n\n";
 }
 
-struct ExportGeometry {
+struct ExportGeometry
+{
     Rect mapRect;
     Rect localRect;
     int sourceWidth = 0;
@@ -569,22 +622,22 @@ bool hasExplicitRect(Rect rect) noexcept
     return rect.w > 0 && rect.h > 0;
 }
 
-ExportGeometry exportGeometryFor(const MapGrid& map, const MapDocument& document)
+ExportGeometry exportGeometryFor(const MapGrid &map, const MapDocument &document)
 {
     ExportGeometry geometry;
-    geometry.mapRect = hasExplicitRect(document.mapRect) ? document.mapRect : Rect{0, 0, map.width(), map.height()};
-    geometry.localRect = hasExplicitRect(document.localSize) ? document.localSize : Rect{0, 0, map.width(), map.height()};
+    geometry.mapRect = hasExplicitRect(document.mapRect) ? document.mapRect : Rect {0, 0, map.width(), map.height()};
+    geometry.localRect = hasExplicitRect(document.localSize) ? document.localSize : Rect {0, 0, map.width(), map.height()};
     geometry.sourceWidth = std::min(map.width(), std::max(0, geometry.localRect.w));
     geometry.sourceHeight = std::min(map.height(), std::max(0, geometry.localRect.h));
     return geometry;
 }
 
-Point mapPointToIso(const ExportGeometry& geometry, Point p)
+Point mapPointToIso(const ExportGeometry &geometry, Point p)
 {
     return displayToIso(p.x * 2, p.y, geometry.mapRect.w);
 }
 
-Point sourceCellToIso(const ExportGeometry& geometry, Point p)
+Point sourceCellToIso(const ExportGeometry &geometry, Point p)
 {
     return mapPointToIso(geometry, {geometry.localRect.x + p.x, geometry.localRect.y + p.y});
 }
@@ -592,35 +645,34 @@ Point sourceCellToIso(const ExportGeometry& geometry, Point p)
 Point nativeCellToMapPoint(Point cell, int mapWidth) noexcept
 {
     const int xNumerator = cell.x - cell.y + mapWidth - 1;
-    const int mapX = xNumerator >= 0 && (xNumerator & 1) != 0
-        ? xNumerator / 2 + 1
-        : xNumerator / 2;
+    const int mapX = xNumerator >= 0 && (xNumerator & 1) != 0 ? xNumerator / 2 + 1 : xNumerator / 2;
     return {
         mapX,
         (cell.x + cell.y - mapWidth - 1) / 2,
     };
 }
 
-Point nativeCellToSourceCell(const ExportGeometry& geometry, Point nativeCell) noexcept
+Point nativeCellToSourceCell(const ExportGeometry &geometry, Point nativeCell) noexcept
 {
     const Point mapPoint = nativeCellToMapPoint(nativeCell, geometry.mapRect.w);
     return {mapPoint.x - geometry.localRect.x, mapPoint.y - geometry.localRect.y};
 }
 
-Point sourceCellToNativeCell(const ExportGeometry& geometry, Point source) noexcept
+Point sourceCellToNativeCell(const ExportGeometry &geometry, Point source) noexcept
 {
-    const Point mapPoint{source.x + geometry.localRect.x, source.y + geometry.localRect.y};
+    const Point mapPoint {source.x + geometry.localRect.x, source.y + geometry.localRect.y};
     return {mapPoint.x + mapPoint.y + 1, geometry.mapRect.w - mapPoint.x + mapPoint.y};
 }
 
-bool sourceCellIsExported(const ExportGeometry& geometry, Point p) noexcept
+bool sourceCellIsExported(const ExportGeometry &geometry, Point p) noexcept
 {
     return p.x >= 0 && p.y >= 0 && p.x < geometry.sourceWidth && p.y < geometry.sourceHeight;
 }
 
-bool sourcePointForMapPoint(const MapGrid& map, const ExportGeometry& geometry, Point mapPoint, Point& sourcePoint)
+bool sourcePointForMapPoint(const MapGrid &map, const ExportGeometry &geometry, Point mapPoint, Point &sourcePoint)
 {
-    if (!contains(geometry.localRect, mapPoint)) {
+    if (!contains(geometry.localRect, mapPoint))
+    {
         return false;
     }
 
@@ -628,35 +680,40 @@ bool sourcePointForMapPoint(const MapGrid& map, const ExportGeometry& geometry, 
     return sourceCellIsExported(geometry, sourcePoint) && map.inBounds(sourcePoint);
 }
 
-void validateYrIniIsoBounds(const ExportGeometry& geometry)
+void validateYrIniIsoBounds(const ExportGeometry &geometry)
 {
-    if (geometry.mapRect.w + geometry.mapRect.h > 512) {
+    if (geometry.mapRect.w + geometry.mapRect.h > 512)
+    {
         throw std::runtime_error("yrini export requires map width + height <= 512 for RA2/YR iso coordinates");
     }
 }
 
 void writeTerrainChainEntries(
-    std::ostringstream& out,
-    const MapGrid& map,
-    const MapDocument& document,
-    const ExportGeometry& geometry,
-    const std::unordered_set<int>& occupiedPackedCells)
+    std::ostringstream &out,
+    const MapGrid &map,
+    const MapDocument &document,
+    const ExportGeometry &geometry,
+    const std::unordered_set<int> &occupiedPackedCells)
 {
-    for (const auto& cell : map.cells()) {
-        if (cell.overlay != Overlay::TerrainChain || !sourceCellIsExported(geometry, {cell.x, cell.y})) {
+    for (const auto &cell : map.cells())
+    {
+        if (cell.overlay != Overlay::TerrainChain || !sourceCellIsExported(geometry, {cell.x, cell.y}))
+        {
             continue;
         }
 
         const Point iso = sourceCellToIso(geometry, {cell.x, cell.y});
         const int packed = packedCell(iso);
-        if (occupiedPackedCells.contains(packed)) {
+        if (occupiedPackedCells.contains(packed))
+        {
             continue;
         }
         out << packed << '=' << terrainChainType(document.rmgConfig, cell.overlayValue) << '\n';
     }
 }
 
-struct IsoPayloadEntry {
+struct IsoPayloadEntry
+{
     Point iso;
     std::uint32_t tile = 0;
     std::uint8_t subTile = 0;
@@ -666,40 +723,51 @@ struct IsoPayloadEntry {
 
 std::uint64_t isoOverrideKey(Point iso) noexcept
 {
-    return (static_cast<std::uint64_t>(static_cast<std::uint32_t>(iso.x)) << 32)
-        | static_cast<std::uint32_t>(iso.y);
+    return (static_cast<std::uint64_t>(static_cast<std::uint32_t>(iso.x)) << 32) | static_cast<std::uint32_t>(iso.y);
 }
 
-std::unordered_map<std::uint64_t, const IsoTileOverride*> buildIsoOverrideMap(const MapDocument& document)
+std::unordered_map<std::uint64_t, const IsoTileOverride *> buildIsoOverrideMap(const MapDocument &document)
 {
-    std::unordered_map<std::uint64_t, const IsoTileOverride*> overrides;
+    std::unordered_map<std::uint64_t, const IsoTileOverride *> overrides;
     overrides.reserve(document.isoTileOverrides.size());
-    for (const auto& override : document.isoTileOverrides) {
+    for (const auto &override : document.isoTileOverrides)
+    {
         overrides[isoOverrideKey(override.iso)] = &override;
     }
     return overrides;
 }
 
-void applyIsoOverride(IsoPayloadEntry& entry, const TileCatalog& catalog, const IsoTileOverride& override)
+void applyIsoOverride(IsoPayloadEntry &entry, const TileCatalog &catalog, const IsoTileOverride &override)
 {
-    if (override.nativeTileTypeIndex >= 0) {
+    if (override.nativeTileTypeIndex >= 0)
+    {
         entry.tile = static_cast<std::uint32_t>(override.nativeTileTypeIndex);
         entry.subTile = static_cast<std::uint8_t>(std::clamp(override.subTile, 0, 255));
-    } else if (isEncodedCliffPiece(override.slopeIndex)) {
+    }
+    else if (isEncodedCliffPiece(override.slopeIndex))
+    {
         const CliffPiece piece = decodeCliffPiece(override.slopeIndex);
         entry.tile = mappedTileNum(catalog.cliff, piece.tile);
         entry.subTile = static_cast<std::uint8_t>(std::clamp(piece.subTile, 0, 255));
-    } else if (isEncodedShorePiece(override.slopeIndex)) {
+    }
+    else if (isEncodedShorePiece(override.slopeIndex))
+    {
         const ShorePiece piece = decodeShorePiece(override.slopeIndex);
         entry.tile = mappedTileNum(catalog.shore, piece.tile);
         entry.subTile = static_cast<std::uint8_t>(std::clamp(piece.subTile, 0, 255));
-    } else if (isNativeHeightSlope(override)) {
+    }
+    else if (isNativeHeightSlope(override))
+    {
         entry.tile = mappedTileNum(catalog.ramp, override.slopeIndex - 1);
         entry.subTile = 0;
-    } else if (canUseClearLat(override.terrain) && override.variant > 0) {
+    }
+    else if (canUseClearLat(override.terrain) && override.variant > 0)
+    {
         entry.tile = mappedTileNum(latTileMappingForTerrain(catalog, override.terrain), override.variant - 1);
         entry.subTile = static_cast<std::uint8_t>(std::clamp(override.subTile, 0, 255));
-    } else {
+    }
+    else
+    {
         entry.tile = mappedTileNum(tileMappingForTerrain(catalog, override.terrain), override.variant);
         entry.subTile = static_cast<std::uint8_t>(std::clamp(override.subTile, 0, 255));
     }
@@ -707,7 +775,7 @@ void applyIsoOverride(IsoPayloadEntry& entry, const TileCatalog& catalog, const 
     entry.iceGrowth = override.iceGrowthAllowed ? 1 : 0;
 }
 
-IsoPayloadEntry waterPayloadEntryForMapPoint(const TileCatalog& catalog, Point iso, int mapLevel)
+IsoPayloadEntry waterPayloadEntryForMapPoint(const TileCatalog &catalog, Point iso, int mapLevel)
 {
     IsoPayloadEntry entry;
     entry.iso = iso;
@@ -716,27 +784,32 @@ IsoPayloadEntry waterPayloadEntryForMapPoint(const TileCatalog& catalog, Point i
     return entry;
 }
 
-std::vector<std::uint8_t> buildIsoMapPackPayload(const MapGrid& map, const MapDocument& document, const ExportGeometry& geometry, bool preserveSubTiles)
+std::vector<std::uint8_t> buildIsoMapPackPayload(const MapGrid &map, const MapDocument &document, const ExportGeometry &geometry, bool preserveSubTiles)
 {
-    const auto& catalog = document.tileCatalog;
+    const auto &catalog = document.tileCatalog;
     const int displayWidth = geometry.mapRect.w * 2 - 1;
     const auto isoOverrides = buildIsoOverrideMap(document);
     std::vector<IsoPayloadEntry> entries;
     entries.reserve(static_cast<std::size_t>(displayWidth * geometry.mapRect.h));
 
-    for (int row = 0; row < geometry.mapRect.h; ++row) {
-        for (int dx = 0; dx < displayWidth; ++dx) {
-            const Point mapPoint{std::clamp(dx / 2, 0, geometry.mapRect.w - 1), row};
+    for (int row = 0; row < geometry.mapRect.h; ++row)
+    {
+        for (int dx = 0; dx < displayWidth; ++dx)
+        {
+            const Point mapPoint {std::clamp(dx / 2, 0, geometry.mapRect.w - 1), row};
             Point sourcePoint;
             const bool hasSource = sourcePointForMapPoint(map, geometry, mapPoint, sourcePoint);
             const Point iso = displayToIso(dx, row, geometry.mapRect.w);
             IsoPayloadEntry entry = waterPayloadEntryForMapPoint(catalog, iso, document.mapLevel);
             const auto overrideIt = isoOverrides.find(isoOverrideKey(iso));
-            const IsoTileOverride* isoOverride = overrideIt == isoOverrides.end() ? nullptr : overrideIt->second;
-            if (isoOverride) {
+            const IsoTileOverride *isoOverride = overrideIt == isoOverrides.end() ? nullptr : overrideIt->second;
+            if (isoOverride)
+            {
                 applyIsoOverride(entry, catalog, *isoOverride);
-            } else if (hasSource) {
-                const Cell& cell = map.at(sourcePoint);
+            }
+            else if (hasSource)
+            {
+                const Cell &cell = map.at(sourcePoint);
                 entry.tile = terrainTileId(catalog, map, sourcePoint);
                 entry.subTile = subTileForCell(catalog, map, sourcePoint, preserveSubTiles);
                 entry.level = exportLevelForCell(cell);
@@ -746,17 +819,20 @@ std::vector<std::uint8_t> buildIsoMapPackPayload(const MapGrid& map, const MapDo
         }
     }
 
-    std::sort(entries.begin(), entries.end(), [](const IsoPayloadEntry& left, const IsoPayloadEntry& right) {
-        if (left.iso.y != right.iso.y) {
-            return left.iso.y < right.iso.y;
-        }
-        return left.iso.x < right.iso.x;
-    });
+    std::sort(entries.begin(), entries.end(), [](const IsoPayloadEntry &left, const IsoPayloadEntry &right)
+              {
+                  if (left.iso.y != right.iso.y)
+                  {
+                      return left.iso.y < right.iso.y;
+                  }
+                  return left.iso.x < right.iso.x;
+              });
 
     std::vector<std::uint8_t> payload;
     payload.reserve(static_cast<std::size_t>(displayWidth * geometry.mapRect.h * 11 + 4));
 
-    for (const auto& entry : entries) {
+    for (const auto &entry : entries)
+    {
         appendU16LE(payload, static_cast<std::uint16_t>(std::clamp(entry.iso.x, 0, 0xFFFF)));
         appendU16LE(payload, static_cast<std::uint16_t>(std::clamp(entry.iso.y, 0, 0xFFFF)));
         appendU32LE(payload, entry.tile);
@@ -768,7 +844,7 @@ std::vector<std::uint8_t> buildIsoMapPackPayload(const MapGrid& map, const MapDo
     return payload;
 }
 
-Point nativeProductHomePoint(const ExportGeometry& geometry)
+Point nativeProductHomePoint(const ExportGeometry &geometry)
 {
     ExportGeometry homeGeometry = geometry;
     homeGeometry.mapRect.w &= ~1;
@@ -812,7 +888,7 @@ Rect nativeHeaderRectFromUsableArea(Rect mapRect, Rect localRect) noexcept
     };
 }
 
-void writeNativeProductHeader(std::ostringstream& out, const MapDocument& document, const ExportGeometry& geometry, Rect headerRect)
+void writeNativeProductHeader(std::ostringstream &out, const MapDocument &document, const ExportGeometry &geometry, Rect headerRect)
 {
     const std::size_t waypointCount = document.nativeWaypoints.empty() ? document.starts.size() : document.nativeWaypoints.size();
     out << "[Header]\n";
@@ -822,21 +898,27 @@ void writeNativeProductHeader(std::ostringstream& out, const MapDocument& docume
     out << "Height=" << headerRect.h << '\n';
     out << "NumberStartingPoints=" << waypointCount << '\n';
     out << "NumCoopHumanStartSpots=4\n";
-    for (std::size_t i = 0; i < 8; ++i) {
-        if (!document.nativeWaypoints.empty() && i < document.nativeWaypoints.size()) {
+    for (std::size_t i = 0; i < 8; ++i)
+    {
+        if (!document.nativeWaypoints.empty() && i < document.nativeWaypoints.size())
+        {
             const Point headerWaypoint = nativeHeaderPointFromCell(document.nativeWaypoints[i]);
             out << "Waypoint" << (i + 1) << '=' << headerWaypoint.x << ',' << headerWaypoint.y << '\n';
-        } else if (i < document.starts.size()) {
-            const Point headerWaypoint{headerRect.x + headerRect.w - document.starts[i].x, headerRect.y + document.starts[i].y};
+        }
+        else if (i < document.starts.size())
+        {
+            const Point headerWaypoint {headerRect.x + headerRect.w - document.starts[i].x, headerRect.y + document.starts[i].y};
             out << "Waypoint" << (i + 1) << '=' << headerWaypoint.x << ',' << headerWaypoint.y << '\n';
-        } else {
+        }
+        else
+        {
             out << "Waypoint" << (i + 1) << "=0,0\n";
         }
     }
     out << '\n';
 }
 
-void writeNativeProductSpecialFlags(std::ostringstream& out)
+void writeNativeProductSpecialFlags(std::ostringstream &out)
 {
     out << "[SpecialFlags]\n";
     out << "TiberiumGrows=no\n";
@@ -854,7 +936,7 @@ void writeNativeProductSpecialFlags(std::ostringstream& out)
     out << "Visceroids=no\n\n";
 }
 
-void writeNativeProductBasic(std::ostringstream& out)
+void writeNativeProductBasic(std::ostringstream &out)
 {
     out << "[Basic]\n";
     out << "Name=906d,9047,6218,6a21,5f0f,\n";
@@ -893,7 +975,7 @@ void writeNativeProductBasic(std::ostringstream& out)
     out << "InitTime=10000\n\n";
 }
 
-void writeNativeProductRanking(std::ostringstream& out)
+void writeNativeProductRanking(std::ostringstream &out)
 {
     out << "[Ranking]\n";
     out << "ParTimeEasy=00:01:00\n";
@@ -905,9 +987,10 @@ void writeNativeProductRanking(std::ostringstream& out)
     out << "OverParMessage=GUI:NoOverParMessage\n\n";
 }
 
-void writeNativeProductLighting(std::ostringstream& out, const LightingSettings& lighting)
+void writeNativeProductLighting(std::ostringstream &out, const LightingSettings &lighting)
 {
-    if (!lighting.enabled) {
+    if (!lighting.enabled)
+    {
         return;
     }
 
@@ -934,13 +1017,13 @@ void writeNativeProductLighting(std::ostringstream& out, const LightingSettings&
 }
 
 void writeNativeProductHouseSection(
-    std::ostringstream& out,
-    const std::string& house,
-    const std::string& country,
+    std::ostringstream &out,
+    const std::string &house,
+    const std::string &country,
     int techLevel,
     int credits,
-    const std::string& playerControl,
-    const std::string& color)
+    const std::string &playerControl,
+    const std::string &color)
 {
     out << '[' << house << "]\n";
     out << "Country=" << country << '\n';
@@ -955,7 +1038,7 @@ void writeNativeProductHouseSection(
     out << "NodeCount=0\n\n";
 }
 
-void writeNativeProductHouses(std::ostringstream& out)
+void writeNativeProductHouses(std::ostringstream &out)
 {
     out << "[Houses]\n";
     out << "0=<human player>\n";
@@ -969,15 +1052,20 @@ void writeNativeProductHouses(std::ostringstream& out)
     writeNativeProductHouseSection(out, "Special", "Special", 1, 0, "no", "LightGrey");
 }
 
-void writeNativeProductWaypoints(std::ostringstream& out, const MapDocument& document, const ExportGeometry& geometry)
+void writeNativeProductWaypoints(std::ostringstream &out, const MapDocument &document, const ExportGeometry &geometry)
 {
     out << "[Waypoints]\n";
-    if (!document.nativeWaypoints.empty()) {
-        for (std::size_t i = 0; i < document.nativeWaypoints.size(); ++i) {
+    if (!document.nativeWaypoints.empty())
+    {
+        for (std::size_t i = 0; i < document.nativeWaypoints.size(); ++i)
+        {
             out << i << '=' << packedCell(document.nativeWaypoints[i]) << '\n';
         }
-    } else {
-        for (std::size_t i = 0; i < document.starts.size(); ++i) {
+    }
+    else
+    {
+        for (std::size_t i = 0; i < document.starts.size(); ++i)
+        {
             const Point p = sourceCellToIso(geometry, document.starts[i]);
             out << i << '=' << packedCell(p) << '\n';
         }
@@ -987,17 +1075,21 @@ void writeNativeProductWaypoints(std::ostringstream& out, const MapDocument& doc
     out << "700=" << packedCell(home) << "\n\n";
 }
 
-void writeNativeProductTerrain(std::ostringstream& out, const MapGrid& map, const MapDocument& document, const ExportGeometry& geometry)
+void writeNativeProductTerrain(std::ostringstream &out, const MapGrid &map, const MapDocument &document, const ExportGeometry &geometry)
 {
     out << "[Terrain]\n";
     std::unordered_set<int> writtenPackedCells;
-    if (!document.nativeObjectOverrides.empty()) {
-        for (const NativeObjectOverride& object : document.nativeObjectOverrides) {
-            if (object.objectAbstractType != 36) {
+    if (!document.nativeObjectOverrides.empty())
+    {
+        for (const NativeObjectOverride &object : document.nativeObjectOverrides)
+        {
+            if (object.objectAbstractType != 36)
+            {
                 continue;
             }
             const std::string typeName = nativeTerrainTypeName(object.objectTypeIndex);
-            if (typeName.empty()) {
+            if (typeName.empty())
+            {
                 continue;
             }
             const int packed = packedCell(object.iso);
@@ -1009,11 +1101,14 @@ void writeNativeProductTerrain(std::ostringstream& out, const MapGrid& map, cons
         return;
     }
 
-    for (const auto& cell : map.cells()) {
-        if (!sourceCellIsExported(geometry, {cell.x, cell.y})) {
+    for (const auto &cell : map.cells())
+    {
+        if (!sourceCellIsExported(geometry, {cell.x, cell.y}))
+        {
             continue;
         }
-        if (cell.terrainObject == TerrainObject::TiberiumTree) {
+        if (cell.terrainObject == TerrainObject::TiberiumTree)
+        {
             const Point iso = sourceCellToIso(geometry, {cell.x, cell.y});
             const int packed = packedCell(iso);
             out << packed << '=' << tiberiumTreeType(cell.terrainObjectValue) << '\n';
@@ -1024,47 +1119,61 @@ void writeNativeProductTerrain(std::ostringstream& out, const MapGrid& map, cons
     out << '\n';
 }
 
-void writeNativeProductStructures(std::ostringstream& out, const MapGrid& map, const MapDocument& document, const ExportGeometry& geometry)
+void writeNativeProductStructures(std::ostringstream &out, const MapGrid &map, const MapDocument &document, const ExportGeometry &geometry)
 {
     std::ostringstream structures;
     int structureIndex = 0;
-    if (!document.nativeStructureOverrides.empty()) {
-        for (const NativeStructureOverride& structure : document.nativeStructureOverrides) {
+    if (!document.nativeStructureOverrides.empty())
+    {
+        for (const NativeStructureOverride &structure : document.nativeStructureOverrides)
+        {
             writeNativeStructureOverride(structures, structureIndex, structure);
         }
     }
 
-    if (document.nativeStructureOverrides.empty() || document.mode == "native") {
-        for (const auto& cell : map.cells()) {
-            if (!sourceCellIsExported(geometry, {cell.x, cell.y})) {
+    if (document.nativeStructureOverrides.empty() || document.mode == "native")
+    {
+        for (const auto &cell : map.cells())
+        {
+            if (!sourceCellIsExported(geometry, {cell.x, cell.y}))
+            {
                 continue;
             }
-            if (cell.overlay == Overlay::Tech && document.nativeStructureOverrides.empty()) {
+            if (cell.overlay == Overlay::Tech && document.nativeStructureOverrides.empty())
+            {
                 const Point iso = sourceCellToIso(geometry, {cell.x, cell.y});
                 structures << structureIndex++ << "=Neutral," << structureTypeForTech(document.rmgConfig, cell.overlayValue) << ",256," << iso.x << ',' << iso.y << ",0,None,1,0,1,0,0,None,None,None,0,0\n";
-            } else if (cell.overlay == Overlay::NeutralBuilding) {
+            }
+            else if (cell.overlay == Overlay::NeutralBuilding)
+            {
                 const Point iso = sourceCellToIso(geometry, {cell.x, cell.y});
                 structures << structureIndex++ << "=Neutral," << structureTypeForCivilian(document.rmgConfig, cell.overlayValue) << ",256," << iso.x << ',' << iso.y << ",0,None,1,0,1,0,0,None,None,None,0,0\n";
-            } else if (cell.terrainObject == TerrainObject::OrePatchLamp) {
+            }
+            else if (cell.terrainObject == TerrainObject::OrePatchLamp)
+            {
                 const Point iso = sourceCellToIso(geometry, {cell.x, cell.y});
                 structures << structureIndex++ << "=Neutral," << orePatchLampType(document, cell.terrainObjectValue) << ",256," << iso.x << ',' << iso.y << ",0,None,1,0,1,0,0,None,None,None,0,0\n";
             }
         }
     }
-    if (structureIndex > 0) {
+    if (structureIndex > 0)
+    {
         out << "[Structures]\n";
         out << structures.str();
         out << '\n';
     }
 }
 
-void buildOverlayPacks(const MapGrid& map, const MapDocument& document, const ExportGeometry& geometry, std::vector<std::uint8_t>& overlayPack, std::vector<std::uint8_t>& overlayDataPack)
+void buildOverlayPacks(const MapGrid &map, const MapDocument &document, const ExportGeometry &geometry, std::vector<std::uint8_t> &overlayPack, std::vector<std::uint8_t> &overlayDataPack)
 {
     overlayPack.assign(1u << 18, 0xFF);
     overlayDataPack.assign(1u << 18, 0);
-    if (!document.nativeOverlayOverrides.empty()) {
-        for (const NativeOverlayOverride& overlay : document.nativeOverlayOverrides) {
-            if (overlay.overlayTypeIndex < 0 || overlay.iso.x < 0 || overlay.iso.y < 0 || overlay.iso.x >= 512 || overlay.iso.y >= 512) {
+    if (!document.nativeOverlayOverrides.empty())
+    {
+        for (const NativeOverlayOverride &overlay : document.nativeOverlayOverrides)
+        {
+            if (overlay.overlayTypeIndex < 0 || overlay.iso.x < 0 || overlay.iso.y < 0 || overlay.iso.x >= 512 || overlay.iso.y >= 512)
+            {
                 continue;
             }
             const auto index = static_cast<std::size_t>(overlay.iso.x + 512 * overlay.iso.y);
@@ -1074,16 +1183,20 @@ void buildOverlayPacks(const MapGrid& map, const MapDocument& document, const Ex
         return;
     }
 
-    for (const auto& cell : map.cells()) {
-        if (!sourceCellIsExported(geometry, {cell.x, cell.y})) {
+    for (const auto &cell : map.cells())
+    {
+        if (!sourceCellIsExported(geometry, {cell.x, cell.y}))
+        {
             continue;
         }
         const int id = overlayIdForCell(cell);
-        if (id < 0) {
+        if (id < 0)
+        {
             continue;
         }
         const Point iso = sourceCellToIso(geometry, {cell.x, cell.y});
-        if (iso.x < 0 || iso.y < 0 || iso.x >= 512 || iso.y >= 512) {
+        if (iso.x < 0 || iso.y < 0 || iso.x >= 512 || iso.y >= 512)
+        {
             continue;
         }
         const auto index = static_cast<std::size_t>(iso.x + 512 * iso.y);
@@ -1092,9 +1205,9 @@ void buildOverlayPacks(const MapGrid& map, const MapDocument& document, const Ex
     }
 }
 
-void writeNativeProductAiTriggerTypesEnable(std::ostringstream& out)
+void writeNativeProductAiTriggerTypesEnable(std::ostringstream &out)
 {
-    static const char* const triggerIds[] = {
+    static const char *const triggerIds[] = {
         "0CAD0DCC-G",
         "0CAD0C7C-G",
         "0CAD0B2C-G",
@@ -1263,18 +1376,21 @@ void writeNativeProductAiTriggerTypesEnable(std::ostringstream& out)
     };
 
     out << "[AITriggerTypesEnable]\n";
-    for (const char* triggerId : triggerIds) {
+    for (const char *triggerId : triggerIds)
+    {
         out << triggerId << "=yes\n";
     }
     out << '\n';
 }
 
-std::string withCrLfLineEndings(const std::string& text)
+std::string withCrLfLineEndings(const std::string &text)
 {
     std::string result;
     result.reserve(text.size() + text.size() / 64);
-    for (char ch : text) {
-        if (ch == '\n') {
+    for (char ch : text)
+    {
+        if (ch == '\n')
+        {
             result.push_back('\r');
         }
         result.push_back(ch);
@@ -1284,13 +1400,14 @@ std::string withCrLfLineEndings(const std::string& text)
 
 std::string digestInputForNativeProductBody(std::string body)
 {
-    if (body.size() >= 2 && body[body.size() - 1] == '\n' && body[body.size() - 2] == '\n') {
+    if (body.size() >= 2 && body[body.size() - 1] == '\n' && body[body.size() - 2] == '\n')
+    {
         body.pop_back();
     }
     return withCrLfLineEndings(body);
 }
 
-void writeNativeProductDigest(std::ostringstream& out, const std::string& body)
+void writeNativeProductDigest(std::ostringstream &out, const std::string &body)
 {
     const std::string digestInput = digestInputForNativeProductBody(body);
     const auto digest = ra2::pack::sha1Digest(digestInput);
@@ -1301,7 +1418,7 @@ void writeNativeProductDigest(std::ostringstream& out, const std::string& body)
 
 } // namespace
 
-std::string writeTextMap(const MapGrid& map, const MapDocument& document)
+std::string writeTextMap(const MapGrid &map, const MapDocument &document)
 {
     std::ostringstream out;
     out << "; RandomMapGen output\n";
@@ -1316,28 +1433,34 @@ std::string writeTextMap(const MapGrid& map, const MapDocument& document)
     out << '\n';
 
     out << "[Metrics]\n";
-    for (const auto& [key, value] : document.metrics) {
+    for (const auto &[key, value] : document.metrics)
+    {
         appendKeyValue(out, key, value);
     }
     out << '\n';
 
     out << "[Starts]\n";
-    for (std::size_t i = 0; i < document.starts.size(); ++i) {
+    for (std::size_t i = 0; i < document.starts.size(); ++i)
+    {
         appendKeyValue(out, "Player" + std::to_string(i + 1), pointToString(document.starts[i]));
     }
     out << '\n';
 
-    if (!document.notes.empty()) {
+    if (!document.notes.empty())
+    {
         out << "[Notes]\n";
-        for (std::size_t i = 0; i < document.notes.size(); ++i) {
+        for (std::size_t i = 0; i < document.notes.size(); ++i)
+        {
             appendKeyValue(out, "Note" + std::to_string(i + 1), document.notes[i]);
         }
         out << '\n';
     }
 
     out << "[MapAscii]\n";
-    for (int y = 0; y < map.height(); ++y) {
-        for (int x = 0; x < map.width(); ++x) {
+    for (int y = 0; y < map.height(); ++y)
+    {
+        for (int x = 0; x < map.width(); ++x)
+        {
             out << displayChar(map.at({x, y}));
         }
         out << '\n';
@@ -1345,24 +1468,31 @@ std::string writeTextMap(const MapGrid& map, const MapDocument& document)
     out << '\n';
 
     out << "[Cells]\n";
-    for (const auto& cell : map.cells()) {
+    for (const auto &cell : map.cells())
+    {
         out << cell.x << ',' << cell.y << '=' << terrainName(cell.terrain);
-        if (cell.overlay != Overlay::None) {
+        if (cell.overlay != Overlay::None)
+        {
             out << ',' << overlayName(cell.overlay) << ',' << cell.overlayValue;
         }
-        if (cell.terrainObject != TerrainObject::None) {
+        if (cell.terrainObject != TerrainObject::None)
+        {
             out << ',' << terrainObjectName(cell.terrainObject) << ',' << cell.terrainObjectValue;
         }
-        if (cell.height != 0 || cell.slope != -1) {
+        if (cell.height != 0 || cell.slope != -1)
+        {
             out << ",h" << cell.height << ",s" << cell.slope;
         }
-        if (cell.spawnExclusion) {
+        if (cell.spawnExclusion)
+        {
             out << ",spawnExcluded";
         }
-        if (cell.cliffShoreExclusion) {
+        if (cell.cliffShoreExclusion)
+        {
             out << ",cliffShoreExcluded";
         }
-        if (cell.urbanRegionMark) {
+        if (cell.urbanRegionMark)
+        {
             out << ",urbanRegion";
         }
         out << '\n';
@@ -1371,11 +1501,11 @@ std::string writeTextMap(const MapGrid& map, const MapDocument& document)
     return out.str();
 }
 
-std::string writeYrIniMap(const MapGrid& map, const MapDocument& document)
+std::string writeYrIniMap(const MapGrid &map, const MapDocument &document)
 {
     const ExportGeometry geometry = exportGeometryFor(map, document);
     validateYrIniIsoBounds(geometry);
-    const Rect headerRect = hasExplicitRect(document.headerRect) ? document.headerRect : Rect{0, 0, map.width(), map.height()};
+    const Rect headerRect = hasExplicitRect(document.headerRect) ? document.headerRect : Rect {0, 0, map.width(), map.height()};
 
     std::ostringstream out;
     out << "; RandomMapGen RA2/YR-style INI\n";
@@ -1404,11 +1534,15 @@ std::string writeYrIniMap(const MapGrid& map, const MapDocument& document)
     out << "Width=" << headerRect.w << '\n';
     out << "Height=" << headerRect.h << '\n';
     out << "NumberStartingPoints=" << waypointCount << '\n';
-    for (std::size_t i = 0; i < waypointCount; ++i) {
-        if (useNativeWaypoints) {
+    for (std::size_t i = 0; i < waypointCount; ++i)
+    {
+        if (useNativeWaypoints)
+        {
             const Point headerWaypoint = nativeHeaderPointFromCell(document.nativeWaypoints[i]);
             out << "Waypoint" << (i + 1) << '=' << headerWaypoint.x << ',' << headerWaypoint.y << '\n';
-        } else {
+        }
+        else
+        {
             out << "Waypoint" << (i + 1) << '=' << document.starts[i].x << ',' << document.starts[i].y << '\n';
         }
     }
@@ -1417,14 +1551,16 @@ std::string writeYrIniMap(const MapGrid& map, const MapDocument& document)
     out << "[Houses]\n";
     out << "0=Neutral\n";
     out << "1=Special\n";
-    for (int i = 0; i < document.players; ++i) {
+    for (int i = 0; i < document.players; ++i)
+    {
         out << (i + 2) << "=Multi" << (i + 1) << '\n';
     }
     out << '\n';
 
     writeHouseSection(out, "Neutral", "Grey", "Neutral");
     writeHouseSection(out, "Special", "Grey", "Special");
-    for (int i = 0; i < document.players; ++i) {
+    for (int i = 0; i < document.players; ++i)
+    {
         writeHouseSection(out, "Multi" + std::to_string(i + 1), multiplayerColor(i), "Americans");
     }
 
@@ -1438,9 +1574,11 @@ std::string writeYrIniMap(const MapGrid& map, const MapDocument& document)
 
     out << "[Preview]\n";
     out << "Size=" << map.width() << ',' << map.height() << '\n';
-    for (int y = 0; y < map.height(); ++y) {
+    for (int y = 0; y < map.height(); ++y)
+    {
         out << y << '=';
-        for (int x = 0; x < map.width(); ++x) {
+        for (int x = 0; x < map.width(); ++x)
+        {
             out << displayChar(map.at({x, y}));
         }
         out << '\n';
@@ -1448,12 +1586,17 @@ std::string writeYrIniMap(const MapGrid& map, const MapDocument& document)
     out << '\n';
 
     out << "[Waypoints]\n";
-    if (useNativeWaypoints) {
-        for (std::size_t i = 0; i < document.nativeWaypoints.size(); ++i) {
+    if (useNativeWaypoints)
+    {
+        for (std::size_t i = 0; i < document.nativeWaypoints.size(); ++i)
+        {
             out << i << '=' << packedCell(document.nativeWaypoints[i]) << '\n';
         }
-    } else {
-        for (std::size_t i = 0; i < document.starts.size(); ++i) {
+    }
+    else
+    {
+        for (std::size_t i = 0; i < document.starts.size(); ++i)
+        {
             const Point p = sourceCellToIso(geometry, document.starts[i]);
             out << i << '=' << packedCell(p) << '\n';
         }
@@ -1462,23 +1605,33 @@ std::string writeYrIniMap(const MapGrid& map, const MapDocument& document)
 
     out << "[Structures]\n";
     int structureIndex = 0;
-    if (!document.nativeStructureOverrides.empty()) {
-        for (const NativeStructureOverride& structure : document.nativeStructureOverrides) {
+    if (!document.nativeStructureOverrides.empty())
+    {
+        for (const NativeStructureOverride &structure : document.nativeStructureOverrides)
+        {
             writeNativeStructureOverride(out, structureIndex, structure);
         }
     }
-    if (document.nativeStructureOverrides.empty() || document.mode == "native") {
-        for (const auto& cell : map.cells()) {
-            if (!sourceCellIsExported(geometry, {cell.x, cell.y})) {
+    if (document.nativeStructureOverrides.empty() || document.mode == "native")
+    {
+        for (const auto &cell : map.cells())
+        {
+            if (!sourceCellIsExported(geometry, {cell.x, cell.y}))
+            {
                 continue;
             }
-            if (cell.overlay == Overlay::Tech && document.nativeStructureOverrides.empty()) {
+            if (cell.overlay == Overlay::Tech && document.nativeStructureOverrides.empty())
+            {
                 const Point iso = sourceCellToIso(geometry, {cell.x, cell.y});
                 out << structureIndex++ << "=Neutral," << structureTypeForTech(document.rmgConfig, cell.overlayValue) << ",256," << iso.x << ',' << iso.y << ",0,None,1,0,1,0,0,None,None,None,0,0\n";
-            } else if (cell.overlay == Overlay::NeutralBuilding) {
+            }
+            else if (cell.overlay == Overlay::NeutralBuilding)
+            {
                 const Point iso = sourceCellToIso(geometry, {cell.x, cell.y});
                 out << structureIndex++ << "=Neutral," << structureTypeForCivilian(document.rmgConfig, cell.overlayValue) << ",256," << iso.x << ',' << iso.y << ",0,None,1,0,1,0,0,None,None,None,0,0\n";
-            } else if (cell.terrainObject == TerrainObject::OrePatchLamp) {
+            }
+            else if (cell.terrainObject == TerrainObject::OrePatchLamp)
+            {
                 const Point iso = sourceCellToIso(geometry, {cell.x, cell.y});
                 out << structureIndex++ << "=Neutral," << orePatchLampType(document, cell.terrainObjectValue) << ",256," << iso.x << ',' << iso.y << ",0,None,1,0,1,0,0,None,None,None,0,0\n";
             }
@@ -1488,32 +1641,45 @@ std::string writeYrIniMap(const MapGrid& map, const MapDocument& document)
 
     out << "[Units]\n";
     int unitIndex = 0;
-    for (const auto& cell : map.cells()) {
-        if (!sourceCellIsExported(geometry, {cell.x, cell.y})) {
+    for (const auto &cell : map.cells())
+    {
+        if (!sourceCellIsExported(geometry, {cell.x, cell.y}))
+        {
             continue;
         }
-        if (cell.overlay == Overlay::NeutralUnit) {
+        if (cell.overlay == Overlay::NeutralUnit)
+        {
             const Point iso = sourceCellToIso(geometry, {cell.x, cell.y});
             out << unitIndex++ << "=Neutral," << unitTypeForNeutral(document.rmgConfig, cell.overlayValue) << ",256," << iso.x << ',' << iso.y << ",0,Guard,None\n";
         }
     }
     out << '\n';
 
-    if (!document.nativeObjectOverrides.empty()) {
+    if (!document.nativeObjectOverrides.empty())
+    {
         writeNativeProductTerrain(out, map, document, geometry);
-    } else {
+    }
+    else
+    {
         out << "[Terrain]\n";
-        for (const auto& cell : map.cells()) {
-            if (!sourceCellIsExported(geometry, {cell.x, cell.y})) {
+        for (const auto &cell : map.cells())
+        {
+            if (!sourceCellIsExported(geometry, {cell.x, cell.y}))
+            {
                 continue;
             }
-            if (cell.terrainObject == TerrainObject::TiberiumTree) {
+            if (cell.terrainObject == TerrainObject::TiberiumTree)
+            {
                 const Point iso = sourceCellToIso(geometry, {cell.x, cell.y});
                 out << packedCell(iso) << '=' << tiberiumTreeType(cell.terrainObjectValue) << '\n';
-            } else if (cell.overlay == Overlay::Tree) {
+            }
+            else if (cell.overlay == Overlay::Tree)
+            {
                 const Point iso = sourceCellToIso(geometry, {cell.x, cell.y});
                 out << packedCell(iso) << '=' << treeType(cell.overlayValue) << '\n';
-            } else if (cell.overlay == Overlay::TerrainChain) {
+            }
+            else if (cell.overlay == Overlay::TerrainChain)
+            {
                 const Point iso = sourceCellToIso(geometry, {cell.x, cell.y});
                 out << packedCell(iso) << '=' << terrainChainType(document.rmgConfig, cell.overlayValue) << '\n';
             }
@@ -1526,10 +1692,13 @@ std::string writeYrIniMap(const MapGrid& map, const MapDocument& document)
     buildOverlayPacks(map, document, geometry, overlayPack, overlayDataPack);
 
     out << "[Overlay]\n";
-    for (int y = 0; y < 512; ++y) {
-        for (int x = 0; x < 512; ++x) {
+    for (int y = 0; y < 512; ++y)
+    {
+        for (int x = 0; x < 512; ++x)
+        {
             const auto index = static_cast<std::size_t>(x + 512 * y);
-            if (overlayPack[index] == 0xFF) {
+            if (overlayPack[index] == 0xFF)
+            {
                 continue;
             }
             out << packedCell({x, y}) << '=' << static_cast<int>(overlayPack[index]) << '\n';
@@ -1538,10 +1707,13 @@ std::string writeYrIniMap(const MapGrid& map, const MapDocument& document)
     out << '\n';
 
     out << "[OverlayData]\n";
-    for (int y = 0; y < 512; ++y) {
-        for (int x = 0; x < 512; ++x) {
+    for (int y = 0; y < 512; ++y)
+    {
+        for (int x = 0; x < 512; ++x)
+        {
             const auto index = static_cast<std::size_t>(x + 512 * y);
-            if (overlayPack[index] == 0xFF) {
+            if (overlayPack[index] == 0xFF)
+            {
                 continue;
             }
             out << packedCell({x, y}) << '=' << static_cast<int>(overlayDataPack[index]) << '\n';
@@ -1553,7 +1725,8 @@ std::string writeYrIniMap(const MapGrid& map, const MapDocument& document)
     out << "Mode=" << document.mode << '\n';
     out << "Seed=" << document.seed << '\n';
     out << "Players=" << document.players << '\n';
-    for (const auto& [key, value] : document.metrics) {
+    for (const auto &[key, value] : document.metrics)
+    {
         out << key << '=' << value << '\n';
     }
     out << '\n';
@@ -1567,8 +1740,10 @@ std::string writeYrIniMap(const MapGrid& map, const MapDocument& document)
 
     out << "[IsoMapPackPreview]\n";
     const auto isoOverrides = buildIsoOverrideMap(document);
-    for (const auto& cell : map.cells()) {
-        if (!sourceCellIsExported(geometry, {cell.x, cell.y})) {
+    for (const auto &cell : map.cells())
+    {
+        if (!sourceCellIsExported(geometry, {cell.x, cell.y}))
+        {
             continue;
         }
         const Point iso = sourceCellToIso(geometry, {cell.x, cell.y});
@@ -1577,7 +1752,8 @@ std::string writeYrIniMap(const MapGrid& map, const MapDocument& document)
         previewEntry.iso = iso;
         previewEntry.tile = terrainTileId(document.tileCatalog, map, {cell.x, cell.y});
         previewEntry.level = exportLevelForCell(cell);
-        if (const auto overrideIt = isoOverrides.find(isoOverrideKey(nativeCell)); overrideIt != isoOverrides.end()) {
+        if (const auto overrideIt = isoOverrides.find(isoOverrideKey(nativeCell)); overrideIt != isoOverrides.end())
+        {
             applyIsoOverride(previewEntry, document.tileCatalog, *overrideIt->second);
         }
         out << iso.x << ',' << iso.y << '=' << previewEntry.tile << ',' << static_cast<int>(previewEntry.level) << ',' << cell.slope << ',' << pseudoPackLine(cell) << '\n';
@@ -1585,23 +1761,26 @@ std::string writeYrIniMap(const MapGrid& map, const MapDocument& document)
     out << '\n';
 
     out << "[OverlayPackPreview]\n";
-    for (const auto& cell : map.cells()) {
-        if (!sourceCellIsExported(geometry, {cell.x, cell.y})) {
+    for (const auto &cell : map.cells())
+    {
+        if (!sourceCellIsExported(geometry, {cell.x, cell.y}))
+        {
             continue;
         }
         const int id = overlayIdForCell(cell);
-        if (id >= 0) {
+        if (id >= 0)
+        {
             out << cell.x << ',' << cell.y << '=' << id << ',' << overlayDataForCell(cell) << '\n';
         }
     }
     return out.str();
 }
 
-std::string writeYrIniProductMap(const MapGrid& map, const MapDocument& document)
+std::string writeYrIniProductMap(const MapGrid &map, const MapDocument &document)
 {
     const ExportGeometry geometry = exportGeometryFor(map, document);
     validateYrIniIsoBounds(geometry);
-    const Rect headerRect = hasExplicitRect(document.headerRect) ? document.headerRect : Rect{0, 0, map.width(), map.height()};
+    const Rect headerRect = hasExplicitRect(document.headerRect) ? document.headerRect : Rect {0, 0, map.width(), map.height()};
 
     std::ostringstream out;
     writeNativeProductHeader(out, document, geometry, headerRect);
@@ -1637,61 +1816,70 @@ std::string writeYrIniProductMap(const MapGrid& map, const MapDocument& document
     return out.str();
 }
 
-void writeTextMapFile(const std::filesystem::path& path, const MapGrid& map, const MapDocument& document)
+void writeTextMapFile(const std::filesystem::path &path, const MapGrid &map, const MapDocument &document)
 {
-    if (!path.parent_path().empty()) {
+    if (!path.parent_path().empty())
+    {
         std::filesystem::create_directories(path.parent_path());
     }
 
     std::ofstream file(path, std::ios::binary);
-    if (!file) {
+    if (!file)
+    {
         throw std::runtime_error("failed to open output file: " + path.string());
     }
     const std::string text = writeTextMap(map, document);
     file.write(text.data(), static_cast<std::streamsize>(text.size()));
     file.flush();
-    if (!file) {
+    if (!file)
+    {
         throw std::runtime_error("failed to write output file: " + path.string());
     }
 }
 
-void writeYrIniMapFile(const std::filesystem::path& path, const MapGrid& map, const MapDocument& document)
+void writeYrIniMapFile(const std::filesystem::path &path, const MapGrid &map, const MapDocument &document)
 {
-    if (!path.parent_path().empty()) {
+    if (!path.parent_path().empty())
+    {
         std::filesystem::create_directories(path.parent_path());
     }
 
     std::ofstream file(path, std::ios::binary);
-    if (!file) {
+    if (!file)
+    {
         throw std::runtime_error("failed to open output file: " + path.string());
     }
     const std::string text = writeYrIniMap(map, document);
     file.write(text.data(), static_cast<std::streamsize>(text.size()));
     file.flush();
-    if (!file) {
+    if (!file)
+    {
         throw std::runtime_error("failed to write output file: " + path.string());
     }
 }
 
-void writeYrIniProductMapFile(const std::filesystem::path& path, const MapGrid& map, const MapDocument& document)
+void writeYrIniProductMapFile(const std::filesystem::path &path, const MapGrid &map, const MapDocument &document)
 {
-    if (!path.parent_path().empty()) {
+    if (!path.parent_path().empty())
+    {
         std::filesystem::create_directories(path.parent_path());
     }
 
     std::ofstream file(path, std::ios::binary);
-    if (!file) {
+    if (!file)
+    {
         throw std::runtime_error("failed to open output file: " + path.string());
     }
     const std::string text = withCrLfLineEndings(writeYrIniProductMap(map, document));
     file.write(text.data(), static_cast<std::streamsize>(text.size()));
     file.flush();
-    if (!file) {
+    if (!file)
+    {
         throw std::runtime_error("failed to write output file: " + path.string());
     }
 }
 
-MapDocument makeNativeDocument(const MapSeedOptions& options, const RmgConfig& config, const NativeGenerationReport& report, const MapGrid& map)
+MapDocument makeNativeDocument(const MapSeedOptions &options, const RmgConfig &config, const NativeGenerationReport &report, const MapGrid &map)
 {
     MapDocument document;
     document.mode = "native";
@@ -1699,10 +1887,13 @@ MapDocument makeNativeDocument(const MapSeedOptions& options, const RmgConfig& c
     document.players = options.numPlayers;
     document.theater = options.theater;
     document.mapLevel = kNativeInitialMapLevel;
-    if (map.hasNativeGeometry()) {
+    if (map.hasNativeGeometry())
+    {
         document.mapRect = map.nativeMapRect();
         document.localSize = map.nativeLocalRect();
-    } else {
+    }
+    else
+    {
         const int nativeLocalWidth = std::max(1, map.width());
         const int nativeLocalHeight = std::max(1, map.height());
         document.mapRect = {0, 0, nativeLocalWidth + 4, nativeLocalHeight + 12};
@@ -2106,18 +2297,23 @@ MapDocument makeNativeDocument(const MapSeedOptions& options, const RmgConfig& c
         {"MapUtilization", std::to_string(report.evaluation.mapUtilization)},
     };
 
-    for (std::size_t i = 0; i < report.startResourceValues.size(); ++i) {
+    for (std::size_t i = 0; i < report.startResourceValues.size(); ++i)
+    {
         document.metrics.push_back({"Player" + std::to_string(i + 1) + "StartResourceValue", std::to_string(report.startResourceValues[i])});
     }
-    for (std::size_t i = 0; i < report.startResourceDistances.size(); ++i) {
+    for (std::size_t i = 0; i < report.startResourceDistances.size(); ++i)
+    {
         document.metrics.push_back({"Player" + std::to_string(i + 1) + "StartResourceDistance", std::to_string(report.startResourceDistances[i])});
     }
-    for (std::size_t i = 0; i < report.buildableNearStarts.size(); ++i) {
+    for (std::size_t i = 0; i < report.buildableNearStarts.size(); ++i)
+    {
         document.metrics.push_back({"Player" + std::to_string(i + 1) + "BuildableNearStart", std::to_string(report.buildableNearStarts[i])});
     }
 
-    for (const auto& cell : map.cells()) {
-        if (cell.overlay == Overlay::Start) {
+    for (const auto &cell : map.cells())
+    {
+        if (cell.overlay == Overlay::Start)
+        {
             document.starts.push_back({cell.x, cell.y});
         }
     }

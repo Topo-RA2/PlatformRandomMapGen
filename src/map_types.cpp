@@ -4,25 +4,28 @@
 #include <cmath>
 #include <stdexcept>
 
-namespace rmg {
-
-MapGrid::MapGrid(int width, int height)
-    : width_(width)
-    , height_(height)
+namespace rmg
 {
-    if (width_ <= 0 || height_ <= 0) {
+
+MapGrid::MapGrid(int width, int height) : width_(width), height_(height)
+{
+    if (width_ <= 0 || height_ <= 0)
+    {
         throw std::invalid_argument("map dimensions must be positive");
     }
-    if (width_ > 512 || height_ > 512) {
+    if (width_ > 512 || height_ > 512)
+    {
         throw std::invalid_argument("map dimensions must be at most 512 cells per axis");
     }
 
     const auto cellCount = static_cast<std::size_t>(width_) * static_cast<std::size_t>(height_);
     cells_.resize(cellCount);
 
-    for (int y = 0; y < height_; ++y) {
-        for (int x = 0; x < width_; ++x) {
-            auto& cell = at({x, y});
+    for (int y = 0; y < height_; ++y)
+    {
+        for (int x = 0; x < width_; ++x)
+        {
+            auto &cell = at({x, y});
             cell.x = x;
             cell.y = y;
         }
@@ -40,17 +43,19 @@ bool MapGrid::inBounds(Point p) const noexcept
     return p.x >= 0 && p.y >= 0 && p.x < width_ && p.y < height_;
 }
 
-Cell& MapGrid::at(Point p)
+Cell &MapGrid::at(Point p)
 {
-    if (!inBounds(p)) {
+    if (!inBounds(p))
+    {
         throw std::out_of_range("map cell is out of bounds");
     }
     return cells_[static_cast<std::size_t>(p.y * width_ + p.x)];
 }
 
-const Cell& MapGrid::at(Point p) const
+const Cell &MapGrid::at(Point p) const
 {
-    if (!inBounds(p)) {
+    if (!inBounds(p))
+    {
         throw std::out_of_range("map cell is out of bounds");
     }
     return cells_[static_cast<std::size_t>(p.y * width_ + p.x)];
@@ -58,12 +63,14 @@ const Cell& MapGrid::at(Point p) const
 
 std::vector<Point> MapGrid::neighbors4(Point p) const
 {
-    static constexpr Point kOffsets[]{{1, 0}, {0, 1}, {-1, 0}, {0, -1}};
+    static constexpr Point kOffsets[] {{1, 0}, {0, 1}, {-1, 0}, {0, -1}};
     std::vector<Point> result;
     result.reserve(4);
-    for (const auto offset : kOffsets) {
-        const Point next{p.x + offset.x, p.y + offset.y};
-        if (inBounds(next)) {
+    for (const auto offset : kOffsets)
+    {
+        const Point next {p.x + offset.x, p.y + offset.y};
+        if (inBounds(next))
+        {
             result.push_back(next);
         }
     }
@@ -72,12 +79,14 @@ std::vector<Point> MapGrid::neighbors4(Point p) const
 
 std::vector<Point> MapGrid::neighbors8(Point p) const
 {
-    static constexpr Point kOffsets[]{{1, 0}, {1, 1}, {0, 1}, {-1, 1}, {-1, 0}, {-1, -1}, {0, -1}, {1, -1}};
+    static constexpr Point kOffsets[] {{1, 0}, {1, 1}, {0, 1}, {-1, 1}, {-1, 0}, {-1, -1}, {0, -1}, {1, -1}};
     std::vector<Point> result;
     result.reserve(8);
-    for (const auto offset : kOffsets) {
-        const Point next{p.x + offset.x, p.y + offset.y};
-        if (inBounds(next)) {
+    for (const auto offset : kOffsets)
+    {
+        const Point next {p.x + offset.x, p.y + offset.y};
+        if (inBounds(next))
+        {
             result.push_back(next);
         }
     }
@@ -86,7 +95,8 @@ std::vector<Point> MapGrid::neighbors8(Point p) const
 
 void MapGrid::fill(Terrain terrain, Overlay overlay)
 {
-    for (auto& cell : cells_) {
+    for (auto &cell : cells_)
+    {
         cell.terrain = terrain;
         cell.overlay = overlay;
         cell.overlayValue = 0;
@@ -107,48 +117,46 @@ void MapGrid::fill(Terrain terrain, Overlay overlay)
 
 int MapGrid::countTerrain(Terrain terrain) const
 {
-    return static_cast<int>(std::count_if(cells_.begin(), cells_.end(), [terrain](const Cell& cell) {
-        return cell.terrain == terrain;
-    }));
+    return static_cast<int>(std::count_if(cells_.begin(), cells_.end(), [terrain](const Cell &cell)
+                                          {
+                                              return cell.terrain == terrain;
+                                          }));
 }
 
 int MapGrid::countOverlay(Overlay overlay) const
 {
-    return static_cast<int>(std::count_if(cells_.begin(), cells_.end(), [overlay](const Cell& cell) {
-        return cell.overlay == overlay;
-    }));
+    return static_cast<int>(std::count_if(cells_.begin(), cells_.end(), [overlay](const Cell &cell)
+                                          {
+                                              return cell.overlay == overlay;
+                                          }));
 }
 
 int MapGrid::countTerrainObject(TerrainObject object) const
 {
-    return static_cast<int>(std::count_if(cells_.begin(), cells_.end(), [object](const Cell& cell) {
-        return cell.terrainObject == object;
-    }));
+    return static_cast<int>(std::count_if(cells_.begin(), cells_.end(), [object](const Cell &cell)
+                                          {
+                                              return cell.terrainObject == object;
+                                          }));
 }
 
-bool isPassable(const Cell& cell) noexcept
+bool isPassable(const Cell &cell) noexcept
 {
-    return cell.overlay == Overlay::Bridge
-        || (cell.terrain != Terrain::Water && cell.terrain != Terrain::Cliff);
+    return cell.overlay == Overlay::Bridge || (cell.terrain != Terrain::Water && cell.terrain != Terrain::Cliff);
 }
 
-bool isBuildable(const Cell& cell) noexcept
+bool isBuildable(const Cell &cell) noexcept
 {
     return cell.terrain == Terrain::Land && (cell.overlay == Overlay::None || cell.overlay == Overlay::Start);
 }
 
-bool isWet(const Cell& cell) noexcept
+bool isWet(const Cell &cell) noexcept
 {
     return cell.terrain == Terrain::Water || cell.terrain == Terrain::Shore;
 }
 
-bool isSolidLand(const Cell& cell) noexcept
+bool isSolidLand(const Cell &cell) noexcept
 {
-    return cell.terrain == Terrain::Land
-        || cell.terrain == Terrain::Dirt
-        || cell.terrain == Terrain::Rough
-        || cell.terrain == Terrain::Pave
-        || cell.terrain == Terrain::Green;
+    return cell.terrain == Terrain::Land || cell.terrain == Terrain::Dirt || cell.terrain == Terrain::Rough || cell.terrain == Terrain::Pave || cell.terrain == Terrain::Green;
 }
 
 bool contains(Rect rect, Point p) noexcept
@@ -176,9 +184,10 @@ double euclidean(Point a, Point b) noexcept
     return std::sqrt(dx * dx + dy * dy);
 }
 
-char displayChar(const Cell& cell)
+char displayChar(const Cell &cell)
 {
-    switch (cell.overlay) {
+    switch (cell.overlay)
+    {
     case Overlay::Ore:
         return 'o';
     case Overlay::Gems:
@@ -203,14 +212,17 @@ char displayChar(const Cell& cell)
         break;
     }
 
-    if (cell.terrainObject == TerrainObject::TiberiumTree) {
+    if (cell.terrainObject == TerrainObject::TiberiumTree)
+    {
         return 'i';
     }
-    if (cell.terrainObject == TerrainObject::OrePatchLamp) {
+    if (cell.terrainObject == TerrainObject::OrePatchLamp)
+    {
         return 'l';
     }
 
-    switch (cell.terrain) {
+    switch (cell.terrain)
+    {
     case Terrain::Water:
         return '~';
     case Terrain::Land:
@@ -233,7 +245,8 @@ char displayChar(const Cell& cell)
 
 std::string terrainName(Terrain terrain)
 {
-    switch (terrain) {
+    switch (terrain)
+    {
     case Terrain::Water:
         return "Water";
     case Terrain::Land:
@@ -256,7 +269,8 @@ std::string terrainName(Terrain terrain)
 
 std::string overlayName(Overlay overlay)
 {
-    switch (overlay) {
+    switch (overlay)
+    {
     case Overlay::None:
         return "None";
     case Overlay::Ore:
@@ -285,7 +299,8 @@ std::string overlayName(Overlay overlay)
 
 std::string terrainObjectName(TerrainObject object)
 {
-    switch (object) {
+    switch (object)
+    {
     case TerrainObject::None:
         return "None";
     case TerrainObject::TiberiumTree:

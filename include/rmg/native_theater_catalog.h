@@ -7,16 +7,19 @@
 #include <string>
 #include <vector>
 
-namespace rmg {
+namespace rmg
+{
 
-struct NativeIsoTileSlot {
+struct NativeIsoTileSlot
+{
     bool present = false;
     std::uint8_t heightOffset = 0;
     std::uint8_t terrainType = 0;
     std::uint8_t slope = 0;
 };
 
-struct NativeIsoTileTemplate {
+struct NativeIsoTileTemplate
+{
     int tileTypeIndex = -1;
     std::string fileName;
     bool morphable = false;
@@ -25,7 +28,8 @@ struct NativeIsoTileTemplate {
     std::vector<NativeIsoTileSlot> slots;
 };
 
-struct NativeTheaterCatalog {
+struct NativeTheaterCatalog
+{
     int theater = 0;
     std::string theaterName;
     TileCatalog exportCatalog;
@@ -52,11 +56,11 @@ struct NativeTheaterCatalog {
     int slopeSetPieces2Base = -1;
     std::vector<NativeIsoTileTemplate> tileTypes;
 
-    [[nodiscard]] const NativeIsoTileTemplate* tileType(int tileTypeIndex) const noexcept;
+    [[nodiscard]] const NativeIsoTileTemplate *tileType(int tileTypeIndex) const noexcept;
 };
 
 [[nodiscard]] NativeTheaterCatalog loadNativeTheaterCatalog(
-    const std::filesystem::path& gameResourceDirectory,
+    const std::filesystem::path &gameResourceDirectory,
     int theater);
 
 } // namespace rmg
