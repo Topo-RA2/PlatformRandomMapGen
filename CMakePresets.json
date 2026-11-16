@@ -64,8 +64,7 @@
       "configurePreset": "windows-msvc-x64",
       "targets": [
         "rmg"
-      ],
-      "jobs": 1
+      ]
     },
     {
       "name": "windows-msvc-x64-tests",
@@ -73,16 +72,14 @@
       "targets": [
         "rmg",
         "rmg_tests"
-      ],
-      "jobs": 1
+      ]
     },
     {
       "name": "linux-release",
       "configurePreset": "linux-release",
       "targets": [
         "rmg"
-      ],
-      "jobs": 1
+      ]
     },
     {
       "name": "linux-tests",
@@ -90,8 +87,7 @@
       "targets": [
         "rmg",
         "rmg_tests"
-      ],
-      "jobs": 1
+      ]
     }
   ],
   "testPresets": [
