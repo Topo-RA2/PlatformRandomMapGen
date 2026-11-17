@@ -496,10 +496,6 @@ void NativeMapGenerator::placeTrees(MapGrid &map, const MapSeedOptions &options,
         const Point source = nativeCellToSourcePoint(map, nativeCell);
         return map.inBounds(source) ? nativeTileTypeIndexForTerrain(map.at(source)) : kNativeTileWaterBase;
     };
-    auto isNativeBlankTreeSeed = [&](Point nativeCell)
-    {
-        return isNativeClearTileIndex(nativeTreeSeedTile(nativeCell));
-    };
 
     for (int i = 0; i < 100 && remainingTrees > 0; ++i)
     {

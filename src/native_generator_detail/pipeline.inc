@@ -157,7 +157,7 @@ MapGrid NativeMapGenerator::generate(const MapSeedOptions &options, const RmgCon
         }
     }
 
-    decorateNativeFramePonds(map, options, rng);
+    decorateNativeFramePonds(map, rng);
 
     if (traceDecoratePonds)
     {
@@ -535,7 +535,7 @@ MapGrid NativeMapGenerator::generate(const MapSeedOptions &options, const RmgCon
         spawnNeutralTechBuildings(map, options, rng, regions);
     }
     captureStage("tech", map, rng);
-    distributeTiberium(map, options, config, rng, regions, starts);
+    distributeTiberium(map, options, config, rng, regions);
     captureStage("tiberium", map, rng);
     resetNativeZonesAndRegionsScratch();
     smoothHeightsAndAssignSlopes(map, options, rng);
@@ -546,7 +546,7 @@ MapGrid NativeMapGenerator::generate(const MapSeedOptions &options, const RmgCon
         placeSurfaceAndVegetation(map, options, rng);
         report_.treePlacementPhase = 1;
         placeTrees(map, options, config, rng);
-        placeSurfaceGrass(map, options, rng);
+        placeSurfaceGrass(map, rng);
         captureStage("surface", map, rng);
         captureStage("trees", map, rng);
         captureStage("grass", map, rng);

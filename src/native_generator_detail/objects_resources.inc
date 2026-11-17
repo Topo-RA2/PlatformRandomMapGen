@@ -1088,8 +1088,7 @@ void NativeMapGenerator::distributeTiberium(
     const MapSeedOptions &options,
     const RmgConfig &config,
     NativeRandomizer &rng,
-    const std::vector<NativeRegion> &regions,
-    const std::vector<Point> &starts)
+    const std::vector<NativeRegion> &regions)
 {
     if (regions.empty())
     {
