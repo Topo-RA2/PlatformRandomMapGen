@@ -627,7 +627,7 @@ void NativeMapGenerator::decoratePonds(MapGrid &map, NativeRandomizer &rng)
     }
 }
 
-void NativeMapGenerator::decorateNativeFramePonds(MapGrid &map, const MapSeedOptions &options, NativeRandomizer &rng)
+void NativeMapGenerator::decorateNativeFramePonds(MapGrid &map, NativeRandomizer &rng)
 {
     struct DecorCell
     {

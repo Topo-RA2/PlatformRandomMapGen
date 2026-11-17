@@ -109,7 +109,7 @@ bool NativeMapGenerator::canPlaceDecorationFootprint(const MapGrid &map, Point a
     return true;
 }
 
-NativeMapGenerator::UrbanRegion NativeMapGenerator::createUrbanRegion(MapGrid &map, const MapSeedOptions &options, NativeRandomizer &rng, Point center, double targetScale)
+NativeMapGenerator::UrbanRegion NativeMapGenerator::createUrbanRegion(MapGrid &map, NativeRandomizer &rng, Point center, double targetScale)
 {
     UrbanRegion urban;
     urban.center = center;
@@ -628,7 +628,7 @@ void NativeMapGenerator::placeUrbanPatches(MapGrid &map, const MapSeedOptions &o
     for (int attempt = 0; attempt < maxAttempts && placedRects < targetRects; ++attempt)
     {
         const Point base = urban.cells[static_cast<std::size_t>(rng.randomRanged(0, static_cast<int>(urban.cells.size()) - 1))];
-        for (const auto [width, height] : templates)
+        for (const auto &[width, height] : templates)
         {
             if (!isPavedAndEmptyRect(map, base, width, height))
             {
@@ -789,7 +789,7 @@ bool NativeMapGenerator::selectDecorationCenter(const MapGrid &map, NativeRandom
     return false;
 }
 
-void NativeMapGenerator::placeTerrainChain(MapGrid &map, const MapSeedOptions &options, NativeRandomizer &rng, Point center)
+void NativeMapGenerator::placeTerrainChain(MapGrid &map, NativeRandomizer &rng, Point center)
 {
     constexpr int kInvalidTile = -1;
     constexpr int kQueueCapacity = 1024;
@@ -1534,10 +1534,10 @@ void NativeMapGenerator::placeNativeDecorations(MapGrid &map, const MapSeedOptio
         if (rng.randomUnit() < static_cast<double>(presence) / 100.0)
         {
             ++report_.decorationUrbanAttempts;
-            UrbanRegion urban = createUrbanRegion(map, options, rng, center);
+            UrbanRegion urban = createUrbanRegion(map, rng, center);
             if (urban.cells.empty())
             {
-                urban = createUrbanRegion(map, options, rng, center, 0.55);
+                urban = createUrbanRegion(map, rng, center, 0.55);
             }
             if (urban.cells.empty())
             {
@@ -1561,7 +1561,7 @@ void NativeMapGenerator::placeNativeDecorations(MapGrid &map, const MapSeedOptio
             continue;
         }
         const int chainsBefore = report_.terrainChains;
-        placeTerrainChain(map, options, rng, center);
+        placeTerrainChain(map, rng, center);
         if (report_.terrainChains > chainsBefore)
         {
             placeNeutralDecorationBuildings(map, rng, center, rng.randomRanged(1, 2 + presence / 35));
@@ -1579,7 +1579,7 @@ void NativeMapGenerator::placeNativeDecorations(MapGrid &map, const MapSeedOptio
             {
                 break;
             }
-            placeTerrainChain(map, options, rng, center);
+            placeTerrainChain(map, rng, center);
             if (report_.terrainChains > 0)
             {
                 placeNeutralDecorationBuildings(map, rng, center, std::max(1, presence / 35));

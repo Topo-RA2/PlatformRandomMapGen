@@ -613,7 +613,7 @@ void NativeMapGenerator::markSpawnExclusionZones(MapGrid &map, const std::vector
     {
         overrideByIso[nativeIsoKey(override.iso)] = &override;
     }
-    auto nativeBlank = [&map, &overrideByIso](Point native, Point startNative)
+    auto nativeBlank = [&map, &overrideByIso](Point native)
     {
         const auto overrideIt = overrideByIso.find(nativeIsoKey(native));
         if (overrideIt != overrideByIso.end())
@@ -724,7 +724,7 @@ void NativeMapGenerator::markSpawnExclusionZones(MapGrid &map, const std::vector
             }
             const Point point = heap.pop();
             ++report_.spawnExclusionHeapPops;
-            if (point != nativeStart && !nativeBlank(point, nativeStart))
+            if (point != nativeStart && !nativeBlank(point))
             {
                 continue;
             }
@@ -784,7 +784,7 @@ void NativeMapGenerator::markSpawnExclusionZones(MapGrid &map, const std::vector
                 }
                 visited.insert(key);
                 ++report_.spawnExclusionCandidateChecks;
-                if (!nativeBlank(next, nativeStart))
+                if (!nativeBlank(next))
                 {
                     ++report_.spawnExclusionRejectedNonBlank;
                     continue;

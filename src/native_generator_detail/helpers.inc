@@ -578,16 +578,6 @@ double nativeHeapPriorityNoise(std::uint32_t raw) noexcept
     return static_cast<double>(raw) * 5.0 * kNativeUInt32Unit;
 }
 
-int clampOddMinimum(int value, int minimum)
-{
-    return std::max(value, minimum);
-}
-
-Point rectCenter(Rect rect)
-{
-    return {rect.x + rect.w / 2, rect.y + rect.h / 2};
-}
-
 Point toNativeCellCoords(Point p, int mapWidth)
 {
     return {p.x + p.y + 1, mapWidth + p.y - p.x};
@@ -1037,33 +1027,6 @@ double nativeRegionDistanceCells(Point noisyNative, Point cellNative, Point anch
         diamondYScale));
 }
 
-double nativeRegionSeedDistance(Point p, Point regionAnchor, Rect rect, int mapWidth, Point mapOffset = {})
-{
-    if (rect.w <= 0 || rect.h <= 0)
-    {
-        return euclidean(p, regionAnchor);
-    }
-
-    const Point cellNative = toNativeCellCoords(offsetPoint(p, mapOffset), mapWidth);
-    const Point anchorNative = toNativeCellCoords(offsetPoint(regionAnchor, mapOffset), mapWidth);
-    double xScale = 1.0;
-    double yScale = 1.0;
-    if (rect.h <= rect.w)
-    {
-        yScale = static_cast<double>(rect.w) / std::max(1.0, static_cast<double>(rect.h)) * 1.2;
-    }
-    else
-    {
-        xScale = static_cast<double>(rect.h) / std::max(1.0, static_cast<double>(rect.w)) * 1.2;
-    }
-    return static_cast<double>(std::abs(cellNative.x - anchorNative.x)) * xScale + static_cast<double>(std::abs(cellNative.y - anchorNative.y)) * yScale;
-}
-
-double nativeAreaRatio(std::uint32_t raw)
-{
-    return 0.45 + static_cast<double>(raw) * (1.0 / 4294967296.0) * 0.05;
-}
-
 bool isNativeHighResourceMode(const MapSeedOptions &options) noexcept
 {
     return options.mapType == 3 || options.mapType == 4;
@@ -1182,16 +1145,6 @@ double clampCliffLineGaussian(
     return value;
 }
 
-int randomNativeSurfaceMean(NativeRandomizer &rng)
-{
-    int value = 20;
-    do
-    {
-        value = nativeDoubleToInt(rng.randomUnit() * 21.0 + 20.0);
-    } while (value > 40);
-    return value;
-}
-
 int randomNativeSurfaceBlobSize(NativeRandomizer &rng, int mean, double deviation = 20.0)
 {
     double effectiveMean = static_cast<double>(mean);
@@ -1285,41 +1238,7 @@ void clearTags(MapGrid &map, int tag)
     }
 }
 
-std::vector<Point> passableCells(const MapGrid &map)
-{
-    std::vector<Point> result;
-    result.reserve(static_cast<std::size_t>(map.width() * map.height()));
-    for (const auto &cell : map.cells())
-    {
-        if (isPassable(cell))
-        {
-            result.push_back({cell.x, cell.y});
-        }
-    }
-    return result;
-}
-
-bool isResourcePatchCompatibleOverlay(Overlay overlay) noexcept
-{
-    return overlay == Overlay::None || overlay == Overlay::Ore || overlay == Overlay::Gems || overlay == Overlay::Start || overlay == Overlay::Tech || overlay == Overlay::NeutralBuilding || overlay == Overlay::NeutralUnit || overlay == Overlay::TerrainChain;
-}
-
-bool isCandidateResourceCell(const Cell &cell)
-{
-    return isPassable(cell) && !cell.spawnExclusion && !cell.cliffShoreExclusion && cell.terrainObject != TerrainObject::OrePatchLamp && isResourcePatchCompatibleOverlay(cell.overlay);
-}
-
-bool canTraverseResourcePatch(const Cell &cell)
-{
-    return isPassable(cell) && cell.terrainObject != TerrainObject::OrePatchLamp && isResourcePatchCompatibleOverlay(cell.overlay);
-}
-
 int nativeLandTypeForCell(const Cell &cell) noexcept;
-
-bool isNativeRegionPassable(const Cell &cell) noexcept
-{
-    return isPassable(cell) && cell.terrain != Terrain::Green;
-}
 
 bool isNativeRegionCandidateCell(const Cell &cell, Point nativeCell) noexcept
 {
@@ -1388,16 +1307,6 @@ bool isGroundTileBlobCandidateCell(const Cell &cell, bool allowPave)
         return allowPave;
     }
     return isMapgenBlankCell(cell);
-}
-
-bool isVegetationDensityAnchorCell(const Cell &cell)
-{
-    return cell.terrain == Terrain::Cliff;
-}
-
-std::size_t mapIndex(const MapGrid &map, Point p)
-{
-    return static_cast<std::size_t>(p.y * map.width() + p.x);
 }
 
 Point nativeCellToMapPoint(Point cell, int mapWidth) noexcept
@@ -1593,12 +1502,6 @@ std::string hex64(std::uint64_t value)
     char buffer[17] {};
     std::snprintf(buffer, sizeof(buffer), "%016llX", static_cast<unsigned long long>(value));
     return buffer;
-}
-
-void hashCellPosition(std::uint64_t &hash, const Cell &cell)
-{
-    hashI32(hash, cell.x);
-    hashI32(hash, cell.y);
 }
 
 void hashPointPosition(std::uint64_t &hash, Point p)
@@ -1910,52 +1813,6 @@ std::vector<Point> nativeMapgenWorkspaceScanOrder(const MapGrid &map)
     return cells;
 }
 
-std::vector<Point> nativeMapCellIteratorScanOrder(const MapGrid &map)
-{
-    const Rect mapRect = nativeSavedMapRect(map);
-    const int workspaceSize = mapRect.w + mapRect.h + 1;
-    std::vector<Point> cells;
-    cells.reserve(static_cast<std::size_t>(workspaceSize * workspaceSize / 2));
-    int nextX = 1;
-    int nextY = mapRect.w;
-    int remainingOnDiagonal = mapRect.w - 1;
-    const int maxIterations = std::max(1, workspaceSize * workspaceSize * 2);
-    for (int i = 0; i < maxIterations; ++i)
-    {
-        const Point current {nextX, nextY};
-        if (remainingOnDiagonal != 0)
-        {
-            ++nextX;
-            --nextY;
-            --remainingOnDiagonal;
-        }
-        else
-        {
-            const int oldNextY = nextY;
-            const int oldNextX = nextX;
-            nextX = oldNextY;
-            nextY = oldNextX;
-            if (((oldNextY - mapRect.w + oldNextX - 1) & 1) != 0)
-            {
-                remainingOnDiagonal = mapRect.w - 1;
-                nextY = oldNextX + 1;
-            }
-            else
-            {
-                remainingOnDiagonal = mapRect.w - 2;
-                nextX = oldNextY + 1;
-            }
-        }
-
-        if (!isInsideNativeCellDiamond(current, mapRect))
-        {
-            break;
-        }
-        cells.push_back(current);
-    }
-    return cells;
-}
-
 enum class NativeLatGroup
 {
     None,
@@ -2111,20 +1968,6 @@ void refreshNativeLatOverridesWithTileMap(
         }
         tileByIso[nativeIsoKey(override.iso)] = nativeTileTypeIndexForOverride(override);
     }
-}
-
-void refreshNativeLatOverrides(
-    std::vector<IsoTileOverride> &overrides,
-    bool finalLandTypes = false,
-    bool missingNeighborIsSameGroup = false,
-    int missingNeighborTile = -1)
-{
-    refreshNativeLatOverridesWithTileMap(
-        overrides,
-        nullptr,
-        finalLandTypes,
-        missingNeighborIsSameGroup,
-        missingNeighborTile);
 }
 
 void refreshNativeRampSmoothOverrides(
@@ -3076,38 +2919,6 @@ void dumpNativeStageCellsIfRequested(const std::string &stageName, const std::ve
             << cell.mapgenTempTag << ','
             << cell.mapgenZoneId << '\n';
     }
-}
-
-int cardinalBoundaryVariant(const MapGrid &map, Point p, bool (*matches)(const Cell &))
-{
-    int mask = 0;
-    if (map.inBounds({p.x, p.y - 1}) && matches(map.at({p.x, p.y - 1})))
-    {
-        mask |= 1;
-    }
-    if (map.inBounds({p.x + 1, p.y}) && matches(map.at({p.x + 1, p.y})))
-    {
-        mask |= 2;
-    }
-    if (map.inBounds({p.x, p.y + 1}) && matches(map.at({p.x, p.y + 1})))
-    {
-        mask |= 4;
-    }
-    if (map.inBounds({p.x - 1, p.y}) && matches(map.at({p.x - 1, p.y})))
-    {
-        mask |= 8;
-    }
-    return mask;
-}
-
-bool isLandBoundaryCell(const Cell &cell)
-{
-    return isSolidLand(cell) || cell.terrain == Terrain::Cliff;
-}
-
-bool isLowerCliffBoundaryCell(const Cell &cell)
-{
-    return cell.terrain != Terrain::Cliff && !isWet(cell);
 }
 
 bool isNativeShorePiece(const Cell &cell)

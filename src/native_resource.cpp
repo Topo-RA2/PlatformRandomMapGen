@@ -603,7 +603,7 @@ void ResourceFileSystem::loadYuriMixes()
 {
     for (int index = 99; index >= 0; --index)
     {
-        const std::string number = index < 10 ? "0" + std::to_string(index) : std::to_string(index);
+        const std::string number {static_cast<char>('0' + index / 10), static_cast<char>('0' + index % 10)};
         impl_->addMix("expandmd" + number + ".mix");
     }
     for (const char *name : {
@@ -615,7 +615,7 @@ void ResourceFileSystem::loadYuriMixes()
     impl_->addDirectoryMixes("ecache", ".mix", true);
     for (int index = 99; index >= 0; --index)
     {
-        const std::string number = index < 10 ? "0" + std::to_string(index) : std::to_string(index);
+        const std::string number {static_cast<char>('0' + index / 10), static_cast<char>('0' + index % 10)};
         impl_->addMix("elocal" + number + ".mix");
     }
     impl_->addDirectoryMixes("", ".mmx", true);

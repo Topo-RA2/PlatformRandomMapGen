@@ -4,7 +4,6 @@
 #include <array>
 #include <limits>
 #include <stdexcept>
-#include <unordered_map>
 
 namespace ra2::pack {
 namespace {
@@ -19,36 +18,10 @@ std::uint32_t rotateLeft32(std::uint32_t value, int bits) noexcept
     return (value << bits) | (value >> (32 - bits));
 }
 
-int countSame(const std::vector<std::uint8_t>& source, std::size_t offset, int maxCount)
-{
-    maxCount = std::min<int>(maxCount, static_cast<int>(source.size() - offset));
-    if (maxCount <= 0) {
-        return 0;
-    }
-
-    const auto first = source[offset++];
-    int count = 1;
-    while (count < maxCount && source[offset++] == first) {
-        ++count;
-    }
-    return count;
-}
-
 void writeU16(std::vector<std::uint8_t>& out, std::uint16_t value)
 {
     out.push_back(static_cast<std::uint8_t>(value & 0xFFu));
     out.push_back(static_cast<std::uint8_t>((value >> 8) & 0xFFu));
-}
-
-void writeCopyBlocks(const std::vector<std::uint8_t>& source, std::size_t offset, std::size_t count, std::vector<std::uint8_t>& out)
-{
-    while (count > 0) {
-        const auto writeNow = std::min<std::size_t>(count, 0x3F);
-        out.push_back(static_cast<std::uint8_t>(0x80u | writeNow));
-        out.insert(out.end(), source.begin() + static_cast<std::ptrdiff_t>(offset), source.begin() + static_cast<std::ptrdiff_t>(offset + writeNow));
-        offset += writeNow;
-        count -= writeNow;
-    }
 }
 
 std::uint16_t readU16(const std::vector<std::uint8_t>& bytes, std::size_t offset)
@@ -245,33 +218,6 @@ LzoTrailingPatch writeLzoMatch(std::vector<std::uint8_t>& out, std::size_t dista
     }
 
     throw std::runtime_error("LZO match distance is too large");
-}
-
-std::uint32_t threeByteKey(const std::vector<std::uint8_t>& source, std::size_t offset)
-{
-    return static_cast<std::uint32_t>(source[offset])
-        | (static_cast<std::uint32_t>(source[offset + 1]) << 8)
-        | (static_cast<std::uint32_t>(source[offset + 2]) << 16);
-}
-
-void indexLiteralWindow(const std::vector<std::uint8_t>& source, std::size_t begin, std::size_t end, std::unordered_map<std::uint32_t, std::size_t>& lastSeen)
-{
-    if (end <= begin || source.size() < 3) {
-        return;
-    }
-
-    const std::size_t cappedEnd = std::min(end, source.size() - 2);
-    for (std::size_t pos = begin; pos < cappedEnd; ++pos) {
-        lastSeen[threeByteKey(source, pos)] = pos;
-    }
-}
-
-std::size_t trailingLiteralCountAfterMatch(std::size_t remainingAfterMatch)
-{
-    if (remainingAfterMatch <= 3) {
-        return remainingAfterMatch;
-    }
-    return 0;
 }
 
 } // namespace

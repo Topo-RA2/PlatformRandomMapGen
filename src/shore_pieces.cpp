@@ -48,12 +48,6 @@ struct ShoreSubTileCandidate
     int priority = 0;
 };
 
-struct PieceList
-{
-    std::array<int, 12> values {};
-    int count = 0;
-};
-
 constexpr int kFirstShorePiece = 1;
 constexpr int kLastShorePiece = 42;
 
@@ -164,28 +158,6 @@ bool touchesShoreCell(const MapGrid &map, Point point) noexcept
 bool canWriteTemplateSlot(const MapGrid &map, Point point, char slot) noexcept
 {
     return slot != 'W' || touchesShoreCell(map, point);
-}
-
-int shoreNeighbors4(const MapGrid &map, Point point) noexcept
-{
-    int count = 0;
-    if (isShoreCell(map, {point.x, point.y - 1}))
-    {
-        ++count;
-    }
-    if (isShoreCell(map, {point.x + 1, point.y}))
-    {
-        ++count;
-    }
-    if (isShoreCell(map, {point.x, point.y + 1}))
-    {
-        ++count;
-    }
-    if (isShoreCell(map, {point.x - 1, point.y}))
-    {
-        ++count;
-    }
-    return count;
 }
 
 bool canWriteWaterSideShoreSlot(const MapGrid &map, Point point) noexcept
@@ -365,23 +337,6 @@ int straightRunLength(const MapGrid &map, Point point, int direction) noexcept
     return run;
 }
 
-int fallbackStraightPiece(int direction) noexcept
-{
-    switch (direction)
-    {
-    case kSouth:
-        return 4;
-    case kEast:
-        return 12;
-    case kWest:
-        return 28;
-    case kNorth:
-        return 20;
-    default:
-        return 17;
-    }
-}
-
 int straightPiece(const MapGrid &map, Point point, int direction, int flags) noexcept
 {
     const int run = straightRunLength(map, point, direction);
@@ -526,139 +481,6 @@ int pieceForNativeFlags(const MapGrid &map, Point point, int flags) noexcept
     }
 
     return 17;
-}
-
-void addCandidatePiece(PieceList &pieces, int piece) noexcept
-{
-    if (piece < kFirstShorePiece || piece > 40)
-    {
-        return;
-    }
-    for (int i = 0; i < pieces.count; ++i)
-    {
-        if (pieces.values[static_cast<std::size_t>(i)] == piece)
-        {
-            return;
-        }
-    }
-    if (pieces.count < static_cast<int>(pieces.values.size()))
-    {
-        pieces.values[static_cast<std::size_t>(pieces.count++)] = piece;
-    }
-}
-
-void addCandidateRange(PieceList &pieces, int first, int last) noexcept
-{
-    for (int piece = first; piece <= last; ++piece)
-    {
-        addCandidatePiece(pieces, piece);
-    }
-}
-
-PieceList candidatePiecesForFlags(const MapGrid &map, Point point, int flags) noexcept
-{
-    PieceList pieces;
-    const int nativePiece = pieceForNativeFlags(map, point, flags);
-    addCandidatePiece(pieces, nativePiece);
-
-    const int cardinal = cardinalFlags(flags);
-    const int cardinalCount = countCardinalWater(flags);
-    if (cardinalCount == 1)
-    {
-        switch (cardinal)
-        {
-        case kSouth:
-            addCandidateRange(pieces, 1, 4);
-            break;
-        case kEast:
-            addCandidateRange(pieces, 9, 12);
-            break;
-        case kNorth:
-            addCandidateRange(pieces, 17, 20);
-            break;
-        case kWest:
-            addCandidateRange(pieces, 25, 28);
-            break;
-        default:
-            break;
-        }
-        return pieces;
-    }
-
-    if ((flags & (kSouth | kEast)) == (kSouth | kEast))
-    {
-        addCandidatePiece(pieces, 6);
-        if ((flags & (kNorthEast | kSouthWest)) == (kNorthEast | kSouthWest))
-        {
-            addCandidateRange(pieces, 7, 8);
-        }
-        else if (has(flags, kNorthEast))
-        {
-            addCandidatePiece(pieces, 13);
-        }
-    }
-    if ((flags & (kNorth | kEast)) == (kNorth | kEast))
-    {
-        addCandidatePiece(pieces, 22);
-        if ((flags & (kSouthEast | kNorthWest)) == (kSouthEast | kNorthWest))
-        {
-            addCandidateRange(pieces, 15, 16);
-        }
-        else if (has(flags, kSouthEast))
-        {
-            addCandidatePiece(pieces, 14);
-        }
-    }
-    if ((flags & (kNorth | kWest)) == (kNorth | kWest))
-    {
-        addCandidatePiece(pieces, 30);
-        if ((flags & (kNorthEast | kSouthWest)) == (kNorthEast | kSouthWest))
-        {
-            addCandidateRange(pieces, 23, 24);
-        }
-        else if (has(flags, kNorthEast))
-        {
-            addCandidatePiece(pieces, 21);
-        }
-    }
-    if ((flags & (kSouth | kWest)) == (kSouth | kWest))
-    {
-        addCandidatePiece(pieces, 29);
-        if ((flags & (kSouthEast | kNorthWest)) == (kSouthEast | kNorthWest))
-        {
-            addCandidateRange(pieces, 31, 32);
-        }
-        else if (has(flags, kSouthEast))
-        {
-            addCandidatePiece(pieces, 5);
-        }
-    }
-
-    if (cardinalCount == 0)
-    {
-        if (has(flags, kSouthEast))
-        {
-            addCandidateRange(pieces, 33, 34);
-        }
-        if (has(flags, kNorthEast))
-        {
-            addCandidateRange(pieces, 35, 36);
-        }
-        if (has(flags, kNorthWest))
-        {
-            addCandidateRange(pieces, 37, 38);
-        }
-        if (has(flags, kSouthWest))
-        {
-            addCandidateRange(pieces, 39, 40);
-        }
-    }
-
-    if (pieces.count == 0)
-    {
-        addCandidatePiece(pieces, nativePiece);
-    }
-    return pieces;
 }
 
 int oppositeFlags(int flags) noexcept

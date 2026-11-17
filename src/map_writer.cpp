@@ -309,16 +309,6 @@ std::string pseudoPackLine(const Cell &cell)
     return out.str();
 }
 
-std::string overlayPackLine(const Cell &cell)
-{
-    std::ostringstream out;
-    out << hexByte(cell.x)
-        << hexByte(cell.y)
-        << hexByte(overlayIdForCell(cell))
-        << hexByte(overlayDataForCell(cell));
-    return out.str();
-}
-
 std::uint8_t subTileForCell(const TileCatalog &catalog, const MapGrid &map, Point p, bool preserveSubTiles)
 {
     const Cell &cell = map.at(p);
@@ -359,19 +349,6 @@ Point displayToIso(int dx, int row, int width)
     const int rx = (dx + dy) / 2 + 1;
     const int ry = dy - rx + width + 1;
     return {ry, rx};
-}
-
-Point realToIso(Point p, int width)
-{
-    return displayToIso(p.x * 2, p.y, width);
-}
-
-void validateYrIniIsoBounds(const MapGrid &map)
-{
-    if (map.width() + map.height() > 512)
-    {
-        throw std::runtime_error("yrini export requires width + height <= 512 for RA2/YR iso coordinates");
-    }
 }
 
 void writeEncodedSection(std::ostringstream &out, const std::string &sectionName, const std::string &encoded, std::size_t lineLength)
@@ -642,22 +619,6 @@ Point sourceCellToIso(const ExportGeometry &geometry, Point p)
     return mapPointToIso(geometry, {geometry.localRect.x + p.x, geometry.localRect.y + p.y});
 }
 
-Point nativeCellToMapPoint(Point cell, int mapWidth) noexcept
-{
-    const int xNumerator = cell.x - cell.y + mapWidth - 1;
-    const int mapX = xNumerator >= 0 && (xNumerator & 1) != 0 ? xNumerator / 2 + 1 : xNumerator / 2;
-    return {
-        mapX,
-        (cell.x + cell.y - mapWidth - 1) / 2,
-    };
-}
-
-Point nativeCellToSourceCell(const ExportGeometry &geometry, Point nativeCell) noexcept
-{
-    const Point mapPoint = nativeCellToMapPoint(nativeCell, geometry.mapRect.w);
-    return {mapPoint.x - geometry.localRect.x, mapPoint.y - geometry.localRect.y};
-}
-
 Point sourceCellToNativeCell(const ExportGeometry &geometry, Point source) noexcept
 {
     const Point mapPoint {source.x + geometry.localRect.x, source.y + geometry.localRect.y};
@@ -888,7 +849,7 @@ Rect nativeHeaderRectFromUsableArea(Rect mapRect, Rect localRect) noexcept
     };
 }
 
-void writeNativeProductHeader(std::ostringstream &out, const MapDocument &document, const ExportGeometry &geometry, Rect headerRect)
+void writeNativeProductHeader(std::ostringstream &out, const MapDocument &document, Rect headerRect)
 {
     const std::size_t waypointCount = document.nativeWaypoints.empty() ? document.starts.size() : document.nativeWaypoints.size();
     out << "[Header]\n";
@@ -1783,7 +1744,7 @@ std::string writeYrIniProductMap(const MapGrid &map, const MapDocument &document
     const Rect headerRect = hasExplicitRect(document.headerRect) ? document.headerRect : Rect {0, 0, map.width(), map.height()};
 
     std::ostringstream out;
-    writeNativeProductHeader(out, document, geometry, headerRect);
+    writeNativeProductHeader(out, document, headerRect);
     writeNativeProductSpecialFlags(out);
     writeNativeProductBasic(out);
     writeNativeProductRanking(out);

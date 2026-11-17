@@ -47,7 +47,7 @@ int weightedScore(std::initializer_list<std::pair<int, int>> values)
 {
     int weighted = 0;
     int totalWeight = 0;
-    for (const auto [score, weight] : values)
+    for (const auto &[score, weight] : values)
     {
         if (weight <= 0)
         {
@@ -64,7 +64,7 @@ int minimumAwareAggregate(const std::vector<std::pair<int, int>> &values)
     int weighted = 0;
     int totalWeight = 0;
     int minimum = kScoreMaximum;
-    for (const auto [score, weight] : values)
+    for (const auto &[score, weight] : values)
     {
         if (weight <= 0)
         {

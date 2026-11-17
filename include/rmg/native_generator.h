@@ -140,8 +140,8 @@ struct NativeStructureOverride
     Point iso;
     int nativeTechIndex = -1;
     int nativeUniqueId = -1;
-    std::string nativeSaveKey;
-    std::string nativeSaveValue;
+    std::string nativeSaveKey {};
+    std::string nativeSaveValue {};
 };
 
 struct NativeOverlayOverride
@@ -580,7 +580,7 @@ private:
     int floodFillTerrainPatch(MapGrid &map, NativeRandomizer &rng, const FloodOptions &options, int tag);
     bool placeCliffsAndOre(MapGrid &map, const MapSeedOptions &options, NativeRandomizer &rng);
     bool placeCliffLine(MapGrid &map, const MapSeedOptions &options, NativeRandomizer &rng, Point *endPoint, bool allowBranch = false, Point seed = {0, 0}, double forcedAngle = 0.0);
-    bool placeCliffPlateau(MapGrid &map, const MapSeedOptions &options, NativeRandomizer &rng, Point anchor, int direction, double lineWidth, double *x, double *y);
+    bool placeCliffPlateau(MapGrid &map, NativeRandomizer &rng, Point anchor, int direction, double lineWidth, double *x, double *y);
     void initializeHighResourceNativeWorkspace(const MapGrid &map);
     void synchronizeHighResourceWorkspaceToMap(MapGrid &map);
     void synchronizeHighResourceMapToWorkspace(const MapGrid &map, bool preserveNativePieces);
@@ -624,7 +624,7 @@ private:
     void placeGreenTilesNearShore(MapGrid &map, NativeRandomizer &rng);
     void recalculateNativeHighResourceLandTypes(MapGrid &map);
     void decoratePonds(MapGrid &map, NativeRandomizer &rng);
-    void decorateNativeFramePonds(MapGrid &map, const MapSeedOptions &options, NativeRandomizer &rng);
+    void decorateNativeFramePonds(MapGrid &map, NativeRandomizer &rng);
     std::vector<NativeRegion> buildPassableRegions(
         MapGrid &map,
         const MapSeedOptions &options,
@@ -712,7 +712,7 @@ private:
     void markSpawnExclusionZones(MapGrid &map, const std::vector<Point> &starts);
     bool isAreaSuitableForPlacement(const MapGrid &map, Point center, int radius) const;
     void spawnNeutralTechBuildings(MapGrid &map, const MapSeedOptions &options, NativeRandomizer &rng, const std::vector<NativeRegion> &regions, bool initialZeroQuotaRegions = false);
-    void distributeTiberium(MapGrid &map, const MapSeedOptions &options, const RmgConfig &config, NativeRandomizer &rng, const std::vector<NativeRegion> &regions, const std::vector<Point> &starts);
+    void distributeTiberium(MapGrid &map, const MapSeedOptions &options, const RmgConfig &config, NativeRandomizer &rng, const std::vector<NativeRegion> &regions);
     void placeTiberiumPatch(MapGrid &map, const MapSeedOptions &options, const RmgConfig &config, NativeRandomizer &rng, Point seed, int amount, bool rich, const char *traceBranch = nullptr, bool seedIsNative = false, double amountJitter = 0.0, int amountRawCount = 0, std::uint32_t amountRaw0 = 0, std::uint32_t amountRaw1 = 0, int nativeScratchTag = 0);
     void markCliffShoreExclusion(MapGrid &map);
     std::vector<int> generateHeightNoise(MapGrid &map, const MapSeedOptions &options, NativeRandomizer &rng);
@@ -723,7 +723,7 @@ private:
     void refreshNativeSurfaceLatOverrides(MapGrid &map);
     void placeSurfaceBlobs(MapGrid &map, const MapSeedOptions &options, NativeRandomizer &rng);
     void placeSurfaceAndVegetation(MapGrid &map, const MapSeedOptions &options, NativeRandomizer &rng);
-    void placeSurfaceGrass(MapGrid &map, const MapSeedOptions &options, NativeRandomizer &rng);
+    void placeSurfaceGrass(MapGrid &map, NativeRandomizer &rng);
     int placeTreePatch(MapGrid &map, NativeRandomizer &rng, Point center, int targetTrees, double placementChance);
     int placeTreePatchNative(MapGrid &map, NativeRandomizer &rng, Point center, int targetTrees, double placementChance);
     void placeTrees(MapGrid &map, const MapSeedOptions &options, const RmgConfig &config, NativeRandomizer &rng);
@@ -732,13 +732,13 @@ private:
     bool isPavedAndEmptyRect(const MapGrid &map, Point topLeft, int width, int height) const;
     bool canPlaceDecorationFootprint(const MapGrid &map, Point anchor, int width, int height, bool requirePave, bool allowExistingPaving, int requiredLevel = -1);
     void stampDecorationFootprint(MapGrid &map, Point anchor, int width, int height, Terrain terrain);
-    UrbanRegion createUrbanRegion(MapGrid &map, const MapSeedOptions &options, NativeRandomizer &rng, Point center, double targetScale = 1.0);
+    UrbanRegion createUrbanRegion(MapGrid &map, NativeRandomizer &rng, Point center, double targetScale = 1.0);
     bool selectDecorationCenter(const MapGrid &map, NativeRandomizer &rng, const std::vector<NativeRegion> &regions, Point *center);
     void placeCliffEdgeTiles(MapGrid &map, NativeRandomizer &rng, const UrbanRegion &urban);
     void placeUrbanPatches(MapGrid &map, const MapSeedOptions &options, NativeRandomizer &rng, const UrbanRegion &urban);
     void placeRegionBuildings(MapGrid &map, NativeRandomizer &rng, const UrbanRegion &urban);
     void placeRegionUnits(MapGrid &map, NativeRandomizer &rng, const UrbanRegion &urban);
-    void placeTerrainChain(MapGrid &map, const MapSeedOptions &options, NativeRandomizer &rng, Point center);
+    void placeTerrainChain(MapGrid &map, NativeRandomizer &rng, Point center);
     void placeNeutralDecorationBuildings(MapGrid &map, NativeRandomizer &rng, Point center, int target);
     void placeNeutralDecorationUnits(MapGrid &map, NativeRandomizer &rng, Point center, int target);
     void captureStage(const std::string &name, const MapGrid &map, const NativeRandomizer &rng, bool initializedClear = false);

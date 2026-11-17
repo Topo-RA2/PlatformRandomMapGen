@@ -16,7 +16,7 @@ struct TileMapping
     std::uint16_t tileCount = 1;
     std::uint8_t subTileBase = 0;
     std::uint8_t subTileCount = 1;
-    std::vector<int> variantRemap;
+    std::vector<int> variantRemap {};
 };
 
 struct TileCatalog

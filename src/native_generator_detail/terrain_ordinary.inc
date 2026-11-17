@@ -15,7 +15,7 @@ void NativeMapGenerator::generateTerrainType2(MapGrid &map, const MapSeedOptions
 
 void NativeMapGenerator::generateTerrainNativeWorkspace(MapGrid &map, const MapSeedOptions &options, NativeRandomizer &rng, int terrainType)
 {
-    ScopedNativeX87Chop scopedRounding;
+    [[maybe_unused]] ScopedNativeX87Chop scopedRounding;
     const std::uint16_t terrainFunctionId = terrainType == 0 ? native_trace::GenerateTerrainType0 : terrainType == 1 ? native_trace::GenerateTerrainType1 :
                                                                                                                        native_trace::GenerateTerrainType2;
     const bool terrainTraceEnabled = native_trace::coreFunctionEnabled(terrainFunctionId);
@@ -537,23 +537,6 @@ void NativeMapGenerator::generateTerrainNativeWorkspace(MapGrid &map, const MapS
         {Point {0, 1}, kNativeFlagSouth},
         {Point {1, 1}, kNativeFlagSouthEast},
     }};
-    auto nativeWaterFlagsForBlankCell = [&](Point cell)
-    {
-        if (!nativeCellIsBlank(cell))
-        {
-            return 0;
-        }
-
-        int flags = 0;
-        for (const auto &[offset, flag] : kNativeWaterFlagOffsets)
-        {
-            if (nativeCellIsWater({cell.x + offset.x, cell.y + offset.y}))
-            {
-                flags |= flag;
-            }
-        }
-        return flags;
-    };
     auto nativeWaterFlagsForAnyCell = [&](Point cell)
     {
         if (!nativeCellIsActive(cell))
@@ -1309,29 +1292,21 @@ void NativeMapGenerator::generateTerrainNativeWorkspace(MapGrid &map, const MapS
             }
 
             const NativeTerrainCell &native = workspace[workspaceIndex(nativeCell)];
-            Terrain projectedTerrain = Terrain::Land;
-            int projectedVariant = 0;
             if (preserveNativePostpassTiles && native.isoTileTypeIndex >= kNativeTileShoreBase && native.isoTileTypeIndex < kNativeTileShoreBase + 42)
             {
                 cell.terrain = Terrain::Shore;
-                projectedTerrain = Terrain::Shore;
-                projectedVariant = native.isoTileTypeIndex - kNativeTileShoreBase;
             }
             else if (preserveNativePostpassTiles && native.isoTileTypeIndex == nativeGreenTileBase())
             {
                 cell.terrain = Terrain::Green;
-                projectedTerrain = Terrain::Green;
             }
             else if (nativeCellIsWet(nativeCell))
             {
                 cell.terrain = Terrain::Water;
-                projectedTerrain = Terrain::Water;
-                projectedVariant = native.isoTileTypeIndex >= kNativeTileWaterBase && native.isoTileTypeIndex < kNativeTileWaterBase + 14 ? native.isoTileTypeIndex - kNativeTileWaterBase : 0;
             }
             else
             {
                 cell.terrain = Terrain::Land;
-                projectedTerrain = Terrain::Land;
             }
             cell.tempTag = native.processedTag != 0 ? native.processedTag : native.queuedTag;
             cell.height = std::clamp(native.height, 0, 255);

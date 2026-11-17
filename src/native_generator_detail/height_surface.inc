@@ -1321,7 +1321,7 @@ void NativeMapGenerator::placeSurfaceAndVegetation(MapGrid &map, const MapSeedOp
     refreshNativeSurfaceLatOverrides(map);
 }
 
-void NativeMapGenerator::placeSurfaceGrass(MapGrid &map, const MapSeedOptions &options, NativeRandomizer &rng)
+void NativeMapGenerator::placeSurfaceGrass(MapGrid &map, NativeRandomizer &rng)
 {
     const Rect mapRect = nativeSavedMapRect(map);
     const int workspaceSize = mapRect.w + mapRect.h + 1;

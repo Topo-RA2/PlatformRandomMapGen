@@ -1329,7 +1329,7 @@ bool NativeMapGenerator::placeCliffLine(MapGrid &map, const MapSeedOptions &opti
             ++plateauAttempts;
             const int direction = cliffPlateauDirection(angle);
             const Point anchor {static_cast<int>(std::lround(x)), static_cast<int>(std::lround(y))};
-            if (placeCliffPlateau(map, options, rng, anchor, direction, width, &x, &y))
+            if (placeCliffPlateau(map, rng, anchor, direction, width, &x, &y))
             {
                 plateauAccepted = true;
             }
@@ -1425,7 +1425,7 @@ bool NativeMapGenerator::placeCliffLine(MapGrid &map, const MapSeedOptions &opti
     return true;
 }
 
-bool NativeMapGenerator::placeCliffPlateau(MapGrid &map, const MapSeedOptions &options, NativeRandomizer &rng, Point anchor, int direction, double lineWidth, double *x, double *y)
+bool NativeMapGenerator::placeCliffPlateau(MapGrid &map, NativeRandomizer &rng, Point anchor, int direction, double lineWidth, double *x, double *y)
 {
     ++report_.cliffPlateauAttempts;
     const int parallel = std::clamp(static_cast<int>(std::lround(lineWidth)) + 5, 6, 18);
