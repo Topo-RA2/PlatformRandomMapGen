@@ -32,14 +32,16 @@ endif()
 
 option(PLATFORMRANDOMMAPGEN_BUILD_TESTS "Build RandomMapGen self-tests" OFF)
 
-FetchContent_Declare(
-    nlohmann_json
-    GIT_REPOSITORY https://github.com/nlohmann/json.git
-    # v3.12.0, shared with PlatformSDK.
-    GIT_TAG 55f93686c01528224f448c19128836e7df245f72
-    GIT_SHALLOW FALSE
-)
-FetchContent_MakeAvailable(nlohmann_json)
+if(NOT TARGET nlohmann_json::nlohmann_json)
+    FetchContent_Declare(
+        nlohmann_json
+        GIT_REPOSITORY https://github.com/nlohmann/json.git
+        # v3.12.0, shared with PlatformSDK.
+        GIT_TAG 55f93686c01528224f448c19128836e7df245f72
+        GIT_SHALLOW FALSE
+    )
+    FetchContent_MakeAvailable(nlohmann_json)
+endif()
 
 platform_find_openssl(Crypto)
 
